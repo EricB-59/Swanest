@@ -21,6 +21,7 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/doctrine/orm" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/doctrine/persistence" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/doctrine/sql-formatter" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/vendor/nelmio/cors-bundle" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/nikic/php-parser" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/php-cs-fixer/shim" />
       <excludeFolder url="file://$MODULE_DIR$/backend/vendor/symfony/doctrine-bridge" />

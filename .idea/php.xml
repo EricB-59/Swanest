@@ -69,6 +69,7 @@
       <path value="$PROJECT_DIR$/backend/vendor/doctrine/doctrine-migrations-bundle" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/doctrine-bridge" />
       <path value="$PROJECT_DIR$/backend/vendor/symfony/stopwatch" />
+      <path value="$PROJECT_DIR$/backend/vendor/nelmio/cors-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />
