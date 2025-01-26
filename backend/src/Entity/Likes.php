@@ -13,13 +13,15 @@ class Likes
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $liker_id = null;
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $liker_id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $liked_id = null;
 
     #[ORM\Column]
-    private ?int $liked_id = null;
-
-    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $liked_at = null;
 
     public function getId(): ?int
@@ -34,24 +36,24 @@ class Likes
         return $this;
     }
 
-    public function getLikerId(): ?int
+    public function getLikerId(): ?User
     {
         return $this->liker_id;
     }
 
-    public function setLikerId(int $liker_id): static
+    public function setLikerId(?User $liker_id): static
     {
         $this->liker_id = $liker_id;
 
         return $this;
     }
 
-    public function getLikedId(): ?int
+    public function getLikedId(): ?User
     {
         return $this->liked_id;
     }
 
-    public function setLikedId(int $liked_id): static
+    public function setLikedId(?User $liked_id): static
     {
         $this->liked_id = $liked_id;
 
@@ -63,7 +65,7 @@ class Likes
         return $this->liked_at;
     }
 
-    public function setLikedAt(?\DateTimeImmutable $liked_at): static
+    public function setLikedAt(\DateTimeImmutable $liked_at): static
     {
         $this->liked_at = $liked_at;
 

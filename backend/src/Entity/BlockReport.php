@@ -14,16 +14,18 @@ class BlockReport
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $reporter_id = null;
+    #[ORM\ManyToOne(inversedBy: 'blockReports')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $reporter_id = null;
 
-    #[ORM\Column]
-    private ?int $reported_id = null;
+    #[ORM\ManyToOne(inversedBy: 'blockReports')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $reported_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $reason = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $reported_at = null;
 
     public function getId(): ?int
@@ -38,24 +40,24 @@ class BlockReport
         return $this;
     }
 
-    public function getReporterId(): ?int
+    public function getReporterId(): ?User
     {
         return $this->reporter_id;
     }
 
-    public function setReporterId(int $reporter_id): static
+    public function setReporterId(?User $reporter_id): static
     {
         $this->reporter_id = $reporter_id;
 
         return $this;
     }
 
-    public function getReportedId(): ?int
+    public function getReportedId(): ?User
     {
         return $this->reported_id;
     }
 
-    public function setReportedId(int $reported_id): static
+    public function setReportedId(?User $reported_id): static
     {
         $this->reported_id = $reported_id;
 
@@ -79,7 +81,7 @@ class BlockReport
         return $this->reported_at;
     }
 
-    public function setReportedAt(\DateTimeImmutable $reported_at): static
+    public function setReportedAt(?\DateTimeImmutable $reported_at): static
     {
         $this->reported_at = $reported_at;
 

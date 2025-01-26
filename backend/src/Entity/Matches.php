@@ -13,11 +13,13 @@ class Matches
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $user1_id = null;
+    #[ORM\ManyToOne(inversedBy: 'matches')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user1_id = null;
 
-    #[ORM\Column]
-    private ?int $user2_id = null;
+    #[ORM\ManyToOne(inversedBy: 'matches')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user2_id = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $matched_at = null;
@@ -34,24 +36,24 @@ class Matches
         return $this;
     }
 
-    public function getUser1Id(): ?int
+    public function getUser1Id(): ?User
     {
         return $this->user1_id;
     }
 
-    public function setUser1Id(int $user1_id): static
+    public function setUser1Id(?User $user1_id): static
     {
         $this->user1_id = $user1_id;
 
         return $this;
     }
 
-    public function getUser2Id(): ?int
+    public function getUser2Id(): ?User
     {
         return $this->user2_id;
     }
 
-    public function setUser2Id(int $user2_id): static
+    public function setUser2Id(?User $user2_id): static
     {
         $this->user2_id = $user2_id;
 

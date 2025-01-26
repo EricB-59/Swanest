@@ -13,11 +13,13 @@ class Notifications
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'notifications')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user_id = null;
 
-    #[ORM\Column]
-    private ?int $message_id = null;
+    #[ORM\OneToOne(inversedBy: 'notifications', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Messages $message_id = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
@@ -37,24 +39,24 @@ class Notifications
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): ?User
     {
         return $this->user_id;
     }
 
-    public function setUserId(int $user_id): static
+    public function setUserId(?User $user_id): static
     {
         $this->user_id = $user_id;
 
         return $this;
     }
 
-    public function getMessageId(): ?int
+    public function getMessageId(): ?Messages
     {
         return $this->message_id;
     }
 
-    public function setMessageId(int $message_id): static
+    public function setMessageId(Messages $message_id): static
     {
         $this->message_id = $message_id;
 

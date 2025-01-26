@@ -14,17 +14,22 @@ class Messages
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $sender_id = null;
+    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $sender_id = null;
 
-    #[ORM\Column]
-    private ?int $receiver_id = null;
+    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $receiver_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column]
     private ?\DateTimeImmutable $sent_at = null;
+
+    #[ORM\OneToOne(mappedBy: 'message_id', cascade: ['persist', 'remove'])]
+    private ?Notifications $notifications = null;
 
     public function getId(): ?int
     {
@@ -38,24 +43,24 @@ class Messages
         return $this;
     }
 
-    public function getSenderId(): ?int
+    public function getSenderId(): ?User
     {
         return $this->sender_id;
     }
 
-    public function setSenderId(int $sender_id): static
+    public function setSenderId(?User $sender_id): static
     {
         $this->sender_id = $sender_id;
 
         return $this;
     }
 
-    public function getReceiverId(): ?int
+    public function getReceiverId(): ?User
     {
         return $this->receiver_id;
     }
 
-    public function setReceiverId(int $receiver_id): static
+    public function setReceiverId(?User $receiver_id): static
     {
         $this->receiver_id = $receiver_id;
 
@@ -79,9 +84,26 @@ class Messages
         return $this->sent_at;
     }
 
-    public function setSentAt(?\DateTimeImmutable $sent_at): static
+    public function setSentAt(\DateTimeImmutable $sent_at): static
     {
         $this->sent_at = $sent_at;
+
+        return $this;
+    }
+
+    public function getNotifications(): ?Notifications
+    {
+        return $this->notifications;
+    }
+
+    public function setNotifications(Notifications $notifications): static
+    {
+        // set the owning side of the relation if necessary
+        if ($notifications->getMessageId() !== $this) {
+            $notifications->setMessageId($this);
+        }
+
+        $this->notifications = $notifications;
 
         return $this;
     }

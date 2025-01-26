@@ -14,8 +14,9 @@ class FeedbackSupport
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\ManyToOne(inversedBy: 'feedbackSupports')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user_id = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $feedback = null;
@@ -35,12 +36,12 @@ class FeedbackSupport
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): ?User
     {
         return $this->user_id;
     }
 
-    public function setUserId(int $user_id): static
+    public function setUserId(?User $user_id): static
     {
         $this->user_id = $user_id;
 

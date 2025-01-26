@@ -13,8 +13,9 @@ class Preferences
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
-    private ?int $user_id = null;
+    #[ORM\OneToOne(inversedBy: 'preferences', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user_id = null;
 
     #[ORM\Column]
     private ?int $age_min = null;
@@ -22,8 +23,9 @@ class Preferences
     #[ORM\Column]
     private ?int $age_max = null;
 
-    #[ORM\Column]
-    private ?int $province_id = null;
+    #[ORM\ManyToOne(inversedBy: 'preferences')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Province $province_id = null;
 
     public function getId(): ?int
     {
@@ -37,12 +39,12 @@ class Preferences
         return $this;
     }
 
-    public function getUserId(): ?int
+    public function getUserId(): ?User
     {
         return $this->user_id;
     }
 
-    public function setUserId(int $user_id): static
+    public function setUserId(User $user_id): static
     {
         $this->user_id = $user_id;
 
@@ -73,12 +75,12 @@ class Preferences
         return $this;
     }
 
-    public function getProvinceId(): ?int
+    public function getProvinceId(): ?Province
     {
         return $this->province_id;
     }
 
-    public function setProvinceId(int $province_id): static
+    public function setProvinceId(?Province $province_id): static
     {
         $this->province_id = $province_id;
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -24,6 +26,17 @@ class User
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
+
+    /**
+     * @var Collection<int, FeedbackSupport>
+     */
+    #[ORM\OneToMany(targetEntity: FeedbackSupport::class, mappedBy: 'user_id')]
+    private Collection $feedbackSupports;
+
+    public function __construct()
+    {
+        $this->feedbackSupports = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -81,6 +94,36 @@ class User
     public function setCreatedAt(?\DateTimeImmutable $created_at): static
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FeedbackSupport>
+     */
+    public function getFeedbackSupports(): Collection
+    {
+        return $this->feedbackSupports;
+    }
+
+    public function addFeedbackSupport(FeedbackSupport $feedbackSupport): static
+    {
+        if (!$this->feedbackSupports->contains($feedbackSupport)) {
+            $this->feedbackSupports->add($feedbackSupport);
+            $feedbackSupport->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFeedbackSupport(FeedbackSupport $feedbackSupport): static
+    {
+        if ($this->feedbackSupports->removeElement($feedbackSupport)) {
+            // set the owning side to null (unless already changed)
+            if ($feedbackSupport->getUserId() === $this) {
+                $feedbackSupport->setUserId(null);
+            }
+        }
 
         return $this;
     }
