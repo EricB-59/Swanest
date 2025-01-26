@@ -13,8 +13,7 @@ final class UserController extends AbstractController
     public function index(): JsonResponse
     {
         return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/UserController.php',
+            'message' => 'App_user(Symfony) working!',
         ]);
     }
 }
