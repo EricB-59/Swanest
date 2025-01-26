@@ -6,11 +6,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-class UserController extends AbstractController
+final class UserController extends AbstractController
 {
-    #[Route('/user', name: 'app_user', methods: ['GET'])]
+    #[Route('/user', name: 'app_user')]
     public function index(): JsonResponse
     {
-        return $this->json(['id' => 1, 'name' => 'John Doe']);
+        return $this->json([
+            'message' => 'Welcome to your new controller!',
+            'path' => 'src/Controller/UserController.php',
+        ]);
     }
 }
