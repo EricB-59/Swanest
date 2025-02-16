@@ -1,22 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { RouterModule } from '@angular/router';
-import { UserService } from './services/user.service';
+import { UserService } from './services/user/user.service';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterModule],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'app';
 
-  constructor(private test: UserService) {}
+  constructor(private _userService: UserService) {}
 
-  ngOnInit() {
-    this.test.test().subscribe((result) => {
-      console.log(result);
+  ngOnInit(): void {
+    this._userService.getTest().subscribe({
+      next: (result) => {
+        console.log(result);
+      },
+      error: (error) => {
+        console.log(error);
+      },
     });
   }
 }
