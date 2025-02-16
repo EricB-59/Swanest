@@ -13,7 +13,7 @@ class Gender
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 25)]
     private ?string $name = null;
 
     public function getId(): ?int

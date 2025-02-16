@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -27,16 +25,8 @@ class User
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
 
-    /**
-     * @var Collection<int, FeedbackSupport>
-     */
-    #[ORM\OneToMany(targetEntity: FeedbackSupport::class, mappedBy: 'user_id')]
-    private Collection $feedbackSupports;
-
-    public function __construct()
-    {
-        $this->feedbackSupports = new ArrayCollection();
-    }
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Profile $profile = null;
 
     public function getId(): ?int
     {
@@ -98,32 +88,19 @@ class User
         return $this;
     }
 
-    /**
-     * @return Collection<int, FeedbackSupport>
-     */
-    public function getFeedbackSupports(): Collection
+    public function getProfile(): ?Profile
     {
-        return $this->feedbackSupports;
+        return $this->profile;
     }
 
-    public function addFeedbackSupport(FeedbackSupport $feedbackSupport): static
+    public function setProfile(Profile $profile): static
     {
-        if (!$this->feedbackSupports->contains($feedbackSupport)) {
-            $this->feedbackSupports->add($feedbackSupport);
-            $feedbackSupport->setUserId($this);
+        // set the owning side of the relation if necessary
+        if ($profile->getUser() !== $this) {
+            $profile->setUser($this);
         }
 
-        return $this;
-    }
-
-    public function removeFeedbackSupport(FeedbackSupport $feedbackSupport): static
-    {
-        if ($this->feedbackSupports->removeElement($feedbackSupport)) {
-            // set the owning side to null (unless already changed)
-            if ($feedbackSupport->getUserId() === $this) {
-                $feedbackSupport->setUserId(null);
-            }
-        }
+        $this->profile = $profile;
 
         return $this;
     }

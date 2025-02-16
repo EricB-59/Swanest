@@ -9,11 +9,11 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/user', name: 'app_user')]
 final class UserController extends AbstractController
 {
-    #[Route('/test', name: 'test')]
+    #[Route('/test', name: 'app_user_test')]
     public function index(): JsonResponse
     {
         return $this->json([
-            'message' => 'App_user(Symfony) working!',
+            'message' => 'Welcome to your user controller',
         ]);
     }
 }
