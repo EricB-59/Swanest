@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../../app/models/User';
+import { User } from '../../models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -23,8 +23,8 @@ export class UserService {
     let url = `${this.apiUrl}/find/${id}`;
     return this.connHttp.get<User>(url, {
       headers: new HttpHeaders({
-        'Content-Type':'aplication/json' 
-      })
-    })
+        'Content-Type': 'aplication/json',
+      }),
+    });
   }
 }
