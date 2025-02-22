@@ -23,7 +23,15 @@ export class UserService {
     let url = `${this.apiUrl}/find/${id}`;
     return this.connHttp.get<User>(url, {
       headers: new HttpHeaders({
-        'Content-Type': 'aplication/json',
+        'Content-Type': 'application/json',
+      }),
+    });
+  }
+
+  create(user: User): Observable<object> {
+    return this.connHttp.post(this.apiUrl + '/create', user, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
       }),
     });
   }
