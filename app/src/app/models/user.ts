@@ -4,7 +4,7 @@ export class User {
   username: string;
   email: string;
   password: string;
-  profile: Profile;
+  profile?: Profile;
 
   constructor({
     username,
@@ -15,7 +15,7 @@ export class User {
     username: string;
     email: string;
     password: string;
-    profile: Profile;
+    profile?: Profile;
   }) {
     this.username = username;
     this.email = email;

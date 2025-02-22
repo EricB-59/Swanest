@@ -1,0 +1,13 @@
+<section>
+  <form novalidate [formGroup]="registerForm" (submit)="register()">
+    <fieldset class="flex flex-col w-48">
+      <label for="Username">Username:</label>
+      <input type="text" formControlName="username" />
+      <label for="Email">Email:</label>
+      <input type="text" formControlName="email" />
+      <label for="Password">Password:</label>
+      <input type="text" formControlName="password" />
+    </fieldset>
+    <input type="submit" value="send" />
+  </form>
+</section>
