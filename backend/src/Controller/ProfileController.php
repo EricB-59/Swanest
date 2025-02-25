@@ -31,28 +31,27 @@ final class ProfileController extends AbstractController
 
         $newGender = $entityManager->getRepository(Gender::class)->findOneBy(['id'=>$gender]);
         $newProvince = $entityManager->getRepository(Province::class)->findOneBy(['id'=>$province]);
-        $newProfile = $entityManager->getRepository(Profile::class)->findOneBy(['user' => $id]);
         $newBirthDate = new DateTime($birthDate, null);
+
+        $newProfile = $entityManager->getRepository(Profile::class)->findOneBy(['user' => $id]);
 
         if($newProfile == null){
             return new JsonResponse('Profile Not found', Response::HTTP_BAD_REQUEST);
-        }else{
-            if(!empty( $firstName) || !empty($lastName) || !empty($bio) || !empty($gender) || !empty($birthDate) || !empty($province)){
-
-                $newProfile->setFirstName($firstName);
-                $newProfile->setLastName($lastName);
-                $newProfile->setBio($bio);
-                $newProfile->setGender($newGender);
-                $newProfile->setBirthdate($newBirthDate);
-                $newProfile->setProvince($newProvince);
-
-                $entityManager->flush();
-
-                return new JsonResponse('Update correct!', Response::HTTP_OK);
-
-            }else{
-                return new JsonResponse('Update not correct!', Response::HTTP_BAD_REQUEST);
-            }
         }
+        
+        if(empty( $firstName) || empty($lastName) || empty($bio) || empty($gender) || empty($birthDate) || empty($province)){
+            return new JsonResponse('Update not correct!', Response::HTTP_BAD_REQUEST);
+        }
+
+        $newProfile->setFirstName($firstName);
+        $newProfile->setLastName($lastName);
+        $newProfile->setBio($bio);
+        $newProfile->setGender($newGender);
+        $newProfile->setBirthdate($newBirthDate);
+        $newProfile->setProvince($newProvince);
+
+        $entityManager->flush();
+
+        return new JsonResponse('Update correct!', Response::HTTP_OK);
     }
 }
