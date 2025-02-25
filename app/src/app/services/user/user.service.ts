@@ -18,6 +18,12 @@ export class UserService {
       }),
     });
   }
+  delete(id: number): Observable<boolean> {
+    let url = this.apiUrl + `/delete/${id}`;
+    return this.connHttp.delete<boolean>(url, {
+      headers: new HttpHeaders({ 'Content Type': 'application/json' }),
+    });
+  }
 
   find(id: number): Observable<User> {
     let url = `${this.apiUrl}/find/${id}`;
