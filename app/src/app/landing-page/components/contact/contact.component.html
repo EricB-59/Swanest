@@ -1,36 +1,64 @@
-<section class="flex flex-row p-24">
-  <article>
-    <h1 class="flex flex-row text-9xl font-bold">
+<section class="flex flex-row p-64 bg-white">
+  <article class="w-1/2 pr-12 pl-12">
+    <!-- w-1/2 en tailwind se usa para determinar que el width de este article ocupará la mitad del espacio del section-->
+    <h1 class="flex items-center text-8xl font-bold text-purple-600">
       CO
-      <div class="flex flex-row"><span>N</span><img src="" alt="" /></div>
+      <span class="relative">
+        <!--Demomento no se que poner pero el relative servirá oara que la N pueda estar por encima de la otra o eso he entendido-->
+        <span class="">N</span>
+      </span>
       <span>T</span>
-      <span class="text-white drop-shadow-[5px_5px_0px_rgba(0,0,0,0.99)]"
-        >ACTO</span
-      >
+      <span class="border-text">ACTO</span>
     </h1>
-    <p>
+    <p class="mt-4 text-black pr-20">
+      <!--Demomento no se como hacer para tener los mismos saltos de linea que el figma pero me esperaré a cambiar la tipografía para hacerlo-->
       Tu opinión es muy importante para nosotros. No solo estamos aquí para
       resolver dudas, sino también para recibir tus ideas y sugerencias para
       mejorar la plataforma.
     </p>
   </article>
-  <article>
-    <form action="">
-      <label for="">
-        <input type="text" name="" id="" placeholder="Correo electrónico*" />
-      </label>
-      <label for="">
-        <input type="text" name="" id="" placeholder="Asunto*" />
-      </label>
-      <label for="">
-        <input type="text-area" name="" id="" placeholder="Mensaje*" />
-      </label>
-      <label for="">
-        <input type="checkbox" name="" id="" /> Acepto los
-        <button>terminos y condiciones</button>
+
+  <article class="w-1/2 pr-12 pl-12">
+    <form class="flex flex-col space-y-4">
+      <input
+        type="text"
+        placeholder="Correo electrónico *"
+        class="p-3 border border-gray-300 rounded-lg"
+      />
+      <input
+        type="text"
+        placeholder="Asunto *"
+        class="p-3 border border-gray-300 rounded-lg"
+      />
+      <textarea
+        placeholder="Mensaje *"
+        class="p-3 border border-gray-300 rounded-lg h-32"
+      ></textarea>
+
+      <label class="flex items-center space-x-2">
+        <input type="checkbox" class="w-5 h-5 cursor-pointer" />
+        <span>Acepto los </span>
+        <button
+          type="button"
+          class="text-black underline underline-offset-2 cursor-pointer"
+        >
+          términos y condiciones
+        </button>
       </label>
 
-      <input type="submit" />
+      <button
+        type="submit"
+        class="p-3 bg-white text-black border border-black cursor-pointer"
+      >
+        ENVIAR
+      </button>
     </form>
   </article>
 </section>
+
+<style>
+  .border-text {
+    color: white;
+    -webkit-text-stroke: 1px #7d2ae8;
+  }
+</style>
