@@ -5,7 +5,7 @@ import { RegisterUserComponent } from './landing-page/auth/register-user/registe
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RegisterUserComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
