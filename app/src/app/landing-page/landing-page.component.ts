@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ContactComponent } from './components/contact/contact.component';
 
 @Component({
   selector: 'app-landing-page',
