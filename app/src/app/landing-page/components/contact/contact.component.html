@@ -1,1 +1,61 @@
-<p>contact works!</p>
+<section class="flex flex-row p-64 bg-white">
+  <article class="w-1/2 pr-12 pl-12">
+    <h1 class="flex items-center text-8xl font-bold text-purple-600">
+      CO
+      <span class="relative">
+        <span class="">N</span>
+      </span>
+      <span>T</span>
+      <span class="border-text">ACTO</span>
+    </h1>
+    <p class="mt-4 text-black pr-20">
+      Tu opinión es muy importante para nosotros. No solo estamos aquí para
+      resolver dudas, sino también para recibir tus ideas y sugerencias para
+      mejorar la plataforma.
+    </p>
+  </article>
+
+  <article class="w-1/2 pr-12 pl-12">
+    <form class="flex flex-col space-y-4">
+      <input
+        type="text"
+        placeholder="Correo electrónico *"
+        class="p-3 border-b-2 border-black"
+      />
+      <input
+        type="text"
+        placeholder="Asunto *"
+        class="p-3 border-b-2 border-black"
+      />
+      <textarea
+        placeholder="Mensaje *"
+        class="p-3 border-b-2 border-black h-32"
+      ></textarea>
+
+      <label class="flex items-center space-x-2">
+        <input type="checkbox" class="w-5 h-5 cursor-pointer" />
+        <span>Acepto los </span>
+        <button
+          type="button"
+          class="text-black underline underline-offset-2 cursor-pointer"
+        >
+          términos y condiciones
+        </button>
+      </label>
+
+      <button
+        type="submit"
+        class="p-3 bg-white text-black border border-black cursor-pointer"
+      >
+        ENVIAR
+      </button>
+    </form>
+  </article>
+</section>
+
+<style>
+  .border-text {
+    color: white;
+    -webkit-text-stroke: 1px #7d2ae8;
+  }
+</style>
