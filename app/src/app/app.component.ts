@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { UserService } from './services/user/user.service';
 import { RegisterUserComponent } from './landing-page/auth/register-user/register-user.component';
+import { ApplicationComponent } from "./landing-page/components/application/application.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, ApplicationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
