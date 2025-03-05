@@ -3,27 +3,27 @@
 
 @font-face {
   font-family: "basereg";
-  src: url("../public/assets/BaseNeue-Regular.ttf");
+  src: url("../public/assets/Fonts/BaseNeue-Regular.ttf");
 }
 
 @font-face {
   font-family: "basebold";
-  src: url("../public/assets/BaseNeue-SemiBold.ttf");
+  src: url("../public/assets/Fonts/BaseNeue-SemiBold.ttf");
 }
 
 @font-face {
   font-family: "cesare";
-  src: url("../public/assets/Cesare-Regular.otf");
+  src: url("../public/assets/Fonts/Cesare-Regular.otf");
 }
 
 @font-face {
   font-family: "zumeblack";
-  src: url("../public/assets/Zuume-Black.ttf");
+  src: url("../public/assets/Fonts/Zuume-Black.ttf");
 }
 
 @font-face {
   font-family: "zumebold";
-  src: url("../public/assets/Zuume-Bold.ttf");
+  src: url("../public/assets/Fonts/Zuume-Bold.ttf");
 }
 
 @theme {
@@ -32,7 +32,16 @@
   --font-cesare: cesare;
   --font-zumeblack: zumeblack;
   --font-zumebold: zumebold;
-
+  --animation-slide: slide 30s linear infinite;
   --color-swapur-500: rgba(154, 86, 232, 0.77);
   --color-swapink-500: rgba(249, 35, 113, 1);
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
