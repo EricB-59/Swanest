@@ -1,14 +1,38 @@
-<section class="flex flex-row p-64 bg-white h-screen snap-center">
-  <article class="w-1/2 pr-12 pl-12">
-    <h1 class="flex items-center text-8xl font-bold text-purple-600">
-      CO
-      <span class="relative">
-        <span class="">N</span>
-      </span>
-      <span>T</span>
-      <span class="border-text">ACTO</span>
-    </h1>
-    <p class="mt-4 text-black pr-20">
+<section class="flex flex-row p-30 bg-white">
+  <article class="w-1/2 px-12">
+    <div class="flex flex-row">
+      <h1
+        class="inline-flex text-[180px] font-bold text-purple-600 font-zumeblack tracking-wider leading-40"
+      >
+        CO
+      </h1>
+
+      <div class="relative">
+        <h1
+          class="inline-flex text-[180px] font-bold text-purple-600 font-zumeblack tracking-wider leading-40"
+        >
+          N
+        </h1>
+        <img
+          class="absolute top-[-7%] w-full h-full scale-[1.3]"
+          src="./assets/contact-n.svg"
+          alt=""
+        />
+      </div>
+
+      <h1
+        class="inline-flex text-[180px] font-bold text-purple-600 font-zumeblack tracking-wider leading-40"
+      >
+        T
+      </h1>
+      <h1
+        class="border-text text-[180px] font-bold font-zumeblack tracking-wider leading-40"
+      >
+        ACTO
+      </h1>
+    </div>
+
+    <p class="mt-6 text-black pr-5 font-basereg text-3xl">
       Tu opinión es muy importante para nosotros. No solo estamos aquí para
       resolver dudas, sino también para recibir tus ideas y sugerencias para
       mejorar la plataforma.
@@ -20,24 +44,24 @@
       <input
         type="text"
         placeholder="Correo electrónico *"
-        class="p-3 border-b-2 border-black"
+        class="p-3 border-b-2 border-black placeholder:text-gray-600 font-basereg outline-none"
       />
       <input
         type="text"
         placeholder="Asunto *"
-        class="p-3 border-b-2 border-black"
+        class="p-3 border-b-2 border-black placeholder:text-gray-600 font-basereg outline-none"
       />
       <textarea
         placeholder="Mensaje *"
-        class="p-3 border-b-2 border-black h-32"
+        class="p-3 border-b-2 border-black placeholder:text-gray-600 h-32 font-basereg outline-none"
       ></textarea>
 
-      <label class="flex items-center space-x-2">
-        <input type="checkbox" class="w-5 h-5 cursor-pointer" />
+      <label class="flex items-center space-x-2 font-basereg">
+        <input type="checkbox" class="w-5 h-5 cursor-pointer font-basereg" />
         <span>Acepto los </span>
         <button
           type="button"
-          class="text-black underline underline-offset-2 cursor-pointer"
+          class="text-black underline underline-offset-2 cursor-pointer font-basereg"
         >
           términos y condiciones
         </button>
@@ -56,6 +80,6 @@
 <style>
   .border-text {
     color: white;
-    -webkit-text-stroke: 1px #7d2ae8;
+    -webkit-text-stroke: 4px #7d2ae8;
   }
 </style>
