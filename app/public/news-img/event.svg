@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <!-- Background -->
+  <rect width="400" height="300" fill="#f0f0f0"/>
+  
+  <!-- Gift box -->
+  <rect x="150" y="120" width="100" height="100" fill="#e74c3c"/>
+  <rect x="145" y="115" width="110" height="10" fill="#c0392b"/>
+  <rect x="195" y="115" width="10" height="110" fill="#c0392b"/>
+  <rect x="145" y="170" width="110" height="5" fill="#c0392b"/>
+  
+  <!-- Ribbon and bow -->
+  <path d="M200 80 L200 115" stroke="#c0392b" stroke-width="10"/>
+  <path d="M170 95 Q200 70 230 95" stroke="#c0392b" stroke-width="10" fill="none"/>
+  
+  <!-- Hearts floating -->
+  <path d="M100 70 C100 50 130 50 130 70 C130 90 100 100 100 70" fill="#e74c3c"/>
+  <path d="M270 90 C270 70 300 70 300 90 C300 110 270 120 270 90" fill="#e74c3c"/>
+  <path d="M310 150 C310 130 340 130 340 150 C340 170 310 180 310 150" fill="#e74c3c"/>
+  <path d="M80 180 C80 160 110 160 110 180 C110 200 80 210 80 180" fill="#e74c3c"/>
+  
+  <!-- Swans forming heart shape -->
+  <path d="M140 250 C120 230 130 210 150 220 C170 210 180 230 160 250" fill="#ffffff" stroke="#333" stroke-width="2"/>
+  <path d="M240 250 C260 230 250 210 230 220 C210 210 200 230 220 250" fill="#ffffff" stroke="#333" stroke-width="2"/>
+</svg>
