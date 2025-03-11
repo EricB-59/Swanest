@@ -16,20 +16,23 @@
   </article>
 
   <article class="w-1/2 pr-12 pl-12">
-    <form class="flex flex-col space-y-4">
+    <form [formGroup]="form" (submit)="add()" class="flex flex-col space-y-4">
       <input
         type="text"
         placeholder="Correo electrónico *"
         class="p-3 border-b-2 border-black"
+        formControlName="email"
       />
       <input
         type="text"
         placeholder="Asunto *"
         class="p-3 border-b-2 border-black"
+        formControlName="subject"
       />
       <textarea
         placeholder="Mensaje *"
         class="p-3 border-b-2 border-black h-32"
+        formControlName="message"
       ></textarea>
 
       <label class="flex items-center space-x-2">

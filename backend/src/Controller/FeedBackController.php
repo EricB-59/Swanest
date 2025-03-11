@@ -24,20 +24,22 @@ final class FeedBackController extends AbstractController
         $subject = $data["subject"];
         $message = $data["message"];
 
+        
+
         if(empty($email)||empty($subject)||empty($message)){
-            return new JsonResponse('Feedback incorrect, no empti fields!', Response::HTTP_BAD_REQUEST);
+            return new JsonResponse('Feedback incorrect, no empty fields!', Response::HTTP_BAD_REQUEST);
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return new JsonResponse('Invalid email, bad format', Response::HTTP_BAD_REQUEST);
         }
 
-        if(strlen($subject) < 50){
+        if(strlen($subject) > 50){
             return new JsonResponse('Invalid subject, too long', Response::HTTP_BAD_REQUEST);
         }
 
-        if(strlen($message) < 255){
-            return new JsonResponse('Invalid subject, too long', Response::HTTP_BAD_REQUEST);
+        if(strlen($message) > 255){
+            return new JsonResponse('Invalid message, too long', Response::HTTP_BAD_REQUEST);
         }
 
         

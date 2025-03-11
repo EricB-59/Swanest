@@ -12,6 +12,7 @@ export class FeedbackService {
   constructor(private connHttp: HttpClient) {}
 
   add(feedback: Feedback): Observable<object> {
+    console.log(feedback);
     return this.connHttp.post(this.apiUrl + '/add', feedback, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
