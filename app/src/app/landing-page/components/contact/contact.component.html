@@ -40,7 +40,7 @@
   </article>
 
   <article class="w-1/2 pr-12 pl-12">
-    <form class="flex flex-col space-y-4">
+    <form [formGroup]="form" (submit)="add()" class="flex flex-col space-y-4">
       <input
         type="text"
         placeholder="Correo electrónico *"
