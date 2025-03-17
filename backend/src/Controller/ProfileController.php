@@ -101,7 +101,11 @@ final class ProfileController extends AbstractController
         $profile->setProvince($newProvince);
         
         $dateTimeZone = new DateTimeZone("Europe/Madrid");
-        $user->setCreatedAt(new DateTimeImmutable(timezone: $dateTimeZone));
+        $profile->setCreatedAt(new DateTimeImmutable(timezone: $dateTimeZone));
         
+        $entityManager->persist($profile);
+        $entityManager->flush();
+
+        return new JsonResponse('Profile Created succesfully!', Response::HTTP_OK);
     }
 }
