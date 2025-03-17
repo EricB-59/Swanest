@@ -42,6 +42,10 @@ class Profile
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?UserLabel $labels = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -158,6 +162,18 @@ class Profile
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    public function getLabels(): ?UserLabel
+    {
+        return $this->labels;
+    }
+
+    public function setLabels(UserLabel $labels): static
+    {
+        $this->labels = $labels;
 
         return $this;
     }
