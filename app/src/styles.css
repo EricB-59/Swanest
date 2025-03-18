@@ -36,3 +36,6 @@
   --color-swapur-500: rgba(154, 86, 232, 0.77);
   --color-swapink-500: rgba(249, 35, 113, 1);
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
