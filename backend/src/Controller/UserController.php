@@ -106,4 +106,36 @@ final class UserController extends AbstractController
             return new JsonResponse('Ese ID de usuario es inexistente!', Response::HTTP_NOT_FOUND);
         }
     }
+    public function login (Request $request, EntityManagerInterface $entityManager) : JsonResponse {
+        $data = json_decode($request->getContent(), true);
+        $identifier = $data['identifier'];
+        $password = $data['password'];
+        $userRepository = $entityManager->getRepository(User::class);
+        $user = $userRepository->findByEmailOrUsername($identifier);
+        $userArray = [
+            "id" => $user->getId(),
+            "username" => $user->getUsername(),
+            "email" => $user->getEmail(),
+            "password" => $user->getPassword(),
+            // "profile" => [
+            //     "idProfile" => $user->getProfile()->getId(),
+            //     "first_name" => $user->getProfile()->getFirstName(),
+            //     "last_name" => $user->getProfile()->getLastName(),
+            //     "birthdate" => $user->getProfile()->getBirthdate(),
+            //     "gender" => $user->getProfile()->getGender(),
+            //     "province" => $user->getProfile()->getProvince(),
+            //     "bio" => $user->getProfile()->getBio()
+            // ]
+        ]; 
+
+        if(!$user){
+            return $this->json(false, Response::HTTP_NOT_FOUND); 
+        }
+
+        if(!($user->getPassword() === $password)) {
+            return $this->json(false, Response::HTTP_NOT_FOUND); 
+        }
+        return new JsonResponse($userArray, Response::HTTP_OK);
+        
+    }
 }
