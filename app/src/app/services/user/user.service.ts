@@ -41,4 +41,9 @@ export class UserService {
       }),
     });
   }
+  login(identifier: string, password: string): Observable<User> {
+    const data = { identifier, password };
+    let url = `${this.apiUrl}/login`;
+    return this.connHttp.post<User>(url, data);
+  }
 }
