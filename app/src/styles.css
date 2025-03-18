@@ -1,41 +1,57 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
 
+*::-webkit-scrollbar {
+  width:5px
+}
+
+*::-webkit-scrollbar-thumb {
+  background: black;
+}
+
+*::-webkit-scrollbar:horizontal {
+  height: 0;
+  display: none;
+}
+
 @font-face {
   font-family: "basereg";
-  src: url("../public/assets/BaseNeue-Regular.ttf");
+  src: url("/assets/Fonts/BaseNeue-Regular.ttf");
 }
 
 @font-face {
-  font-family: "basebold";
-  src: url("../public/assets/BaseNeue-SemiBold.ttf");
+  font-family: "basesemibold";
+  src: url("/assets/Fonts/BaseNeue-SemiBold.ttf");
 }
 
 @font-face {
-  font-family: "cesare";
-  src: url("../public/assets/Cesare-Regular.otf");
+  font-family: "baselight";
+  src: url("/assets/Fonts/BaseNeue-Light.ttf");
 }
 
 @font-face {
-  font-family: "zumeblack";
-  src: url("../public/assets/Zuume-Black.ttf");
+  font-family: "basemedium";
+  src: url("/assets/Fonts/BaseNeue-Medium.ttf");
 }
 
 @font-face {
-  font-family: "zumebold";
-  src: url("../public/assets/Zuume-Bold.ttf");
+  font-family: "thunder";
+  src: url("/assets/Fonts/Thunder-BlackLC.otf");
+}
+
+@keyframes infinite-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
 }
 
 @theme {
   --font-basereg: basereg;
-  --font-basebold: basebold;
-  --font-cesare: cesare;
-  --font-zumeblack: zumeblack;
-  --font-zumebold: zumebold;
-
+  --font-basesemibold: basesemibold;
+  --font-basemedium: basemedium;
+  --font-baselight: baselight;
+  --font-thunder: thunder;
+  --animate-infinite-scroll: infinite-scroll 25s linear infinite;
   --color-swapur-500: rgba(154, 86, 232, 0.77);
   --color-swapink-500: rgba(249, 35, 113, 1);
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

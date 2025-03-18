@@ -1,18 +1,7 @@
-<section class="h-screen overflow-y-auto">
-  <button mat-raised-button class="cursor-pointer bg-blue-300" (click)="openModalAuth()">
-    Inicir Sesión / Registrate
-  </button>
-  <article class="h-screen snap-start">
-    <app-landing></app-landing>
-  </article>
-  <article class="h-screen snap-start">
-    <!-- <app-auth></app-auth> -->
-    <app-application></app-application>
-  </article>
-  <article class="h-screen snap-start">
-    <app-news></app-news>
-  </article>
-  <article class="h-screen snap-start">
-    <app-contact></app-contact>
-  </article>
-</section>
+<div class="sections-container">
+  <app-landing></app-landing>    
+  <app-application></app-application>
+  <app-news></app-news>
+  <app-contact></app-contact>
+</div>
+
