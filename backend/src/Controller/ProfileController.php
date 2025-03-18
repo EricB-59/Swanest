@@ -59,11 +59,12 @@ final class ProfileController extends AbstractController
     }
 
 
-    #[Route(path: '/createProfile/{id}', name:'app_profile_create', methods: ['POST'],)]
+    #[Route(path: '/create', name:'app_profile_create', methods: ['POST'],)]
     public function personalInfo(EntityManagerInterface $entityManager, Request $request){
 
         $data = json_decode($request->getContent(), true);
 
+        $id = $data["id"];
         $firstName = $data["first_name"];
         $lastName = $data["last_name"];
         $bio = $data["bio"];
@@ -79,11 +80,11 @@ final class ProfileController extends AbstractController
             return new JsonResponse('No empty fields!', Response::HTTP_BAD_REQUEST);
         }
 
-        if(preg_match('/^[a-zA-Z]+$/', $firstName)){
+        if(!preg_match('/^[a-zA-Z]+$/', $firstName)){
             return new JsonResponse('Only allow letters in the name', Response::HTTP_BAD_REQUEST);
         }
 
-        if(preg_match('/^[a-zA-Z]+$/', $lastName)){
+        if(!preg_match('/^[a-zA-Z]+$/', $lastName)){
             return new JsonResponse('Only allow letters in the surname', Response::HTTP_BAD_REQUEST);
         }
 
@@ -91,8 +92,20 @@ final class ProfileController extends AbstractController
             return new JsonResponse('Bio too long', Response::HTTP_BAD_REQUEST);
         }
 
-        $profile = new Profile();
 
+        $actualYear = (int) date("Y");
+
+        $year = explode("-",$birthDate);
+        $profileYear = (int) $year[0];
+
+        if(($actualYear - $profileYear) < 18){
+            return new JsonResponse('Wrong age', Response::HTTP_BAD_REQUEST);
+        }
+
+        $profile = new Profile();
+        $user = $entityManager->getRepository(User::class)->findOneBy(['id'=>$id]);
+
+        $profile->setUser($user);
         $profile->setFirstName($firstName);
         $profile->setLastName($lastName);
         $profile->setBio($bio);
@@ -102,7 +115,8 @@ final class ProfileController extends AbstractController
         
         $dateTimeZone = new DateTimeZone("Europe/Madrid");
         $profile->setCreatedAt(new DateTimeImmutable(timezone: $dateTimeZone));
-        
+        $profile->setUpdatedAt(new DateTimeImmutable(timezone: $dateTimeZone));
+
         $entityManager->persist($profile);
         $entityManager->flush();
 
