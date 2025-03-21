@@ -2,7 +2,7 @@
 @import "tailwindcss";
 
 *::-webkit-scrollbar {
-  width:5px
+  width: 5px;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -40,8 +40,12 @@
 }
 
 @keyframes infinite-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-100%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 @theme {
@@ -54,4 +58,3 @@
   --color-swapur-500: rgba(154, 86, 232, 0.77);
   --color-swapink-500: rgba(249, 35, 113, 1);
 }
-

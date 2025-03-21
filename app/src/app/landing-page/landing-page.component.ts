@@ -14,8 +14,6 @@ import { MatDialog } from '@angular/material/dialog';
     ApplicationComponent,
     NewsComponent,
     ContactComponent,
-    AuthComponent,
-    LoginUserComponent,
   ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css',
