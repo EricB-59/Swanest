@@ -66,7 +66,7 @@ export class LoginUserComponent implements OnInit {
       },
       (error) => {
         console.log(error);
-      }
+      },
     );
   }
 }

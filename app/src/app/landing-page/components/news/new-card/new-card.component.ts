@@ -10,27 +10,27 @@ import { Component } from '@angular/core';
       class="relative w-[90rem] h-[30rem] flex justify-center flex-col overflow-hidden rounded-4xl"
     >
       @for (new of news; track $index) {
-      <article
-        class="absolute top-0 left-0 w-full h-full grid grid-cols-2 bg-black carousel-card"
-        [ngStyle]="{ '--index': $index }"
-      >
-        <div class="flex flex-col justify-between h-full p-8">
-          <div>
-            <h2 class="text-white text-6xl font-basebold mb-4">
-              {{ new.title }}
-            </h2>
-            <p class="text-white font-basereg text-3xl">{{ new.text }}</p>
+        <article
+          class="absolute top-0 left-0 w-full h-full grid grid-cols-2 bg-black carousel-card"
+          [ngStyle]="{ '--index': $index }"
+        >
+          <div class="flex flex-col justify-between h-full p-8">
+            <div>
+              <h2 class="text-white text-6xl font-basebold mb-4">
+                {{ new.title }}
+              </h2>
+              <p class="text-white font-basereg text-3xl">{{ new.text }}</p>
+            </div>
+            <span class="text-red-600 text-2xl">{{ new.date }}</span>
           </div>
-          <span class="text-red-600 text-2xl">{{ new.date }}</span>
-        </div>
-        <div class="h-full flex items-center justify-end p-8">
-          <img
-            src="{{ 'news-img/' + new.img }}"
-            alt="Picture of the new"
-            class="h-auto object-contain rounded-4xl w-[35rem]"
-          />
-        </div>
-      </article>
+          <div class="h-full flex items-center justify-end p-8">
+            <img
+              src="{{ 'news-img/' + new.img }}"
+              alt="Picture of the new"
+              class="h-auto object-contain rounded-4xl w-[35rem]"
+            />
+          </div>
+        </article>
       }
     </section>
   `,
