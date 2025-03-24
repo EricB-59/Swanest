@@ -4,8 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-update-user',
   imports: [],
   templateUrl: './update-user.component.html',
-  styles: ``
+  styles: ``,
 })
-export class UpdateUserComponent {
-
-}
+export class UpdateUserComponent {}
