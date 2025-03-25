@@ -13,7 +13,7 @@ import { Feedback } from '../../../models/feedback';
 export class ContactComponent {
   constructor(
     private router: Router,
-    private feedbackService: FeedbackService
+    private feedbackService: FeedbackService,
   ) {}
 
   form = new FormGroup({

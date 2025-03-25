@@ -1,7 +1,17 @@
-<div class="sections-container">
-  <app-landing></app-landing>    
-  <app-application></app-application>
-  <app-news></app-news>
-  <app-contact></app-contact>
-</div>
-
+<div
+  class="fixed inset-4 border-4 border-white mix-blend-exclusion pointer-events-none z-50 rounded-4xl"
+></div>
+<section class="h-screen snap-y snap-mandatory overflow-y-auto relative">
+  <article class="h-screen snap-start">
+    <app-landing></app-landing>
+  </article>
+  <article class="h-screen snap-start">
+    <app-application></app-application>
+  </article>
+  <article class="h-screen snap-start">
+    <app-news></app-news>
+  </article>
+  <article class="h-screen snap-start">
+    <app-contact></app-contact>
+  </article>
+</section>
