@@ -14,15 +14,10 @@ import { MatDialog } from '@angular/material/dialog';
     ApplicationComponent,
     NewsComponent,
     ContactComponent,
-    AuthComponent,
-    LoginUserComponent,
   ],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css',
 })
 export class LandingPageComponent {
-  constructor(private _matDialog: MatDialog) {}
-  openModalAuth(): void {
-    this._matDialog.open(AuthComponent);
-  }
+
 }

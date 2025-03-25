@@ -1,7 +1,45 @@
 <div class="fixed inset-0 bg-black/50 flex justify-center items-center">
-  <section class="bg-white rounded-2xl w-5xl h-[40rem]">
-    <app-login-user></app-login-user>
-    <br />
+  <div
+    class="bg-white rounded-[4.625rem] w-[57.5rem] h-145 p-3 flex items-start justify-between relative overflow-hidden"
+  >
+    <div
+      class="absolute w-109 inset-3 bg-[#9272e8] rounded-[4rem] px-5 py-15 flex flex-col"
+    >
+      <img
+        class="absolute top-6 opacity-30"
+        src="/assets/Images/logo.svg"
+        alt="Logo Swan"
+      />
+      <h1
+        class="text-white font-thunder text-[7.375rem] z-10 relative leading-27 [box-decoration-break:clone]"
+      >
+        BIENVENIDO
+      </h1>
+      <div class="flex justify-center">
+        <button class="font-basereg rounded-full bg-white h-14.5 w-46">
+          REGISTRATE
+        </button>
+      </div>
+    </div>
     <app-register-user></app-register-user>
-  </section>
+    <br />
+    <div class="p-10 h-full w-114 relative">
+      <div
+        (click)="close()"
+        class="rounded-full border-2 border-black h-13 w-13 flex justify-center items-center absolute z-10 right-4 top-4 cursor-pointer"
+      >
+        <svg
+          width="17"
+          height="17"
+          viewBox="0 0 17 17"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M1 1L16.558 16.5547" stroke="black" />
+          <path d="M16.5586 1L1.00061 16.5547" stroke="black" />
+        </svg>
+      </div>
+      <app-login-user></app-login-user>
+    </div>
+  </div>
 </div>
