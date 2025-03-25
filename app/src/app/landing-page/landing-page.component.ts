@@ -19,8 +19,5 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrl: './landing-page.component.css',
 })
 export class LandingPageComponent {
-  constructor(private _matDialog: MatDialog) {}
-  openModalAuth(): void {
-    this._matDialog.open(AuthComponent);
-  }
+
 }

@@ -5,8 +5,14 @@ import {
   QueryList,
   ElementRef,
 } from '@angular/core';
+<<<<<<< HEAD
+import { MatDialog } from '@angular/material/dialog';
+=======
+>>>>>>> main
 import { gsap } from 'gsap';
-
+import { AuthComponent } from '../../auth/auth.component';
+import { LoginUserComponent } from '../../auth/login-user/login-user.component';
+import { RegisterUserComponent } from '../../auth/register-user/register-user.component';
 @Component({
   selector: 'app-landing',
   imports: [],
@@ -16,7 +22,10 @@ import { gsap } from 'gsap';
 export class LandingComponent implements AfterViewInit {
   // Usamos ViewChildren para obtener referencias a todos los elementos span
   @ViewChildren('menuText') menuTexts!: QueryList<ElementRef>;
-
+  constructor(private _matDialog: MatDialog) {}
+  openModalAuth(): void {
+    this._matDialog.open(AuthComponent);
+  }
   ngAfterViewInit() {
     // Esperamos a que la vista se inicialice completamente
     setTimeout(() => {
@@ -27,7 +36,11 @@ export class LandingComponent implements AfterViewInit {
   initializeHoverEffects() {
     // Obtenemos todos los elementos li (padres de los spans)
     const menuItems = this.menuTexts.map(
+<<<<<<< HEAD
+      (item) => item.nativeElement.parentElement
+=======
       (item) => item.nativeElement.parentElement,
+>>>>>>> main
     );
 
     // Aplicamos el efecto a cada elemento del menú
@@ -63,7 +76,11 @@ export class LandingComponent implements AfterViewInit {
               borderColor: 'rgba(255, 255, 255, 1)',
               ease: 'power2.out',
             },
+<<<<<<< HEAD
+            0
+=======
             0,
+>>>>>>> main
           );
 
           // Primera parte de la animación - texto hacia arriba
@@ -74,7 +91,11 @@ export class LandingComponent implements AfterViewInit {
               yPercent: -150,
               ease: 'power2.in',
             },
+<<<<<<< HEAD
+            0
+=======
             0,
+>>>>>>> main
           );
 
           // Reposicionamos el texto abajo sin animación
@@ -106,7 +127,11 @@ export class LandingComponent implements AfterViewInit {
               borderColor: 'rgba(255, 255, 255, 0.5)',
               ease: 'power2.out',
             },
+<<<<<<< HEAD
+            0
+=======
             0,
+>>>>>>> main
           );
 
           // Primera parte de la animación - texto hacia abajo
@@ -117,7 +142,11 @@ export class LandingComponent implements AfterViewInit {
               yPercent: 150,
               ease: 'power2.in',
             },
+<<<<<<< HEAD
+            0
+=======
             0,
+>>>>>>> main
           );
 
           // Reposicionamos el texto arriba sin animación

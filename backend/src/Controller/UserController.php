@@ -106,6 +106,7 @@ final class UserController extends AbstractController
             return new JsonResponse('Ese ID de usuario es inexistente!', Response::HTTP_NOT_FOUND);
         }
     }
+    #[Route('/login', 'app_user_login', methods: ['POST'])]
     public function login (Request $request, EntityManagerInterface $entityManager) : JsonResponse {
         $data = json_decode($request->getContent(), true);
         $identifier = $data['identifier'];
@@ -117,15 +118,15 @@ final class UserController extends AbstractController
             "username" => $user->getUsername(),
             "email" => $user->getEmail(),
             "password" => $user->getPassword(),
-            // "profile" => [
-            //     "idProfile" => $user->getProfile()->getId(),
-            //     "first_name" => $user->getProfile()->getFirstName(),
-            //     "last_name" => $user->getProfile()->getLastName(),
-            //     "birthdate" => $user->getProfile()->getBirthdate(),
-            //     "gender" => $user->getProfile()->getGender(),
-            //     "province" => $user->getProfile()->getProvince(),
-            //     "bio" => $user->getProfile()->getBio()
-            // ]
+            "profile" => [
+                "idProfile" => $user->getProfile()->getId(),
+                "first_name" => $user->getProfile()->getFirstName(),
+                "last_name" => $user->getProfile()->getLastName(),
+                "birthdate" => $user->getProfile()->getBirthdate(),
+                "gender" => $user->getProfile()->getGender(),
+                "province" => $user->getProfile()->getProvince(),
+                "bio" => $user->getProfile()->getBio()
+            ]
         ]; 
 
         if(!$user){
