@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
           >
             1
           </div>
-          <hr class="border-4 border-emerald-300 w-[70px]" />
+          <hr class="border-4 border-emerald-300 w-[157px]" />
           <div
             class="flex justify-center items-center w-10 h-10 bg-gray-200 rounded-full border-4 border-emerald-300"
           >
