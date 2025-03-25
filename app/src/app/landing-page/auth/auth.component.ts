@@ -6,19 +6,11 @@ import { RegisterUserComponent } from './register-user/register-user.component';
   selector: 'app-auth',
   imports: [LoginUserComponent, RegisterUserComponent],
   templateUrl: './auth.component.html',
-<<<<<<< HEAD
-  styles: `
-  `,
+  styles: ``,
 })
 export class AuthComponent {
   constructor(public _matDialogRef: MatDialogRef<AuthComponent>) {}
   close() {
     this._matDialogRef.close();
   }
-=======
-  styles: ``,
-})
-export class AuthComponent {
-  constructor(public _matDialogRef: MatDialogRef<AuthComponent>) {}
->>>>>>> main
 }

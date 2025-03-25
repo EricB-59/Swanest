@@ -1,107 +1,98 @@
-<<<<<<< HEAD
-<section class="w-screen h-[108vh] px-5 py-5 flex flex-col relative snap-center font-basereg bg-[#EEEEEE]">
-    <div class="absolute -top-10 -left-30">
-        <img src="/assets/Images/ellipse.svg" class="w-auto blur-[100px] h-auto"/>
-    </div>
-    <div class="flex z-10 w-full flex-grow flex-col px-9 pt-7 pb-12 border-[0.5px] border-black/20 rounded-[4.4rem]">
-        <div>
-            <header class="flex justify-between">
-                <div class="flex items-center justify-center">
-                    <a href="">
-                        <img class="outline-none cursor-none" src="/assets/Images/logo.svg" alt="Logo">
-                    </a>
-                </div>
-                <div class="flex gap-[4rem]">
-                    <nav class="bg-black text-white/50 w-[44.875rem] h-[4.188rem] rounded-full flex justify-center items-center z-50">
-                        <ul class="flex gap-3 text-base select-none">
-                            <li class="cursor-pointer rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border bg-white text-black"><span>Inicio</span></li>
-                            <li class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"><span #menuText>Aplicación</span></li>
-                            <li class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"><span #menuText>Novedades</span></li>
-                            <li class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"><span #menuText>Nosotros</span></li>
-                            <li class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"><span #menuText>Contacto</span></li>
-                        </ul>
-                    </nav>  
-                    <button (click)="openModalAuth()" class="flex justify-center items-center h-[4.188rem] w-[16.625rem] gap-3 border border-black rounded-full cursor-pointer">
-                        <span>Iniciar sesión</span>
-                        <span>/</span>
-                        <span>Registrar</span>
-                    </button>
-                </div>
-            </header>
-=======
 <section
-  class="w-screen h-screen px-5 py-5 flex flex-col relative snap-center font-basereg bg-[#EEEEEE]"
+  class="font-basereg relative flex h-screen w-screen snap-center flex-col bg-[#FCFCFC] px-5 py-5"
 >
-  <div class="absolute -top-10 -left-30">
-    <img src="/assets/Images/ellipse.svg" class="w-auto blur-[100px] h-auto" />
-  </div>
-  <div class="flex z-10 w-full flex-grow flex-col px-9 pt-7 pb-2">
+  <div
+    class="z-10 flex w-full flex-grow flex-col rounded-[4.4rem] border-[0.5px] border-black/20 px-9 pt-7 pb-3"
+  >
     <div>
       <header class="flex justify-between">
         <div class="flex items-center justify-center">
-          <a href="">
+          <a href="" class="z-10">
             <img
-              class="outline-none cursor-none"
+              class="cursor-pointer outline-none"
               src="/assets/Images/logo.svg"
               alt="Logo"
             />
           </a>
->>>>>>> main
         </div>
         <div class="flex gap-[4rem]">
           <nav
-            class="bg-black text-white/50 w-[44.875rem] h-[4.188rem] rounded-full flex justify-center items-center z-50"
+            class="z-50 flex h-[4.188rem] w-[44.875rem] items-center justify-center rounded-full bg-black text-white/50"
           >
             <ul class="flex gap-3 text-base select-none">
               <li
-                class="cursor-pointer rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border bg-white text-black"
+                class="flex h-[2.938rem] w-[8.125rem] cursor-pointer items-center justify-center rounded-full border bg-white p-[0.313rem] text-black"
               >
                 <span>Inicio</span>
               </li>
               <li
-                class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"
+                class="flex h-[2.938rem] w-[8.125rem] cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
               >
                 <span #menuText>Aplicación</span>
               </li>
               <li
-                class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"
+                class="flex h-[2.938rem] w-[8.125rem] cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
               >
                 <span #menuText>Novedades</span>
               </li>
               <li
-                class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"
+                class="flex h-[2.938rem] w-[8.125rem] cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
               >
                 <span #menuText>Nosotros</span>
               </li>
               <li
-                class="cursor-pointer hover:border-white rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border border-white/50 overflow-hidden"
+                class="flex h-[2.938rem] w-[8.125rem] cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
               >
                 <span #menuText>Contacto</span>
               </li>
             </ul>
           </nav>
           <button
-            class="flex justify-center items-center h-[4.188rem] w-[16.625rem] gap-3 border border-black rounded-full cursor-pointer"
+            #animatedButton
+            class="ease-pop relative z-10 flex h-[4.188rem] w-[16.625rem] cursor-pointer items-center justify-center gap-3 overflow-hidden rounded-full border-[0.5px] border-black bg-[#FCFCFC] text-[1rem] text-black transition-all duration-300 hover:scale-105"
           >
-            <span>Iniciar sesión</span>
-            <span>/</span>
-            <span>Registrar</span>
+            <span
+              class="button__flair pointer-events-none absolute inset-0 scale-0 transform before:pointer-events-none before:absolute before:top-0 before:left-0 before:block before:aspect-square before:w-[170%] before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-[#74FFB4] before:content-['']"
+            ></span>
+            <span class="z-10">Iniciar sesión</span>
+            <span class="z-10">/</span>
+            <span class="z-10">Registrar</span>
           </button>
         </div>
       </header>
     </div>
     <main class="relative flex-grow">
       <div
-        class="absolute w-[70rem] h-min top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none"
+        class="absolute top-1/2 left-1/2 h-min w-[70rem] -translate-x-1/2 -translate-y-1/2 select-none"
       >
         <img src="/assets/Images/swanest.svg" />
         <img
-          class="h-98 absolute -top-5 -translate-y-1/2 -translate-x-1/3 left-70"
+          #draggableImage
+          class="absolute -top-5 left-70 h-min w-77 -translate-x-1/3 -translate-y-1/2 cursor-grab rounded-2xl"
           src="/assets/Images/swan-pair-sticker.svg"
         />
+        <div
+          class="absolute -right-6 -bottom-12.5 rotate-4 rounded-full bg-[#74FFB4] px-6 py-4 text-2xl"
+        >
+          <span class="flex items-center">
+            Donde las almas gemelas se anidan.
+            <svg
+              width="16.7  "
+              height="14.83"
+              viewBox="0 0 33 30"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M25.4979 1.83608C21.734 0.952366 17.3068 5.15589 16.6148 5.83014C16.0333 5.07081 12.1909 0.300105 8.34187 0.689922C-0.776031 1.59525 -0.190761 10.4418 1.24919 13.7581C3.46668 18.8614 14.9915 29.468 14.9915 29.468L15.0793 29.4739C15.0793 29.4739 27.9126 20.4945 30.7892 15.7316C32.6575 12.6363 34.4144 3.94624 25.4979 1.83608Z"
+                fill="black"
+              />
+            </svg>
+          </span>
+        </div>
       </div>
       <button
-        class="absolute right-0 bottom-0 w-24 h-24 rounded-full border cursor-pointer border-[#707070] flex items-center justify-center"
+        class="absolute right-0 bottom-0 -z-10 flex h-24 w-24 cursor-pointer items-center justify-center rounded-full border border-[#707070]"
       >
         <svg
           width="23"
@@ -118,18 +109,16 @@
           />
         </svg>
       </button>
-      <div class="absolute bottom-0 max-w-[33%] select-none">
-        <p class="text-[2.05rem] break-words leading-tight">
+      <div class="absolute bottom-0 -z-10 max-w-lg select-none">
+        <p class="text-[2.2rem] leading-tight break-words">
           La web donde encontrarás tu compañero de vuelo.⛅😍
         </p>
       </div>
     </main>
-    <div
-      class="w-full pt-5 pb-2 overflow-hidden select-none whitespace-nowrap z-2"
-    >
+    <div class="-z-1 w-full overflow-hidden pt-5 whitespace-nowrap select-none">
       <div class="flex">
         <ul
-          class="flex items-center whitespace-nowrap animate-infinite-scroll [&_li]:mx-8 [&_span]:text-black/20 [&_span]:text-[3rem]"
+          class="animate-infinite-scroll flex items-center whitespace-nowrap [&_li]:mx-8 [&_span]:text-[3rem] [&_span]:text-black/20"
         >
           <li class="flex items-center gap-[1.6rem]">
             <span>Bienvenido a la web</span>
@@ -153,7 +142,7 @@
           </li>
         </ul>
         <ul
-          class="flex items-center whitespace-nowrap animate-infinite-scroll [&_li]:mx-8 [&_span]:font-medium [&_span]:text-black/20 [&_span]:text-[2.8rem]"
+          class="animate-infinite-scroll flex items-center whitespace-nowrap [&_li]:mx-8 [&_span]:text-[2.8rem] [&_span]:font-medium [&_span]:text-black/20"
         >
           <li class="flex items-center gap-[1.6rem]">
             <span>Bienvenido a swanest</span>
