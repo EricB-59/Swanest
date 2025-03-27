@@ -23,7 +23,7 @@ import {
             Iniciar Sesión
           </h1>
         </div>
-        <div class=" w-full mt-16 flex flex-col gap-9">
+        <div class=" w-full mt-10 flex flex-col gap-6">
           <label class=" text-lg flex flex-col">
             <div class="flex">
               <span>Correo electrónico / Nombre usuario</span>
@@ -56,12 +56,12 @@ import {
         >
         <div class="flex justify-end w-full mt-5 items-center">
           <button
-            class=" bg-black text-white text-[1.125rem] flex rounded-full p-2 pr-3 pl-7 cursor-pointer items-center"
+            class=" bg-black text-white text-[1rem] flex rounded-full p-2 pr-2 pl-6 cursor-pointer items-center"
             type="submit"
           >
             <span>Iniciar sesion</span>
             <div
-              class="bg-white h-11 w-11 rounded-full flex items-center ml-6 justify-center"
+              class="bg-white h-10.5 w-10.5 rounded-full flex items-center ml-6 justify-center"
             >
               <svg
                 width="16"
@@ -80,7 +80,7 @@ import {
           </button>
         </div>
         <button
-          class="rounded-full bg-[#E8E8E8] flex items-center mt-7.5 p-3 w-75 justify-center gap-3"
+          class="rounded-full bg-[#E8E8E8] flex items-center mt-4 p-3 w-75 justify-center gap-3"
         >
           <div>
             <svg
@@ -108,7 +108,7 @@ import {
               />
             </svg>
           </div>
-          <span class="text-[1.05rem]">Iniciar sesión con google</span>
+          <span class="text-[1rem]">Iniciar sesión con google</span>
         </button>
       </form>
     </section>
