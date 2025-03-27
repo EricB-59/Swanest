@@ -4,4 +4,6 @@ export interface Profile {
   last_name: string;
   bio: string;
   birthdate: string;
+  province: string;
+  labels: string;
 }

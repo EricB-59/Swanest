@@ -123,8 +123,37 @@ final class UserController extends AbstractController
                 "first_name" => $user->getProfile()->getFirstName(),
                 "last_name" => $user->getProfile()->getLastName(),
                 "birthdate" => $user->getProfile()->getBirthdate(),
-                "gender" => $user->getProfile()->getGender(),
-                "province" => $user->getProfile()->getProvince(),
+                "gender" => [
+                    "genderId" => $user->getProfile()->getGender()->getId(),
+                    "genderName" => $user->getProfile()->getGender()->getName()
+                ],
+                "province" => [
+                    "provinceId" =>  $user->getProfile()->getProvince()->getId(),
+                    "provinceName" =>  $user->getProfile()->getProvince()->getName()
+
+                ],
+                "labels"=> [
+                    "label1" => [
+                        "id" => $user->getProfile()->getLabels()->getFirstLabel()->getId(),
+                        "name" => $user->getProfile()->getLabels()->getFirstLabel()->getName(),
+                    ],
+                    "label2" => [
+                        "id" => $user->getProfile()->getLabels()->getSecondLabel()->getId(),
+                        "name" => $user->getProfile()->getLabels()->getSecondLabel()->getName(),
+                    ],
+                    // "label3" => [
+                    //     "id" => $user->getProfile()->getLabels()->getThirdLabel()->getId(),
+                    //     "name" => $user->getProfile()->getLabels()->getThirdLabel()->getName(),
+                    // ],
+                    // "label4" => [
+                    //     "id" => $user->getProfile()->getLabels()->getFourthLabel()->getId(),
+                    //     "name" => $user->getProfile()->getLabels()->getFourthLabel()->getName(),
+                    // ],
+                    // "label5" => [
+                    //     "id" => $user->getProfile()->getLabels()->getFifthLabel()->getId(),
+                    //     "name" => $user->getProfile()->getLabels()->getFifthLabel()->getName(),
+                    // ],
+                ],
                 "bio" => $user->getProfile()->getBio()
             ]
         ]; 
