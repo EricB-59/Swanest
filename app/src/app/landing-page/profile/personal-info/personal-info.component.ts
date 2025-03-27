@@ -93,6 +93,7 @@ import { Component } from '@angular/core';
               >
                 <label for="male" class="flex cursor-pointer">Hombre</label>
                 <input
+                  value= "1"
                   id="male"
                   name="genre"
                   type="radio"
@@ -104,6 +105,7 @@ import { Component } from '@angular/core';
               >
                 <label for="female" class="flex cursor-pointer">Mujer</label>
                 <input
+                  value= "2"
                   id="female"
                   name="genre"
                   type="radio"
@@ -117,6 +119,7 @@ import { Component } from '@angular/core';
                   >No binario</label
                 >
                 <input
+                  value= "3"
                   id="non-binary"
                   name="genre"
                   type="radio"
@@ -128,7 +131,7 @@ import { Component } from '@angular/core';
               >
                 <label for="other" class="flex cursor-pointer">Otros</label>
                 <input
-                  value=""
+                  value="4"
                   id="other"
                   name="genre"
                   type="radio"
@@ -142,6 +145,7 @@ import { Component } from '@angular/core';
                   >Prefiero no contestar</label
                 >
                 <input
+                  value="5"
                   id="prefere-not-to-say"
                   name="genre"
                   type="radio"
