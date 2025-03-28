@@ -1,15 +1,16 @@
-<section class="flex h-screen flex-row bg-white p-30">
-  <article class="w-1/2 px-12">
-    <div class="flex flex-row">
+<section
+  class="flex h-auto flex-col bg-white p-6 lg:h-screen lg:flex-row lg:p-20"
+>
+  <article class="w-full px-6 text-center lg:w-1/2 lg:px-12 lg:text-left">
+    <div class="flex justify-center lg:justify-start">
       <h1
-        class="font-thunder inline-flex text-[180px] leading-40 tracking-wider text-purple-600"
+        class="font-family-display text-[80px] leading-40 tracking-wider text-purple-600 lg:text-[180px]"
       >
         CO
       </h1>
-
       <div class="relative">
         <h1
-          class="font-thunder inline-flex text-[180px] leading-40 tracking-wider text-purple-600"
+          class="font-family-display text-[80px] leading-40 tracking-wider text-purple-600 lg:text-[180px]"
         >
           N
         </h1>
@@ -19,55 +20,53 @@
           alt=""
         />
       </div>
-
       <h1
-        class="font-thunder inline-flex text-[180px] leading-40 font-bold tracking-wider text-purple-600"
+        class="font-family-display text-[80px] leading-40 font-bold tracking-wider text-purple-600 lg:text-[180px]"
       >
         T
       </h1>
       <h1
-        class="border-text font-thunder text-[180px] leading-40 font-bold tracking-wider"
+        class="border-text font-family-display text-[80px] leading-40 font-bold tracking-wider lg:text-[180px]"
       >
         ACTO
       </h1>
     </div>
-
-    <p class="font-basereg mt-6 pr-5 text-3xl text-black">
+    <p
+      class="font-family-regular pr-2 text-sm text-black lg:mt-4 lg:mt-6 lg:pr-5 lg:text-3xl lg:text-xl"
+    >
       Tu opinión es muy importante para nosotros. No solo estamos aquí para
       resolver dudas, sino también para recibir tus ideas y sugerencias para
       mejorar la plataforma.
     </p>
   </article>
-
-  <article class="w-1/2 pr-12 pl-12">
+  <article class="mt-6 h-screen w-full px-6 md:px-12 lg:mt-0 lg:w-1/2">
     <form [formGroup]="form" (submit)="add()" class="flex flex-col space-y-4">
       <input
         formControlName="email"
         id="email"
         type="text"
         placeholder="Correo electrónico *"
-        class="font-basereg border-b-2 border-black p-3 outline-none placeholder:text-gray-600"
+        class="font-family-regular border-b-2 border-black p-3 outline-none placeholder:text-gray-600"
       />
       <input
         formControlName="subject"
         id="subject"
         type="text"
         placeholder="Asunto *"
-        class="font-basereg border-b-2 border-black p-3 outline-none placeholder:text-gray-600"
+        class="font-family-regular border-b-2 border-black p-3 outline-none placeholder:text-gray-600"
       />
       <textarea
         formControlName="message"
         id="message"
         placeholder="Mensaje *"
-        class="font-basereg h-32 border-b-2 border-black p-3 outline-none placeholder:text-gray-600"
+        class="font-family-regular h-32 border-b-2 border-black p-3 outline-none placeholder:text-gray-600"
       ></textarea>
-
-      <label class="font-basereg flex items-center space-x-2">
-        <input type="checkbox" class="font-basereg h-5 w-5 cursor-pointer" />
+      <label class="font-family-regular flex items-center space-x-2 text-sm">
+        <input type="checkbox" class="h-5 w-5 cursor-pointer" />
         <span>Acepto los </span>
         <button
           type="button"
-          class="font-basereg cursor-pointer text-black underline underline-offset-2"
+          class="cursor-pointer text-black underline underline-offset-2"
         >
           términos y condiciones
         </button>
@@ -75,15 +74,14 @@
       <input
         value="ENVIAR"
         type="submit"
-        class="relative h-12 w-full cursor-pointer border-1"
+        class="h-12 w-full cursor-pointer border-1"
       />
     </form>
   </article>
 </section>
-
 <style>
   .border-text {
     color: white;
-    -webkit-text-stroke: 4px #7d2ae8;
+    -webkit-text-stroke: 2px #7d2ae8;
   }
 </style>
