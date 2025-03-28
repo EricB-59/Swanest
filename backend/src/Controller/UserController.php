@@ -23,6 +23,17 @@ final class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * Comprehensive user registration validation checks
+     * 
+     * These guard clauses perform multiple validations:
+     * 1. Check for empty required fields
+     * 2. Prevent duplicate usernames
+     * 3. Prevent duplicate emails
+     * 4. Validate email format
+     * 5. Validate username format
+     * 6. Enforce password complexity
+     */
     #[Route('/create', name: 'app_user_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
@@ -32,24 +43,52 @@ final class UserController extends AbstractController
         $email = $data['email'];
         $password = $data['password'];
 
+        // Ensure no critical fields are empty
+        // Prevents registration with missing essential information
         if (empty($username) || empty($email) || empty($password)) {
             return new JsonResponse('Empty fields', Response::HTTP_BAD_REQUEST);
         }
 
-        $repeatedEmail = $entityManager->getRepository(User::class)->findBy(['email' => $email]);
-        if ($repeatedEmail) {
-            return new JsonResponse('Repeted Email', Response::HTTP_BAD_REQUEST);
+        // Check if username is already taken
+        // Maintains unique usernames across the system
+        $repeatedUser = $entityManager->getRepository(User::class)->findBy(['username' => $username]);
+        if ($repeatedUser) {
+            return new JsonResponse('Repeated user', Response::HTTP_BAD_REQUEST);
         }
 
+        // Check if email is already registered
+        // Prevents multiple accounts with the same email address
+        $repeatedEmail = $entityManager->getRepository(User::class)->findBy(['email' => $email]);
+        if ($repeatedEmail) {
+            return new JsonResponse('Repeated email', Response::HTTP_BAD_REQUEST);
+        }
+
+        // Validate email format using built-in PHP filter
+        // Ensures the email address follows a standard, valid format
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return new JsonResponse('Invalid email', Response::HTTP_BAD_REQUEST);
         }
 
-        $regexPattern = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$^';
-        if (!preg_match($regexPattern, $password)) {
+        // Validate username format
+        // Allows only alphanumeric characters
+        // Prevents special characters or spaces in username
+        $regexUsername = '^[a-zA-Z0-9]+$^';
+        if (!preg_match($regexUsername, $username)) {
+            return new JsonResponse('Invalid username', Response::HTTP_BAD_REQUEST);
+        }
+
+        // Enforce password complexity requirements
+        // Requires:
+        // - At least 8 characters
+        // - At least one lowercase letter
+        // - At least one uppercase letter
+        // - At least one digit
+        $regexPassword = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$^';
+        if (!preg_match($regexPassword, $password)) {
             return new JsonResponse('Invalid password', Response::HTTP_BAD_REQUEST);
         }
 
+        // If all validations pass, proceed with the creation of the user and registration on the database
         $user = new User();
         $user->setUsername($username);
         $user->setEmail($email);
@@ -61,7 +100,10 @@ final class UserController extends AbstractController
         $entityManager->persist($user);
         $entityManager->flush();
 
-        return new JsonResponse('User: ' . $user->getUsername() . ' created', Response::HTTP_OK);
+        return new JsonResponse([
+            "username" => $user->getUsername(),
+            "email" => $user->getEmail()
+        ], Response::HTTP_OK);
     }
 
     #[Route(path: '/find/{id}', name: 'app_find_user', methods: ['GET'])]
@@ -107,7 +149,8 @@ final class UserController extends AbstractController
         }
     }
     #[Route('/login', 'app_user_login', methods: ['POST'])]
-    public function login (Request $request, EntityManagerInterface $entityManager) : JsonResponse {
+    public function login(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
         $data = json_decode($request->getContent(), true);
         $identifier = $data['identifier'];
         $password = $data['password'];
@@ -132,7 +175,7 @@ final class UserController extends AbstractController
                     "provinceName" =>  $user->getProfile()->getProvince()->getName()
 
                 ],
-                "labels"=> [
+                "labels" => [
                     "label1" => [
                         "id" => $user->getProfile()->getLabels()->getFirstLabel()->getId(),
                         "name" => $user->getProfile()->getLabels()->getFirstLabel()->getName(),
@@ -156,16 +199,15 @@ final class UserController extends AbstractController
                 ],
                 "bio" => $user->getProfile()->getBio()
             ]
-        ]; 
+        ];
 
-        if(!$user){
-            return $this->json(false, Response::HTTP_NOT_FOUND); 
+        if (!$user) {
+            return $this->json(false, Response::HTTP_NOT_FOUND);
         }
 
-        if(!($user->getPassword() === $password)) {
-            return $this->json(false, Response::HTTP_NOT_FOUND); 
+        if (!($user->getPassword() === $password)) {
+            return $this->json(false, Response::HTTP_NOT_FOUND);
         }
         return new JsonResponse($userArray, Response::HTTP_OK);
-        
     }
 }
