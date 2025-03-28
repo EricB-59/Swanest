@@ -18,6 +18,7 @@ export class UserService {
       }),
     });
   }
+
   delete(id: number): Observable<boolean> {
     let url = this.apiUrl + `/delete/${id}`;
     return this.connHttp.delete<boolean>(url, {
@@ -41,6 +42,7 @@ export class UserService {
       }),
     });
   }
+
   login(identifier: string, password: string): Observable<User> {
     const data = { identifier, password };
     let url = `${this.apiUrl}/login`;

@@ -1,31 +1,31 @@
-<div class="fixed inset-0 bg-black/50 flex justify-center items-center">
+<div class="fixed inset-0 flex items-center justify-center bg-black/50">
   <div
-    class="bg-white rounded-[4.625rem] w-[57.5rem] h-145 p-3 flex items-start justify-between relative overflow-hidden"
+    class="relative flex h-145 w-[57.5rem] items-start justify-between overflow-hidden rounded-[4.625rem] bg-white p-3"
   >
     <div
-      class="absolute w-109 inset-3 bg-[#9272e8] rounded-[4rem] px-5 py-15 flex flex-col z-1"
+      class="absolute inset-3 z-1 flex w-109 flex-col rounded-[4rem] bg-[#9272e8] px-5 py-15"
     >
       <img
         class="absolute top-6 opacity-30"
-        src="/assets/Images/logo.svg"
+        src="assets/images/logo.svg"
         alt="Logo Swan"
       />
       <h1
-        class="text-white font-thunder text-[7.375rem] z-10 relative leading-27 [box-decoration-break:clone]"
+        class="font-thunder relative z-10 [box-decoration-break:clone] text-[7.375rem] leading-27 text-white"
       >
         BIENVENIDO
       </h1>
       <div class="flex justify-center">
-        <button class="font-basereg rounded-full bg-white h-14.5 w-46">
+        <button class="font-basereg h-14.5 w-46 rounded-full bg-white">
           REGISTRATE
         </button>
       </div>
     </div>
-    <div class="p-10 h-full w-114 relative">
+    <div class="relative h-full w-114 p-10">
       <app-register-user></app-register-user>
       <div
         (click)="close()"
-        class="rounded-full border-2 border-black h-13 w-13 flex justify-center items-center absolute z-10 right-4 top-4 cursor-pointer"
+        class="absolute top-4 right-4 z-10 flex h-13 w-13 cursor-pointer items-center justify-center rounded-full border-2 border-black"
       >
         <svg
           width="17"
@@ -40,10 +40,10 @@
       </div>
     </div>
     <br />
-    <div class="p-10 h-full w-114 relative">
+    <div class="relative h-full w-114 p-10">
       <div
         (click)="close()"
-        class="rounded-full border-2 border-black h-13 w-13 flex justify-center items-center absolute z-10 right-4 top-4 cursor-pointer"
+        class="absolute top-4 right-4 z-10 flex h-13 w-13 cursor-pointer items-center justify-center rounded-full border-2 border-black"
       >
         <svg
           width="17"
