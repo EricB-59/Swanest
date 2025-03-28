@@ -1,23 +1,25 @@
 <section class="h-screen snap-center bg-gray-950 p-5">
   <div class="h-full">
     <h1
-      class="font-family-display pl-15 text-[14rem] leading-tight tracking-wider text-white"
+      class="font-family-display pl-5 text-7xl leading-tight tracking-wider text-white md:pl-10 md:text-[14rem]"
     >
       NOVEDADES
     </h1>
     <div
-      class="grid grid-cols-6 grid-rows-5 gap-4 px-20 py-5 [&>div]:drop-shadow-[5px_5px_5px_rgba(255,255,255,0.5)]"
+      class="grid h-[100vw] grid-cols-1 grid-rows-2 gap-30 px-5 py-5 md:h-auto md:grid-cols-6 md:grid-rows-5 md:gap-10 md:px-20 [&>div]:drop-shadow-[5px_5px_5px_rgba(255,255,255,0.5)]"
     >
-      <div class="col-span-2 row-span-5">
+      <div class="h-min md:col-span-2 md:row-span-5">
         <article
-          class="flex h-full w-full flex-col overflow-hidden rounded-4xl bg-gray-950"
+          class="flex w-full flex-col overflow-hidden rounded-4xl bg-gray-950 md:h-full"
         >
-          <div class="flex h-full flex-col justify-between gap-10 p-8">
+          <div class="flex flex-col justify-between gap-10 p-8 md:h-full">
             <div class="flex flex-col gap-2">
-              <h2 class="font-family-semibold mb-4 text-4xl text-white">
+              <h2
+                class="font-family-semibold mb-4 text-xl text-white md:text-4xl"
+              >
                 Llegan las verificaciones a Swanest
               </h2>
-              <p class="font-family-regular text-2xl text-white">
+              <p class="font-family-regular text-sm text-white md:text-2xl">
                 Para ofrecer una experiencia más segura y confiable, Swanest
                 introduce la verificación de cuentas. A partir de ahora, podrás
                 verificar tu perfil y asegurarte de conectar solo con personas
@@ -29,16 +31,18 @@
           </div>
         </article>
       </div>
-      <div class="col-span-2 col-start-3 row-span-5">
+      <div class="md:col-span-2 md:col-start-3 md:row-span-5">
         <article
-          class="flex h-full w-full rounded-2xl bg-gray-950 p-8 shadow-xl"
+          class="flex w-full rounded-4xl bg-gray-950 p-8 shadow-xl md:h-full"
         >
           <div class="flex flex-col justify-between">
             <div>
-              <h2 class="font-family-semibold mb-4 text-4xl text-white">
+              <h2
+                class="font-family-semibold mb-4 text-xl text-white md:text-4xl"
+              >
                 Chat de texto
               </h2>
-              <p class="font-family-regular text-2xl text-white">
+              <p class="font-family-regular text-sm text-white md:text-2xl">
                 💬 Ahora puedes chatear con tus matchs de forma rápida y
                 sencilla. Rompe el hielo, conoce mejor a esa persona especial y
                 deja que la conversación fluya. ¡Empieza a hablar ahora! ❤️✨ 💬
@@ -51,7 +55,7 @@
           </div>
         </article>
       </div>
-      <div class="col-span-2 col-start-5 row-span-3">
+      <div class="hidden md:col-span-2 md:col-start-5 md:row-span-3 md:block">
         <article
           class="flex h-full w-full rounded-2xl bg-gray-950 p-6 shadow-xl"
         >
@@ -70,7 +74,9 @@
           </div>
         </article>
       </div>
-      <div class="col-span-2 col-start-5 row-span-2 row-start-4">
+      <div
+        class="hidden md:col-span-2 md:col-start-5 md:row-span-2 md:row-start-4 md:block"
+      >
         <a href="#">
           <article
             class="flex h-full w-full rounded-2xl bg-gray-950 p-5 shadow-xl"
