@@ -1,4 +1,3 @@
-// prevent default beahvior with cursor
 img {
   -webkit-user-drag: none;
   -khtml-user-drag: none;
