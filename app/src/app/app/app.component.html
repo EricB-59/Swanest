@@ -1,50 +1,66 @@
 <main class="bg-background-main flex h-screen w-screen gap-10 p-5">
-  <header class="flex w-80 flex-col bg-white">
+  <header
+    class="flex w-96 flex-col justify-between rounded-4xl bg-white [&>*]:p-5"
+  >
     <div class="flex w-full justify-between">
-      <img src="assets/images/app/logo-swanest-purple.svg" alt="" />
-      <h2>Swanest</h2>
+      <div class="flex gap-4 align-middle">
+        <img src="assets/images/app/logo-swanest-purple.svg" alt="" />
+        <h2 class="font-family-semibold text-primary-main text-xl">Swanest</h2>
+      </div>
       <button class="cursor-pointer">
         <img src="assets/images/app/icons/arrows-icon.svg" alt="" />
       </button>
     </div>
-    <article class="flex border-2 border-b-amber-600">
+
+    <article class="">
       <img src="" alt="" />
       <div class="flex flex-col">
-        <h2>Buenos días 👋</h2>
-        <h2>Victor Manuel</h2>
+        <h2 class="font-family-light text-xl">Buenos días 👋</h2>
+        <h2 class="font-family-semibold text-2xl">Victor Manuel</h2>
       </div>
     </article>
+
     <article>
-      <h2>MENÚ</h2>
-      <button class="">
-        <img src="assets/images/app/icons/match-icon.svg" alt="" />
-        <p>Match</p>
+      <h2 class="font-family-regular opacity-20">MENÚ</h2>
+      <button class="bg-primary-main flex w-full gap-5 rounded-2xl p-3">
+        <img class="w-6" src="assets/images/app/icons/match-icon.svg" alt="" />
+        <p class="font-family-regular text-w">Match</p>
         <div></div>
       </button>
-      <button>
-        <img src="assets/images/app/icons/messages-icon.svg" alt="" />
-        <p>Mensajes</p>
+      <button class="flex w-full gap-5 rounded-2xl p-3">
+        <img
+          class="w-6"
+          src="assets/images/app/icons/messages-icon.svg"
+          alt=""
+        />
+        <p class="font-family-regular text-w">Mensajes</p>
         <div></div>
       </button>
     </article>
-    <article class="border-2 border-b-amber-600">
+
+    <article class="">
       <div class="bg-slate-300">prime</div>
     </article>
     <article>
-      <h2>AJUSTES</h2>
-      <button>
-        <img src="assets/images/app/icons/update-profile-icon.svg" alt="" />
-        <p>Editar perfil</p>
-        <div></div>
+      <h2 class="font-family-regular opacity-20">AJUSTES</h2>
+      <button class="bg-primary-main flex w-full gap-5 rounded-2xl p-3">
+        <img
+          class="w-6"
+          src="assets/images/app/icons/update-profile-icon.svg"
+          alt=""
+        />
+        <p class="font-family-regular text-w">Editar perfil</p>
       </button>
     </article>
-    <div class="bg-slate-300">
-      <img src="assets/images/app/icons/sun-icon.svg" alt="" />
-    </div>
+
     <article>
-      <button>
-        <img src="assets/images/app/icons/logout-icon.svg" alt="" />
-        <p>Cerrar sesión</p>
+      <button class="flex w-full gap-5 rounded-2xl bg-slate-300 p-3">
+        <img
+          class="w-6"
+          src="assets/images/app/icons/update-profile-icon.svg"
+          alt=""
+        />
+        <p class="font-family-regular text-w">Cerrar sesión</p>
       </button>
     </article>
   </header>
