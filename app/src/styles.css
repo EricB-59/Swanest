@@ -59,8 +59,11 @@
 }
 
 @theme {
+  /* Color de fondo*/
+  --color-background-main: #f5f5f5;
+
   /* Colores Primarios */
-  --color-primary-main: rgba(154, 86, 232, 0.77);
+  --color-primary-main: #7948ff;
   --color-primary-accent: rgba(249, 35, 113, 1);
 
   /* Colores Secundarios */
