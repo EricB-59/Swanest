@@ -1,1 +1,55 @@
-<p>app works!</p>
+<main class="bg-background-main flex h-screen w-screen gap-10 p-5">
+  <header class="flex w-80 flex-col bg-white">
+    <div class="flex w-full justify-between">
+      <img src="assets/images/app/logo-swanest-purple.svg" alt="" />
+      <h2>Swanest</h2>
+      <button class="cursor-pointer">
+        <img src="assets/images/app/icons/arrows-icon.svg" alt="" />
+      </button>
+    </div>
+    <article class="flex border-2 border-b-amber-600">
+      <img src="" alt="" />
+      <div class="flex flex-col">
+        <h2>Buenos días 👋</h2>
+        <h2>Victor Manuel</h2>
+      </div>
+    </article>
+    <article>
+      <h2>MENÚ</h2>
+      <button class="">
+        <img src="assets/images/app/icons/match-icon.svg" alt="" />
+        <p>Match</p>
+        <div></div>
+      </button>
+      <button>
+        <img src="assets/images/app/icons/messages-icon.svg" alt="" />
+        <p>Mensajes</p>
+        <div></div>
+      </button>
+    </article>
+    <article class="border-2 border-b-amber-600">
+      <div class="bg-slate-300">prime</div>
+    </article>
+    <article>
+      <h2>AJUSTES</h2>
+      <button>
+        <img src="assets/images/app/icons/update-profile-icon.svg" alt="" />
+        <p>Editar perfil</p>
+        <div></div>
+      </button>
+    </article>
+    <div class="bg-slate-300">
+      <img src="assets/images/app/icons/sun-icon.svg" alt="" />
+    </div>
+    <article>
+      <button>
+        <img src="assets/images/app/icons/logout-icon.svg" alt="" />
+        <p>Cerrar sesión</p>
+      </button>
+    </article>
+  </header>
+  <section class="h-full w-full bg-white">
+    <app-match-section></app-match-section>
+  </section>
+  <footer>Perfil</footer>
+</main>
