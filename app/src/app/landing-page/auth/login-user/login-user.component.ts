@@ -16,15 +16,15 @@ import {
       <form
         [formGroup]="form"
         (submit)="login()"
-        class="custom-form flex flex-col items-center  font-basereg"
+        class="flex flex-col items-center font-basereg"
       >
         <div class="w-full">
           <h1 class="font-basemedium text-5xl whitespace-nowrap">
-            Iniciar Sesión
+            Iniciar sesión
           </h1>
         </div>
         <div class=" w-full mt-10 flex flex-col gap-6">
-          <label class=" text-lg flex flex-col">
+          <label class=" text-[1.0625rem] flex flex-col">
             <div class="flex">
               <span>Correo electrónico / Nombre usuario</span>
               <span class=" text-[#9272E8] font-basesemibold">*</span>
@@ -37,7 +37,7 @@ import {
               formControlName="identifier"
             />
           </label>
-          <label class=" text-lg flex flex-col">
+          <label class=" text-[1.0625rem] flex flex-col">
             <div class="flex">
               <span>Contraseña</span>
               <span class=" text-[#9272E8] font-basesemibold">*</span>
@@ -56,12 +56,12 @@ import {
         >
         <div class="flex justify-end w-full mt-5 items-center">
           <button
-            class=" bg-black text-white text-[1rem] flex rounded-full p-2 pr-2 pl-6 cursor-pointer items-center"
+            class=" bg-black text-white text-[1rem] flex rounded-full p-1.5 cursor-pointer items-center"
             type="submit"
           >
-            <span>Iniciar sesion</span>
+            <span class="px-4.5">Iniciar sesion</span>
             <div
-              class="bg-white h-10.5 w-10.5 rounded-full flex items-center ml-6 justify-center"
+              class="bg-white h-10.5 w-10.5 rounded-full flex items-center justify-center"
             >
               <svg
                 width="16"
