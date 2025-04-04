@@ -1,1 +1,157 @@
-<p>update-user works!</p>
+<section class="p-30">
+  <form action="" class="grid grid-cols-2">
+    <!-- IMAGES -->
+    <article class="grid w-full place-content-start gap-10">
+      <!-- First image -->
+      <div>
+        <img src="" alt="" class="h-64 w-full rounded-2xl bg-slate-300" />
+      </div>
+      <!-- Rest of images-->
+      <div class="grid grid-cols-2 grid-rows-2 gap-10">
+        <img src="" alt="" class="h-32 w-32 rounded-2xl bg-slate-300" />
+        <img src="" alt="" class="h-32 w-32 rounded-2xl bg-slate-300" />
+        <img src="" alt="" class="h-32 w-32 rounded-2xl bg-slate-300" />
+        <img src="" alt="" class="h-32 w-32 rounded-2xl bg-slate-300" />
+      </div>
+    </article>
+
+    <article class="">
+      <!--Input Bio-->
+      <label for="user-bio">
+        <h2 class="font-family-light pt-6">Preséntate *</h2>
+        <textarea
+          name="bio"
+          id="bio"
+          class="font-family-light h-18 w-full border-b-2 border-black"
+        ></textarea>
+      </label>
+
+      <!--Datalist-->
+      <label for="">
+        <h2 class="font-family-light pt-6">Provincia</h2>
+        <input
+          list="provinces"
+          class="font-family-light1 h-8 w-full border-b-2 border-black"
+        />
+        <datalist id="provinces">
+          @for (province of this.provinces; track $index) {
+            <option value="{{ province.name }}"></option>
+          }
+        </datalist>
+      </label>
+
+      <!--Check box genero-->
+      <h2 class="font-family-light pt-5 pb-3">Género *</h2>
+      <fieldset for="user-genre">
+        <div class="flex flex-wrap gap-2">
+          <div
+            class="flex h-[44px] w-[130px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
+          >
+            <label for="male" class="font-family-light flex cursor-pointer"
+              >Hombre</label
+            >
+            <input
+              value="1"
+              id="male"
+              name="genre"
+              type="radio"
+              class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
+            />
+          </div>
+          <div
+            class="flex h-[44px] w-[120px] flex-row items-center justify-center gap-6 rounded-[32px] border-1"
+          >
+            <label for="female" class="font-family-light flex cursor-pointer"
+              >Mujer</label
+            >
+            <input
+              value="2"
+              id="female"
+              name="genre"
+              type="radio"
+              class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
+            />
+          </div>
+          <div
+            class="flex h-[44px] w-[142px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
+          >
+            <label
+              for="non-binary"
+              class="font-family-light flex cursor-pointer"
+              >No binario</label
+            >
+            <input
+              value="3"
+              id="non-binary"
+              name="genre"
+              type="radio"
+              class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
+            />
+          </div>
+          <div
+            class="flex h-[44px] w-[112px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
+          >
+            <label for="other" class="font-family-light flex cursor-pointer"
+              >Otros</label
+            >
+            <input
+              value="4"
+              id="other"
+              name="genre"
+              type="radio"
+              class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
+            />
+          </div>
+          <div
+            class="flex h-[44px] w-[220px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
+          >
+            <label
+              for="prefere-not-to-say"
+              class="font-family-light flex cursor-pointer"
+              >Prefiero no contestar</label
+            >
+            <input
+              value="5"
+              id="prefere-not-to-say"
+              name="genre"
+              type="radio"
+              class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
+            />
+          </div>
+        </div>
+      </fieldset>
+
+      <!--Labels-->
+      <label for="" class="flex flex-row justify-between">
+        <h2 class="font-basereg pt-6">Intereses</h2>
+        <h2 id="counter" class="font-basereg pt-6 pr-6">
+          {{ selectedInterests.length }}/5
+        </h2>
+      </label>
+      <ul
+        class="flex w-full flex-wrap items-center justify-start gap-1 pt-2 text-sm"
+      >
+        @for (label of this.labels; track $index) {
+          <li
+            class="relative float-left flex h-8 w-22 list-outside list-none items-center justify-center p-2.5"
+          >
+            <input
+              class="absolute h-8 w-22 cursor-pointer appearance-none rounded-4xl border-1 border-black bg-white checked:bg-emerald-300"
+              type="checkbox"
+              id="{{ label.name }}"
+              name="{{ label.name }}"
+              value="{{ label.id }}"
+              [checked]="selectedInterests.includes(label.name)"
+              (change)="toggleInterest(label.name, $event)"
+            />
+            <label
+              for="{{ label.name }}"
+              class="font-family-light absolute inline-block cursor-pointer select-none"
+              >{{ label.name }}</label
+            >
+          </li>
+        }
+      </ul>
+    </article>
+  </form>
+</section>
