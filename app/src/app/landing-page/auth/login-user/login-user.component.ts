@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user/user.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
 
 @Component({
   selector: 'app-login-user',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ErrorFieldsDirective],
   template: `
     <section>
       <form
@@ -29,7 +30,9 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
               type="text"
               id="identifier"
               name="identifier"
+              minlength="3"
               formControlName="identifier"
+              appErrorFields
             />
           </label>
           <label class="flex flex-col text-lg">
