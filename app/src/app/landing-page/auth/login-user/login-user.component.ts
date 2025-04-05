@@ -1,12 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user/user.service';
-import {
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  FormsModule,
-} from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login-user',
@@ -16,34 +11,34 @@ import {
       <form
         [formGroup]="form"
         (submit)="login()"
-        class="flex flex-col items-center font-basereg"
+        class="font-basereg flex flex-col items-center"
       >
         <div class="w-full">
           <h1 class="font-basemedium text-5xl whitespace-nowrap">
             Iniciar sesión
           </h1>
         </div>
-        <div class=" w-full mt-10 flex flex-col gap-6">
-          <label class=" text-[1.0625rem] flex flex-col">
+        <div class="mt-10 flex w-full flex-col gap-6">
+          <label class="flex flex-col text-[1.0625rem]">
             <div class="flex">
               <span>Correo electrónico / Nombre usuario</span>
-              <span class=" text-[#9272E8] font-basesemibold">*</span>
+              <span class="font-basesemibold text-[#9272E8]">*</span>
             </div>
             <input
-              class="border-b-2 border-black outline-none w-full h-10"
+              class="h-10 w-full border-b-2 border-black outline-none"
               type="text"
               id="identifier"
               name="identifier"
               formControlName="identifier"
             />
           </label>
-          <label class=" text-[1.0625rem] flex flex-col">
+          <label class="flex flex-col text-[1.0625rem]">
             <div class="flex">
               <span>Contraseña</span>
-              <span class=" text-[#9272E8] font-basesemibold">*</span>
+              <span class="font-basesemibold text-[#9272E8]">*</span>
             </div>
             <input
-              class="border-b-2 border-black outline-none w-full h-10"
+              class="h-10 w-full border-b-2 border-black outline-none"
               type="password"
               id="password"
               name="password"
@@ -51,17 +46,17 @@ import {
             />
           </label>
         </div>
-        <span class="flex justify-end w-full underline"
+        <span class="flex w-full justify-end underline"
           >Olvidé mi contraseña</span
         >
-        <div class="flex justify-end w-full mt-5 items-center">
+        <div class="mt-5 flex w-full items-center justify-end">
           <button
-            class=" bg-black text-white text-[1rem] flex rounded-full p-1.5 cursor-pointer items-center"
+            class="flex cursor-pointer items-center rounded-full bg-black p-1.5 text-[1rem] text-white"
             type="submit"
           >
             <span class="px-4.5">Iniciar sesion</span>
             <div
-              class="bg-white h-10.5 w-10.5 rounded-full flex items-center justify-center"
+              class="flex h-10.5 w-10.5 items-center justify-center rounded-full bg-white"
             >
               <svg
                 width="16"
@@ -80,7 +75,7 @@ import {
           </button>
         </div>
         <button
-          class="rounded-full bg-[#E8E8E8] flex items-center mt-4 p-3 w-75 justify-center gap-3"
+          class="mt-4 flex w-75 items-center justify-center gap-3 rounded-full bg-[#E8E8E8] p-3"
         >
           <div>
             <svg
@@ -115,29 +110,34 @@ import {
   `,
   styles: ``,
 })
-export class LoginUserComponent implements OnInit {
+export class LoginUserComponent {
   constructor(private router: Router) {}
+
   exist: boolean = false;
+
   identifier: any = '';
   password: any = '';
+
   userService: UserService = inject(UserService);
+
   form = new FormGroup({
     identifier: new FormControl(''),
     password: new FormControl(''),
   });
-  ngOnInit(): void {}
+
   login() {
     this.exist = false;
+
     this.identifier = this.form.value.identifier;
     this.password = this.form.value.password;
-    this.userService.login(this.identifier, this.password).subscribe(
-      (result) => {
-        console.log(result);
+
+    this.userService.login(this.identifier, this.password).subscribe({
+      next: (v) => console.log(v),
+      error: (e) => console.error(e),
+      complete: () => {
         this.exist = true;
+        console.info('complete');
       },
-      (error) => {
-        console.log(error);
-      },
-    );
+    });
   }
 }

@@ -15,28 +15,38 @@
 }
 
 @font-face {
-  font-family: "basereg";
-  src: url("/assets/Fonts/BaseNeue-Regular.ttf");
+  font-family: "base-neue-regular";
+  src: url("assets/fonts/BaseNeue-Regular.ttf");
+  font-weight: 400;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "basesemibold";
-  src: url("/assets/Fonts/BaseNeue-SemiBold.ttf");
+  font-family: "base-neue-semibold";
+  src: url("assets/fonts/BaseNeue-SemiBold.ttf");
+  font-weight: 600;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "baselight";
-  src: url("/assets/Fonts/BaseNeue-Light.ttf");
+  font-family: "base-neue-light";
+  src: url("assets/fonts/BaseNeue-Light.ttf");
+  font-weight: 300;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "basemedium";
-  src: url("/assets/Fonts/BaseNeue-Medium.ttf");
+  font-family: "base-neue-medium";
+  src: url("assets/fonts/BaseNeue-Medium.ttf");
+  font-weight: 500;
+  font-style: normal;
 }
 
 @font-face {
-  font-family: "thunder";
-  src: url("/assets/Fonts/Thunder-BlackLC.otf");
+  font-family: "thunder-black-lc";
+  src: url("assets/fonts/Thunder-BlackLC.otf");
+  font-weight: 900;
+  font-style: normal;
 }
 
 @keyframes infinite-scroll {
@@ -49,12 +59,39 @@
 }
 
 @theme {
-  --font-basereg: basereg;
-  --font-basesemibold: basesemibold;
-  --font-basemedium: basemedium;
-  --font-baselight: baselight;
-  --font-thunder: thunder;
-  --animate-infinite-scroll: infinite-scroll 25s linear infinite;
-  --color-swapur-500: rgba(154, 86, 232, 0.77);
-  --color-swapink-500: rgba(249, 35, 113, 1);
+  /* Color de fondo*/
+  --color-background-main: #f5f5f5;
+
+  /* Colores Primarios */
+  --color-primary-main: #7948ff;
+  --color-primary-accent: rgba(249, 35, 113, 1);
+
+  /* Colores Secundarios */
+  --color-secondary-light: #e6e6e6;
+  --color-secondary-dark: #333333;
+
+  /* Colores de Texto */
+  --color-text-primary: #000000;
+  --color-text-secondary: #666666;
+
+  /* Fuentes */
+  --font-family-regular: base-neue-regular;
+  --font-family-semibold: base-neue-semibold;
+  --font-family-light: base-neue-light;
+  --font-family-medium: base-neue-medium;
+  --font-family-display: thunder-black-lc;
+
+  /* Animaciones */
+  --animation-infinite-scroll: infinite-scroll 25s linear infinite;
+
+  /* Sombras */
+  --shadow-default: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  /* Radianes */
+  --border-radius-small: 4px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 12px;
+
+  /* Transiciones */
+  --transition-default: all 0.3s ease-in-out;
 }

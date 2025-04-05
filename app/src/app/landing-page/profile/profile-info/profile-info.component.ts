@@ -1,85 +1,130 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ProfileService } from '../../../services/profile/profile.service';
+
+interface Province {
+  id: number;
+  name: string;
+}
+
+interface Label {
+  id: number;
+  name: string;
+}
 
 @Component({
   selector: 'app-profile-info',
   imports: [],
   template: `
-    <main class="bg-slate-200 w-full h-full grid place-content-center">
+    <main class="grid h-full w-full place-content-center bg-slate-200">
       <section
-        class="bg-white rounded-[64px] p-10 w-[553px] h-[642px] relative"
+        class="relative h-[642px] w-[553px] rounded-[64px] bg-white p-10"
       >
-        <div class="flex justify-center pb-6 items-center">
-          <div
-            class="flex justify-center items-center w-10 h-10 bg-emerald-300 rounded-full"
-          >
-            1
+        <div
+          class="flex flex-row items-center justify-between pb-4 align-middle"
+        >
+          <div class="flex items-center justify-start">
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-300"
+            >
+              1
+            </div>
+            <hr class="w-24 border-2 border-emerald-300" />
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-full border-4 border-emerald-300 bg-gray-200"
+            >
+              2
+            </div>
+            <hr class="w-24 border-2 border-gray-200" />
+            <div
+              class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200"
+            >
+              3
+            </div>
           </div>
-          <hr class="border-4 border-emerald-300 w-[157px]" />
           <div
-            class="flex justify-center items-center w-10 h-10 bg-gray-200 rounded-full border-4 border-emerald-300"
+            class="z-10 flex h-15 w-15 items-center justify-center rounded-full border-2 border-black"
           >
-            2
-          </div>
-          <hr class="border-4 border-gray-200 w-[70px]" />
-          <div
-            class="flex justify-center items-center w-10 h-10 bg-gray-200 rounded-full"
-          >
-            3
+            <svg
+              width="17"
+              height="17"
+              viewBox="0 0 17 17"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M1 1L16.558 16.5547" stroke="black" />
+              <path d="M16.5586 1L1.00061 16.5547" stroke="black" />
+            </svg>
           </div>
         </div>
-        <h1 class="font-basebold text-4xl">Datos del perfil</h1>
-        <p class="font-basereg">Introduce datos para tu perfil</p>
-        <form action="" class="h-full flex flex-col space-y-6 font-basereg">
-          <label>
-            <h2 class="font-basebold text-2xl pt-6 pb-5">Género</h2>
-            <div class="flex flex-wrap gap-6 mt-2 ">
-              <label class="flex items-center gap-2 text-zinc-600">
-                <input
-                  type="radio"
-                  name="gender"
-                  class="accent-emerald-300 w-5 h-5"
-                  checked
-                />
-                Hombre
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="gender"
-                  class="accent-emerald-300 w-5 h-5"
-                />
-                Mujer
-              </label>
-              <label class="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="gender"
-                  class="accent-emerald-300 w-5 h-5"
-                />
-                No binario
-              </label>
-            </div>
+
+        <div class="flex w-90 flex-col">
+          <h1 class="font-basebold flex text-3xl">Sobre ti</h1>
+          <p class="font-basereg flex text-sm">
+            Cuéntanos un poco más sobre quién eres y qué te gusta. Esto ayudará
+            a encontrar personas afines a ti.
+          </p>
+        </div>
+
+        <form action="" class="flex h-full flex-col">
+          <!--Input Bio-->
+          <label for="user-bio">
+            <h2 class="font-basereg pt-6">Preséntate *</h2>
+            <textarea
+              name="bio"
+              id="bio"
+              class="font-basereg h-18 w-full border-b-2 border-black"
+            ></textarea>
           </label>
 
-          <label>
-            <h2 class="font-basebold text-2xl pt-2 pb-5">
-              Fecha de nacimiento
-            </h2>
-            <input type="date" />
-          </label>
-
-          <label>
-            <h2 class="font-basebold text-2xl pt-2 pb-5">Provincia</h2>
+          <!--Datalist-->
+          <label for="">
+            <h2 class="font-basereg pt-6">Provincia</h2>
             <input
-              type="text"
-              class=" h-12 bg-gray-200 rounded-2xl px-4"
-              placeholder="Provincia"
+              list="provinces"
+              class="font-basereg h-8 w-full border-b-2 border-black"
             />
+            <datalist id="provinces">
+              @for (province of this.provinces; track $index) {
+                <option value="{{ province.name }}"></option>
+              }
+            </datalist>
           </label>
 
-          <div class="flex justify-end">
+          <!--Labels-->
+          <label for="" class="flex flex-row justify-between">
+            <h2 class="font-basereg pt-6">Intereses</h2>
+            <h2 id="counter" class="font-basereg pt-6 pr-6">
+              {{ selectedInterests.length }}/5
+            </h2>
+          </label>
+          <ul
+            class="flex w-full flex-wrap items-center justify-start gap-1 pt-2 text-sm"
+          >
+            @for (label of this.labels; track $index) {
+              <li
+                class="relative float-left flex h-8 w-22 list-outside list-none items-center justify-center p-2.5"
+              >
+                <input
+                  class="absolute h-8 w-22 cursor-pointer appearance-none rounded-4xl border-1 border-black bg-white checked:bg-emerald-300"
+                  type="checkbox"
+                  id="{{ label.name }}"
+                  name="{{ label.name }}"
+                  value="{{ label.id }}"
+                  [checked]="selectedInterests.includes(label.name)"
+                  (change)="toggleInterest(label.name, $event)"
+                />
+                <label
+                  for="{{ label.name }}"
+                  class="absolute inline-block cursor-pointer select-none"
+                  >{{ label.name }}</label
+                >
+              </li>
+            }
+          </ul>
+
+          <div class="flex justify-end pt-4">
             <button
-              class="flex gap-2 text-lg text-white font-basereg mt-4 cursor-pointer bg-black p-4 rounded-4xl w-[182px] h-[58px] justify-center items-center"
+              class="font-basereg flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded-4xl bg-black p-4 text-white"
             >
               Siguiente
               <svg
@@ -103,4 +148,41 @@ import { Component } from '@angular/core';
   `,
   styles: ``,
 })
-export class ProfileInfoComponent {}
+export class ProfileInfoComponent implements OnInit {
+  constructor(private profileService: ProfileService) {}
+
+  provinces: Province[] = [];
+  labels: Label[] = [];
+  selectedInterests: string[] = [];
+
+  ngOnInit(): void {
+    this.profileService.getProvinces().subscribe({
+      next: (result) => {
+        this.provinces =
+          typeof result === 'string' ? JSON.parse(result) : result;
+      },
+    });
+
+    this.profileService.getLabels().subscribe({
+      next: (result) => {
+        this.labels = typeof result === 'string' ? JSON.parse(result) : result;
+      },
+    });
+  }
+
+  toggleInterest(interest: string, event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+
+    if (checkbox.checked) {
+      if (this.selectedInterests.length < 5) {
+        this.selectedInterests.push(interest);
+      } else {
+        checkbox.checked = false;
+      }
+    } else {
+      this.selectedInterests = this.selectedInterests.filter(
+        (i) => i !== interest,
+      );
+    }
+  }
+}
