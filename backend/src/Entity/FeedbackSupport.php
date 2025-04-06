@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FeedbackSupportRepository::class)]
+#[ORM\Table(name: "feedback_support")]
 class FeedbackSupport
 {
     #[ORM\Id]

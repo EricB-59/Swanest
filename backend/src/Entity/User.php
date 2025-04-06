@@ -3,9 +3,12 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: "users")]
 class User
 {
     #[ORM\Id]
@@ -27,6 +30,51 @@ class User
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Profile $profile = null;
+
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Images $image = null;
+
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Preference $preference = null;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'liker', orphanRemoval: true)]
+    private Collection $likes;
+
+    /**
+     * @var Collection<int, Matche>
+     */
+    #[ORM\OneToMany(targetEntity: Matche::class, mappedBy: 'user1', orphanRemoval: true)]
+    private Collection $matches;
+
+    /**
+     * @var Collection<int, Chat>
+     */
+    #[ORM\OneToMany(targetEntity: Chat::class, mappedBy: 'user1', orphanRemoval: true)]
+    private Collection $chats;
+
+    /**
+     * @var Collection<int, Message>
+     */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'sender', orphanRemoval: true)]
+    private Collection $messages;
+
+    /**
+     * @var Collection<int, BlockReport>
+     */
+    #[ORM\OneToMany(targetEntity: BlockReport::class, mappedBy: 'reporter', orphanRemoval: true)]
+    private Collection $blockReports;
+
+    public function __construct()
+    {
+        $this->likes = new ArrayCollection();
+        $this->matches = new ArrayCollection();
+        $this->chats = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+        $this->blockReports = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -101,6 +149,190 @@ class User
         }
 
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function getImage1(): ?Images
+    {
+        return $this->image;
+    }
+
+    public function setImage1(Images $image): static
+    {
+        // set the owning side of the relation if necessary
+        if ($image->getUser() !== $this) {
+            $image->setUser($this);
+        }
+
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getPreference(): ?Preference
+    {
+        return $this->preference;
+    }
+
+    public function setPreference(Preference $preference): static
+    {
+        // set the owning side of the relation if necessary
+        if ($preference->getUser() !== $this) {
+            $preference->setUser($this);
+        }
+
+        $this->preference = $preference;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getLikes(): Collection
+    {
+        return $this->likes;
+    }
+
+    public function addLike(Like $like): static
+    {
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setLiker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLike(Like $like): static
+    {
+        if ($this->likes->removeElement($like)) {
+            // set the owning side to null (unless already changed)
+            if ($like->getLiker() === $this) {
+                $like->setLiker(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Matche>
+     */
+    public function getMatches(): Collection
+    {
+        return $this->matches;
+    }
+
+    public function addMatch(Matche $match): static
+    {
+        if (!$this->matches->contains($match)) {
+            $this->matches->add($match);
+            $match->setUser1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMatch(Matche $match): static
+    {
+        if ($this->matches->removeElement($match)) {
+            // set the owning side to null (unless already changed)
+            if ($match->getUser1() === $this) {
+                $match->setUser1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Chat>
+     */
+    public function getChats(): Collection
+    {
+        return $this->chats;
+    }
+
+    public function addChat(Chat $chat): static
+    {
+        if (!$this->chats->contains($chat)) {
+            $this->chats->add($chat);
+            $chat->setUser1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeChat(Chat $chat): static
+    {
+        if ($this->chats->removeElement($chat)) {
+            // set the owning side to null (unless already changed)
+            if ($chat->getUser1() === $this) {
+                $chat->setUser1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getSender() === $this) {
+                $message->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, BlockReport>
+     */
+    public function getBlockReports(): Collection
+    {
+        return $this->blockReports;
+    }
+
+    public function addBlockReport(BlockReport $blockReport): static
+    {
+        if (!$this->blockReports->contains($blockReport)) {
+            $this->blockReports->add($blockReport);
+            $blockReport->setReporter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlockReport(BlockReport $blockReport): static
+    {
+        if ($this->blockReports->removeElement($blockReport)) {
+            // set the owning side to null (unless already changed)
+            if ($blockReport->getReporter() === $this) {
+                $blockReport->setReporter(null);
+            }
+        }
 
         return $this;
     }
