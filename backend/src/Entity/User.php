@@ -6,10 +6,12 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: "users")]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -22,11 +24,14 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 25)]
+    #[ORM\Column(length: 255)]
     private ?string $password = null;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $created_at = null;
+
+    #[ORM\Column(type: "json")]
+    private array $roles = [];
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Profile $profile = null;
@@ -136,6 +141,46 @@ class User
         return $this;
     }
 
+    /**
+     * @return array
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // garantizar que todos los usuarios tengan al menos ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param array $roles
+     * @return $this
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Método requerido por UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // Si tienes algún campo temporal de contraseña, límpialo aquí
+    }
+
+    /**
+     * Método requerido por UserInterface
+     * Devuelve un identificador único para el usuario
+     */
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
     public function getProfile(): ?Profile
     {
         return $this->profile;
@@ -153,12 +198,12 @@ class User
         return $this;
     }
 
-    public function getImage1(): ?Images
+    public function getImage(): ?Images
     {
         return $this->image;
     }
 
-    public function setImage1(Images $image): static
+    public function setImage(Images $image): static
     {
         // set the owning side of the relation if necessary
         if ($image->getUser() !== $this) {
