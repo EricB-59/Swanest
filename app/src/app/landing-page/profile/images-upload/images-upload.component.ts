@@ -81,16 +81,23 @@ import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
               <label
                 class="absolute right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-black"
               >
-                <img
-                  src="assets/icons/add-image.svg"
-                  alt=""
-                  class="h-4 w-4 rotate-45"
-                />
+                <button type="button" class="cursor-pointer" data-index="1">
+                  <img
+                    src="assets/icons/add-image.svg"
+                    alt=""
+                    class="h-4 w-4 rotate-45"
+                  />
+                </button>
               </label>
               <label
                 class="flex h-40 w-32 items-center justify-center overflow-hidden rounded-4xl border-1 border-black bg-neutral-100"
               >
-                <img id="image1" class="h-full w-full" src="" alt="" />
+                <img
+                  id="image1"
+                  class="h-full w-full object-cover object-center"
+                  src=""
+                  alt=""
+                />
               </label>
             </div>
 
@@ -100,16 +107,23 @@ import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
               <label
                 class="absolute right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-black"
               >
-                <img
-                  src="assets/icons/add-image.svg"
-                  alt=""
-                  class="h-4 w-4 rotate-45"
-                />
+                <button type="button" class="cursor-pointer" data-index="2">
+                  <img
+                    src="assets/icons/add-image.svg"
+                    alt=""
+                    class="h-4 w-4 rotate-45"
+                  />
+                </button>
               </label>
               <label
                 class="flex h-40 w-32 items-center justify-center overflow-hidden rounded-4xl border-1 border-black bg-neutral-100"
               >
-                <img id="image2" class="h-full w-full" src="" alt="" />
+                <img
+                  id="image2"
+                  class="h-full w-full object-cover object-center"
+                  src=""
+                  alt=""
+                />
               </label>
             </div>
 
@@ -119,16 +133,23 @@ import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
               <label
                 class="absolute right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-black"
               >
-                <img
-                  src="assets/icons/add-image.svg"
-                  alt=""
-                  class="h-4 w-4 rotate-45"
-                />
+                <button type="button" class="cursor-pointer" data-index="3">
+                  <img
+                    src="assets/icons/add-image.svg"
+                    alt=""
+                    class="h-4 w-4 rotate-45"
+                  />
+                </button>
               </label>
               <label
                 class="flex h-40 w-32 items-center justify-center overflow-hidden rounded-4xl border-1 border-black bg-neutral-100"
               >
-                <img id="image3" class="h-full w-full" src="" alt="" />
+                <img
+                  id="image3"
+                  class="h-full w-full object-cover object-center"
+                  src=""
+                  alt=""
+                />
               </label>
             </div>
 
@@ -138,16 +159,23 @@ import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
               <label
                 class="absolute right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-black"
               >
-                <img
-                  src="assets/icons/add-image.svg"
-                  alt=""
-                  class="h-4 w-4 rotate-45"
-                />
+                <button type="button" class="cursor-pointer" data-index="4">
+                  <img
+                    src="assets/icons/add-image.svg"
+                    alt=""
+                    class="h-4 w-4 rotate-45"
+                  />
+                </button>
               </label>
               <label
                 class="flex h-40 w-32 items-center justify-center overflow-hidden rounded-4xl border-1 border-black bg-neutral-100"
               >
-                <img id="image4" class="h-full w-full" src="" alt="" />
+                <img
+                  id="image4"
+                  class="h-full w-full object-cover object-center"
+                  src=""
+                  alt=""
+                />
               </label>
             </div>
 
@@ -157,16 +185,23 @@ import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
               <label
                 class="absolute right-0 flex h-7 w-7 cursor-pointer items-center justify-center rounded-full bg-black"
               >
-                <img
-                  src="assets/icons/add-image.svg"
-                  alt=""
-                  class="h-4 w-4 rotate-45"
-                />
+                <button type="button" class="cursor-pointer" data-index="5">
+                  <img
+                    src="assets/icons/add-image.svg"
+                    alt=""
+                    class="h-4 w-4 rotate-45"
+                  />
+                </button>
               </label>
               <label
                 class="flex h-40 w-32 items-center justify-center overflow-hidden rounded-4xl border-1 border-black bg-neutral-100"
               >
-                <img id="image5" class="h-full w-full" src="" alt="" />
+                <img
+                  id="image5"
+                  class="h-full w-full object-cover object-center"
+                  src=""
+                  alt=""
+                />
               </label>
             </div>
           </div>
@@ -209,86 +244,76 @@ export class ImagesUploadComponent implements AfterViewInit {
 
     if (selectImage) {
       selectImage.addEventListener('change', (e: any) => {
-        if (this.isMaxImagesReached) return;
+        if (this.isMaxImagesReached) return; // Evita más selecciones si se alcanzó el límite
 
         const file = e.target.files[0];
         if (!file) return;
 
         const objectUrl = URL.createObjectURL(file);
+
         const index = this.images.findIndex((img) => img === '');
 
         if (index !== -1) {
           this.images[index] = objectUrl;
+
           const imageContainer = document.getElementById(
             `imageContainer${index + 1}`,
           );
-          if (imageContainer) imageContainer.hidden = false;
+          if (imageContainer) {
+            imageContainer.hidden = false;
+          }
 
           const imgElement = document.getElementById(
             `image${index + 1}`,
           ) as HTMLImageElement;
-          if (imgElement) imgElement.src = objectUrl;
-
-          this.createDeleteButton(index + 1);
+          if (imgElement) {
+            imgElement.src = objectUrl;
+          }
 
           if (!this.images.includes('')) {
             this.isMaxImagesReached = true;
-            if (addContainer)
+            if (addContainer) {
               addContainer.classList.add('opacity-50', 'pointer-events-none');
+            }
           }
         }
       });
     }
+    for (let i = 1; i <= 5; i++) {
+      const deleteBtn = document.querySelector(`#imageContainer${i} button`);
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+          this.removeImage(i - 1);
+        });
+      }
+    }
   }
+  removeImage(index: number) {
+    this.images.splice(index, 1); // quita la imagen del array
+    this.images.push(''); // agrega un hueco vacío al final
 
-  createDeleteButton(index: number): void {
-    let imageContainer = document.getElementById(`imageContainer${index}`);
-    if (!imageContainer) return;
-
-    let existingButton = document.getElementById(`deleteButton${index}`);
-    if (existingButton) return;
-
-    const deleteButton = document.createElement('button');
-    deleteButton.id = `deleteButton${index}`;
-    deleteButton.innerText = 'X';
-    deleteButton.className =
-      'absolute top-0 right-0 bg-red-500 text-white rounded-full w-6 h-6';
-    deleteButton.addEventListener('click', () => this.removeImage(index - 1));
-
-    imageContainer.appendChild(deleteButton);
-  }
-
-  removeImage(index: number): void {
-    this.images.splice(index, 1);
-    this.images.push('');
-
+    // actualiza los elementos del DOM
     for (let i = 0; i < 5; i++) {
-      const imageContainer = document.getElementById(`imageContainer${i + 1}`);
-      const imgElement = document.getElementById(
+      const imgEl = document.getElementById(
         `image${i + 1}`,
       ) as HTMLImageElement;
-      const deleteButton = document.getElementById(`deleteButton${i + 1}`);
+      const containerEl = document.getElementById(`imageContainer${i + 1}`);
 
-      if (this.images[i] && this.images[i] !== '') {
-        if (imageContainer) imageContainer.hidden = false;
-        if (imgElement) imgElement.src = this.images[i];
-        if (!deleteButton) this.createDeleteButton(i + 1);
+      if (this.images[i] !== '') {
+        if (imgEl) imgEl.src = this.images[i];
+        if (containerEl) containerEl.hidden = false;
       } else {
-        if (imageContainer) imageContainer.hidden = true;
-        if (imgElement) imgElement.src = '';
-        if (deleteButton) deleteButton.remove();
+        if (imgEl) imgEl.src = '';
+        if (containerEl) containerEl.hidden = true;
       }
     }
 
-    this.isMaxImagesReached =
-      this.images.filter((img) => img !== '').length >= 5;
-    const addContainer = document.getElementById('addImageContainer');
-    if (addContainer) {
-      addContainer.classList.toggle('opacity-50', this.isMaxImagesReached);
-      addContainer.classList.toggle(
-        'pointer-events-none',
-        this.isMaxImagesReached,
-      );
+    // habilita el input de nuevo si hay espacio
+    if (this.images.includes('')) {
+      this.isMaxImagesReached = false;
+      const addContainer = document.getElementById('addImageContainer');
+      if (addContainer)
+        addContainer.classList.remove('opacity-50', 'pointer-events-none');
     }
   }
 }
