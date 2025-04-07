@@ -22,6 +22,7 @@
     "@angular/router": "^19.1.0",
     "@tailwindcss/postcss": "^4.0.6",
     "gsap": "^3.12.7",
+    "interactjs": "^1.10.27",
     "postcss": "^8.5.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
