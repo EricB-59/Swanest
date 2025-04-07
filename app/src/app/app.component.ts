@@ -60,7 +60,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     const cursor = this.cursorFollower.nativeElement;
     
     // Configuración con color fijo
-    cursor.style.setProperty('background-color', '#532AC0', 'important');
+    cursor.style.setProperty('background-color', '#FFFFFF', 'important');
     cursor.style.setProperty('opacity', '1', 'important');
     
     this.mouseMoveListener = this.onMouseMove.bind(this);

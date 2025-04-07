@@ -1,16 +1,13 @@
 <section
-  class="w-screen h-screen px-5 py-5 flex flex-col relative snap-center font-basereg bg-[#EEEEEE]"
+  class="w-screen h-screen px-5 py-5 rounded-4xl flex flex-col relative font-basereg snap-center bg-[#fefefe]"
 >
-  <div class="absolute -top-10 -left-30">
-    <img src="/assets/Images/ellipse.svg" class="w-auto blur-[100px] h-auto" />
-  </div>
-  <div class="flex z-10 w-full flex-grow flex-col px-9 pt-7 pb-2">
+  <div class="flex z-10 w-full flex-grow flex-col px-9 pt-7 pb-3 border-[0.5px] border-black/20 rounded-[4.4rem]">
     <div>
       <header class="flex justify-between">
         <div class="flex items-center justify-center">
-          <a href="">
+          <a href="" class="z-10">
             <img
-              class="outline-none cursor-none"
+              class="outline-none cursor-pointer"
               src="/assets/Images/logo.svg"
               alt="Logo"
             />
@@ -20,9 +17,9 @@
           <nav
             class="bg-black text-white/50 w-[44.875rem] h-[4.188rem] rounded-full flex justify-center items-center z-50"
           >
-            <ul class="flex gap-3 text-base select-none">
+            <ul class="flex gap-3 font-baselight select-none">
               <li
-                class="cursor-pointer rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center items-center border bg-white text-black"
+                class="cursor-pointer rounded-full w-[8.125rem] p-[0.313rem] h-[2.938rem] flex justify-center font-basereg items-center border bg-white text-black"
               >
                 <span>Inicio</span>
               </li>
@@ -48,12 +45,14 @@
               </li>
             </ul>
           </nav>
-          <button
-            class="flex justify-center items-center h-[4.188rem] w-[16.625rem] gap-3 border border-black rounded-full cursor-pointer"
-          >
-            <span>Iniciar sesión</span>
-            <span>/</span>
-            <span>Registrar</span>
+            <button
+              #animatedButton
+              class="relative flex justify-center font-baselight items-center hover:scale-105 z-10 bg-[#f3f3f3] text-[1rem] h-[4.188rem] w-[16.625rem] gap-3 ease-pop rounded-full cursor-pointer border overflow-hidden text-black transition-all duration-300"
+            >
+            <span class="button__flair absolute inset-0 transform scale-0 pointer-events-none before:content-[''] before:block before:absolute before:left-0 before:top-0 before:w-[170%] before:aspect-square before:bg-[#74FFB4] before:rounded-full before:-translate-x-1/2 before:-translate-y-1/2 before:pointer-events-none"></span>
+            <span class="z-10">Iniciar sesión</span>
+            <span class="z-10">/</span>
+            <span class="z-10">Registrar</span>
           </button>
         </div>
       </header>
@@ -64,12 +63,19 @@
       >
         <img src="/assets/Images/swanest.svg" />
         <img
-          class="h-98 absolute -top-5 -translate-y-1/2 -translate-x-1/3 left-70"
+          #draggableImage
+          class="h-min w-70 z-1 absolute -top-5 rounded-2xl -translate-y-1/2 cursor-grab -translate-x-1/3 left-70"
           src="/assets/Images/swan-pair-sticker.svg"
         />
+        <div class="bg-[#7948FF] text-white text-[1.55rem] py-4.5 px-8 rounded-full absolute rotate-4 -right-6 -bottom-12.5">
+          <span class="flex uppercase relative items-center font-baselight tracking-[0.8px] justify-center gap-1">
+            Donde las almas gemelas se anidan.
+            <img class="absolute -right-13 -top-9" src="/assets/Images/sticker_1.svg">   
+          </span>
+        </div>
       </div>
       <button
-        class="absolute right-0 bottom-0 w-24 h-24 rounded-full border cursor-pointer border-[#707070] flex items-center justify-center"
+        class="absolute right-0 bottom-0 w-24 h-24 rounded-full -z-10 border cursor-pointer border-[#707070] flex items-center justify-center"
       >
         <svg
           width="23"
@@ -86,14 +92,14 @@
           />
         </svg>
       </button>
-      <div class="absolute bottom-0 max-w-[33%] select-none">
-        <p class="text-[2.05rem] break-words leading-tight">
+      <div class="absolute bottom-0 max-w-[35rem] select-none -z-10">
+        <p class="text-[2rem] uppercase break-words flex leading-9">
           La web donde encontrarás tu compañero de vuelo.⛅😍
         </p>
       </div>
     </main>
     <div
-      class="w-full pt-5 pb-2 overflow-hidden select-none whitespace-nowrap z-2"
+      class="w-full pt-5 overflow-hidden select-none whitespace-nowrap -z-1"
     >
       <div class="flex">
         <ul

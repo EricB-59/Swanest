@@ -3,6 +3,7 @@
 
 *::-webkit-scrollbar {
   width: 5px;
+  background: transparent
 }
 
 *::-webkit-scrollbar-thumb {
@@ -27,6 +28,11 @@
 @font-face {
   font-family: "baselight";
   src: url("/assets/Fonts/BaseNeue-Light.ttf");
+}
+
+.ease-pop {
+  --tw-ease: var(--ease-pop);
+  transition-timing-function: var(--ease-pop);
 }
 
 @font-face {
