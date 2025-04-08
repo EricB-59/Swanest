@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { UserService } from '../../../services/user/user.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../../../models/user';
+import { MatDialog } from '@angular/material/dialog';
+import { PersonalInfoComponent } from '../../profile/personal-info/personal-info.component';
+import { ProfileInfoComponent } from '../../profile/profile-info/profile-info.component';
 
 @Component({
   selector: 'app-register-user',
@@ -10,7 +13,10 @@ import { User } from '../../../models/user';
   styles: ``,
 })
 export class RegisterUserComponent {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private _matDialog: MatDialog,
+  ) {}
 
   registerForm = new FormGroup({
     username: new FormControl(''),
@@ -26,7 +32,7 @@ export class RegisterUserComponent {
     });
 
     this.userService.create(user).subscribe((result) => {
-      console.log(result);
+      this._matDialog.open(PersonalInfoComponent);
     });
   }
 }
