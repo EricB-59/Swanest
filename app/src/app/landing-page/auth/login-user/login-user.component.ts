@@ -12,15 +12,15 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
       <form
         [formGroup]="form"
         (submit)="login()"
-        class="custom-form font-basereg flex flex-col items-center"
+        class="font-basereg flex flex-col items-center"
       >
         <div class="w-full">
           <h1 class="font-basemedium text-5xl whitespace-nowrap">
-            Iniciar Sesión
+            Iniciar sesión
           </h1>
         </div>
         <div class="mt-10 flex w-full flex-col gap-6">
-          <label class="flex flex-col text-lg">
+          <label class="flex flex-col text-[1.0625rem]">
             <div class="flex">
               <span>Correo electrónico / Nombre usuario</span>
               <span class="font-basesemibold text-[#9272E8]">*</span>
@@ -56,12 +56,12 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
         >
         <div class="mt-5 flex w-full items-center justify-end">
           <button
-            class="flex cursor-pointer items-center rounded-full bg-black p-2 pr-2 pl-6 text-[1rem] text-white"
+            class="flex cursor-pointer items-center rounded-full bg-black p-1.5 text-[1rem] text-white"
             type="submit"
           >
-            <span>Iniciar sesion</span>
+            <span class="px-4.5">Iniciar sesion</span>
             <div
-              class="ml-6 flex h-10.5 w-10.5 items-center justify-center rounded-full bg-white"
+              class="flex h-10.5 w-10.5 items-center justify-center rounded-full bg-white"
             >
               <svg
                 width="16"

@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
+#[ORM\Table(name: "profiles")]
 class Profile
 {
     #[ORM\Id]

@@ -6,6 +6,7 @@ use App\Repository\UserLabelRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserLabelRepository::class)]
+#[ORM\Table(name: "user_label")]
 class UserLabel
 {
     #[ORM\Id]

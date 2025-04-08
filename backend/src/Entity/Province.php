@@ -6,6 +6,7 @@ use App\Repository\ProvinceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProvinceRepository::class)]
+#[ORM\Table(name: "provinces")]
 class Province
 {
     #[ORM\Id]
