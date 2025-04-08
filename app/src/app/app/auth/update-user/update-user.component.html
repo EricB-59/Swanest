@@ -1,1 +1,174 @@
-<p>update-user works!</p>
+<section class="p-6 md:p-12">
+  <form action="" class="grid w-full grid-cols-1 gap-10 md:grid-cols-2">
+    <!-- IMAGES -->
+    <article class="space-y-6">
+      <!-- Imagen principal -->
+      <picture>
+        <img
+          src=""
+          alt="Imagen principal del usuario"
+          class="h-64 w-full rounded-2xl bg-slate-300 object-cover"
+        />
+      </picture>
+
+      <!-- Cuadrícula de imágenes secundarias -->
+      <div class="grid grid-cols-2 grid-rows-2 gap-4">
+        <img
+          src=""
+          alt="Imagen 1"
+          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+        />
+        <img
+          src=""
+          alt="Imagen 2"
+          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+        />
+        <img
+          src=""
+          alt="Imagen 3"
+          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+        />
+        <img
+          src=""
+          alt="Imagen 4"
+          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+        />
+      </div>
+    </article>
+
+    <!-- FORMULARIO -->
+    <article class="space-y-6">
+      <!-- BIO -->
+      <div>
+        <label for="bio" class="block text-lg font-light">Preséntate *</label>
+        <textarea
+          name="bio"
+          id="bio"
+          rows="3"
+          class="mt-2 w-full resize-none border-b-2 border-black font-light focus:outline-none"
+          [value]=""
+        ></textarea>
+      </div>
+
+      <!-- PROVINCIA -->
+      <div>
+        <label for="province" class="block text-lg font-light">Provincia</label>
+        <input
+          list="provinces"
+          id="province"
+          name="province"
+          class="mt-2 h-8 w-full border-b-2 border-black font-light focus:outline-none"
+        />
+        <datalist id="provinces">
+          @for (province of this.provinces; track $index) {
+            <option value="{{ province.name }}"></option>
+          }
+        </datalist>
+      </div>
+
+      <!-- GÉNERO -->
+      <fieldset>
+        <legend class="mb-3 text-lg font-light">Género *</legend>
+        <div class="flex flex-wrap gap-2">
+          <!-- Cada opción -->
+          <div
+            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
+          >
+            <input
+              type="radio"
+              id="male"
+              name="genre"
+              value="1"
+              class="h-4 w-4 accent-purple-500"
+            />
+            <label for="male" class="cursor-pointer font-light">Hombre</label>
+          </div>
+          <div
+            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
+          >
+            <input
+              type="radio"
+              id="female"
+              name="genre"
+              value="2"
+              class="h-4 w-4 accent-purple-500"
+            />
+            <label for="female" class="cursor-pointer font-light">Mujer</label>
+          </div>
+          <div
+            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
+          >
+            <input
+              type="radio"
+              id="non-binary"
+              name="genre"
+              value="3"
+              class="h-4 w-4 accent-purple-500"
+            />
+            <label for="non-binary" class="cursor-pointer font-light"
+              >No binario</label
+            >
+          </div>
+          <div
+            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
+          >
+            <input
+              type="radio"
+              id="other"
+              name="genre"
+              value="4"
+              class="h-4 w-4 accent-purple-500"
+            />
+            <label for="other" class="cursor-pointer font-light">Otros</label>
+          </div>
+          <div
+            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
+          >
+            <input
+              type="radio"
+              id="prefere-not-to-say"
+              name="genre"
+              value="5"
+              class="h-4 w-4 accent-purple-500"
+            />
+            <label for="prefere-not-to-say" class="cursor-pointer font-light"
+              >Prefiero no contestar</label
+            >
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- INTERESES -->
+      <div>
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-medium">Intereses</h2>
+          <span id="counter" class="text-sm"
+            >{{ selectedInterests.length }}/5</span
+          >
+        </div>
+
+        <ul class="mt-2 flex flex-wrap gap-2">
+          @for (label of this.labels; track $index) {
+            <li class="relative">
+              <input
+                type="checkbox"
+                id="{{ label.name }}"
+                name="{{ label.name }}"
+                value="{{ label.id }}"
+                class="peer absolute inset-0 cursor-pointer appearance-none rounded-full border border-black bg-white checked:bg-emerald-300"
+                [checked]="selectedInterests.includes(label.name)"
+                (change)="toggleInterest(label.name, $event)"
+              />
+              <label
+                for="{{ label.name }}"
+                class="inline-block cursor-pointer rounded-full border border-black px-4 py-2 font-light peer-checked:bg-emerald-300"
+              >
+                {{ label.name }}
+              </label>
+            </li>
+          }
+        </ul>
+      </div>
+    </article>
+  </form>
+</section>
