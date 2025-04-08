@@ -29,14 +29,24 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 })
 export class MatchSectionComponent implements AfterViewInit {
   ngAfterViewInit(): void {
+    // As of this grades we consider the user maked a decision
     const DECISION_THRESHOLD = 75;
+
+    // flag for don't mix animations
     let isAnimating = false;
-    let pullDistanceX = 0; // Distance of the card drag
+
+    // Distance of the card drag
+    let pullDistanceX = 0;
 
     document.addEventListener('mousedown', startDrag);
     // With passive true we ignore the default behavior
     document.addEventListener('touchstart', startDrag, { passive: true });
 
+    /**
+     * This function is called when the user start to drag with mouse or with touch
+     * @param event
+     * @returns
+     */
     function startDrag(event: any) {
       if (isAnimating) return;
 
@@ -96,6 +106,7 @@ export class MatchSectionComponent implements AfterViewInit {
         console.log(pullDistanceX);
         console.log(decisionMade);
 
+        // In this point the user had make a decision
         if (decisionMade) {
           const goRight = pullDistanceX >= 0;
           const goLeft = !goRight;

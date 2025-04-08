@@ -4,34 +4,34 @@ import { Component } from '@angular/core';
   selector: 'app-personal-info',
   imports: [],
   template: `
-    <main class="bg-slate-200 w-full h-full grid place-content-center">
+    <main class="grid h-full w-full place-content-center bg-slate-200">
       <section
-        class="bg-white rounded-[64px] p-10 w-[553px] h-[642px] relative"
+        class="flex h-[642px] w-[553px] flex-col rounded-[64px] bg-white p-10"
       >
         <div
-          class="flex flex-row justify-between items-center align-middle pb-4"
+          class="flex flex-row items-center justify-between pb-4 align-middle"
         >
-          <div class="flex justify-start items-center">
+          <div class="flex items-center justify-start">
             <div
-              class="flex w-12 h-12 bg-gray-200 rounded-full border-4 border-emerald-300 justify-center items-center"
+              class="flex h-12 w-12 items-center justify-center rounded-full border-4 border-emerald-300 bg-gray-200"
             >
               1
             </div>
-            <hr class="border-2 border-gray-200 w-24" />
+            <hr class="w-24 border-2 border-gray-200" />
             <div
-              class="flex justify-center items-center w-12 h-12 bg-gray-200 rounded-full"
+              class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200"
             >
               2
             </div>
-            <hr class="border-2 border-gray-200 w-24" />
+            <hr class="w-24 border-2 border-gray-200" />
             <div
-              class="flex justify-center items-center w-12 h-12 bg-gray-200 rounded-full"
+              class="flex h-12 w-12 items-center justify-center rounded-full bg-gray-200"
             >
               3
             </div>
           </div>
           <div
-            class="rounded-full border-2 border-black h-15 w-15 flex justify-center items-center z-10"
+            class="z-10 flex h-15 w-15 items-center justify-center rounded-full border-2 border-black"
           >
             <svg
               width="17"
@@ -45,22 +45,22 @@ import { Component } from '@angular/core';
             </svg>
           </div>
         </div>
-        <div class="flex flex-col w-90">
-          <h1 class="flex font-basebold text-3xl">Información personal</h1>
-          <p class="flex font-basereg text-sm">
+        <div class="flex w-90 flex-col">
+          <h1 class="font-basebold flex text-3xl">Información personal</h1>
+          <p class="font-basereg flex text-sm">
             Comparte algunos datos básicos para empezar y mejorar tu experiencia
             en la app.
           </p>
         </div>
 
-        <form action="" class="h-full flex flex-col">
+        <form action="" class="flex h-full flex-col">
           <!--Input Nombre-->
           <label for="user-name">
             <h2 class="font-basereg pt-5">Nombre *</h2>
             <input
               type="text"
               name="name"
-              class="h-8 font-basereg border-b-2 border-black w-full"
+              class="font-basereg h-8 w-full border-b-2 border-black"
             />
           </label>
 
@@ -70,7 +70,7 @@ import { Component } from '@angular/core';
             <input
               type="text"
               name="surname"
-              class="h-8 font-basereg border-b-2 border-black w-full"
+              class="font-basereg h-8 w-full border-b-2 border-black"
             />
           </label>
 
@@ -80,7 +80,7 @@ import { Component } from '@angular/core';
             <input
               type="date"
               name="birthdate"
-              class="h-8 font-basereg border-b-2 border-black w-full"
+              class="font-basereg h-8 w-full border-b-2 border-black"
             />
           </label>
 
@@ -89,45 +89,45 @@ import { Component } from '@angular/core';
           <fieldset for="user-genre">
             <div class="flex flex-wrap gap-2">
               <div
-                class="flex flex-row border-1 rounded-[32px] w-[130px] h-[44px]   justify-center items-center gap-5"
+                class="flex h-[44px] w-[130px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
               >
                 <label for="male" class="flex cursor-pointer">Hombre</label>
                 <input
-                  value= "1"
+                  value="1"
                   id="male"
                   name="genre"
                   type="radio"
-                  class="flex cursor-pointer w-[23px] h-[23px] checked:accent-purple-500"
+                  class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
                 />
               </div>
               <div
-                class="flex flex-row border-1 rounded-[32px] w-[120px] h-[44px] justify-center items-center gap-6"
+                class="flex h-[44px] w-[120px] flex-row items-center justify-center gap-6 rounded-[32px] border-1"
               >
                 <label for="female" class="flex cursor-pointer">Mujer</label>
                 <input
-                  value= "2"
+                  value="2"
                   id="female"
                   name="genre"
                   type="radio"
-                  class="flex cursor-pointer w-[23px] h-[23px] checked:accent-purple-500"
+                  class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
                 />
               </div>
               <div
-                class="flex flex-row border-1 rounded-[32px] w-[142px] h-[44px]   justify-center items-center gap-5"
+                class="flex h-[44px] w-[142px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
               >
                 <label for="non-binary" class="flex cursor-pointer"
                   >No binario</label
                 >
                 <input
-                  value= "3"
+                  value="3"
                   id="non-binary"
                   name="genre"
                   type="radio"
-                  class="flex cursor-pointer w-[23px] h-[23px] checked:accent-purple-500"
+                  class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
                 />
               </div>
               <div
-                class="flex flex-row border-1 rounded-[32px] w-[112px] h-[44px]   justify-center items-center gap-5"
+                class="flex h-[44px] w-[112px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
               >
                 <label for="other" class="flex cursor-pointer">Otros</label>
                 <input
@@ -135,11 +135,11 @@ import { Component } from '@angular/core';
                   id="other"
                   name="genre"
                   type="radio"
-                  class="flex cursor-pointer w-[23px] h-[23px] checked:accent-purple-500"
+                  class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
                 />
               </div>
               <div
-                class="flex flex-row border-1 rounded-[32px] w-[220px] h-[44px]   justify-center items-center gap-5"
+                class="flex h-[44px] w-[220px] flex-row items-center justify-center gap-5 rounded-[32px] border-1"
               >
                 <label for="prefere-not-to-say" class="flex cursor-pointer"
                   >Prefiero no contestar</label
@@ -149,7 +149,7 @@ import { Component } from '@angular/core';
                   id="prefere-not-to-say"
                   name="genre"
                   type="radio"
-                  class="flex cursor-pointer w-[23px] h-[23px] checked:accent-purple-500"
+                  class="flex h-[23px] w-[23px] cursor-pointer checked:accent-purple-500"
                 />
               </div>
             </div>
@@ -157,7 +157,7 @@ import { Component } from '@angular/core';
 
           <div class="flex justify-end">
             <button
-              class="flex gap-2 text-white font-basereg cursor-pointer bg-black p-4 rounded-4xl w-32 h-11 justify-center items-center"
+              class="font-basereg flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded-4xl bg-black p-4 text-white"
             >
               Siguiente
               <svg

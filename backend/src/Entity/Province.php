@@ -6,6 +6,7 @@ use App\Repository\ProvinceRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProvinceRepository::class)]
+#[ORM\Table(name: "provinces")]
 class Province
 {
     #[ORM\Id]
@@ -38,5 +39,13 @@ class Province
         $this->name = $name;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
     }
 }

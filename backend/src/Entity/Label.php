@@ -6,6 +6,7 @@ use App\Repository\LabelRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: LabelRepository::class)]
+#[ORM\Table(name: "labels")]
 class Label
 {
     #[ORM\Id]
@@ -38,5 +39,13 @@ class Label
         $this->name = $name;
 
         return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+        ];
     }
 }

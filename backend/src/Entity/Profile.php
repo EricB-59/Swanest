@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
+#[ORM\Table(name: "profiles")]
 class Profile
 {
     #[ORM\Id]
@@ -176,5 +177,44 @@ class Profile
         $this->labels = $labels;
 
         return $this;
+    }
+
+    /**
+     * Convierte el objeto Profile y sus relaciones a un array asociativo
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $profileData = [
+            'id' => $this->getId(),
+            'first_name' => $this->getFirstName(),
+            'last_name' => $this->getLastName(),
+            'bio' => $this->getBio(),
+            'birthdate' => $this->getBirthdate() ? $this->getBirthdate()->format('Y-m-d') : null,
+            'created_at' => $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m-d H:i:s') : null,
+            'updated_at' => $this->getUpdatedAt() ? $this->getUpdatedAt()->format('Y-m-d H:i:s') : null,
+        ];
+
+        // Añadir gender si existe
+        if ($this->getGender()) {
+            $profileData['gender'] = $this->getGender()->toArray();
+        }
+
+        // Añadir province si existe
+        if ($this->getProvince()) {
+            $profileData['province'] = $this->getProvince()->toArray();
+        }
+
+        // Añadir labels
+        if ($this->getLabels()) {
+            $profileData['labels'] = $this->getLabels()->toArray();
+        }
+
+        // No incluimos la referencia al usuario para evitar referencias circulares
+        // Si necesitas incluir el ID del usuario:
+        $profileData['user_id'] = $this->getUser() ? $this->getUser()->getId() : null;
+
+        return $profileData;
     }
 }
