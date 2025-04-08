@@ -381,4 +381,59 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * Convert User object to an Array for later use on json to send User data
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $userData = [
+            'id' => $this->getId(),
+            'username' => $this->getUsername(),
+            'email' => $this->getEmail(),
+            'created_at' => $this->getCreatedAt() ? $this->getCreatedAt()->format('Y-m-d H:i:s') : null,
+            'roles' => $this->getRoles(),
+        ];
+
+        if ($this->getProfile()) {
+            $userData['profile'] = $this->getProfile()->toArray();
+        }
+
+        if ($this->getImage()) {
+            $userData['image'] = $this->getImage()->toArray();
+        }
+
+        if ($this->getPreference()) {
+            $userData['preference'] = $this->getPreference()->toArray();
+        }
+
+        $userData['likes'] = [];
+        foreach ($this->getLikes() as $like) {
+            $userData['likes'][] = $like->toArray();
+        }
+
+        $userData['matches'] = [];
+        foreach ($this->getMatches() as $match) {
+            $userData['matches'][] = $match->toArray();
+        }
+
+        $userData['chats'] = [];
+        foreach ($this->getChats() as $chat) {
+            $userData['chats'][] = $chat->toArray();
+        }
+
+        $userData['messages'] = [];
+        foreach ($this->getMessages() as $message) {
+            $userData['messages'][] = $message->toArray();
+        }
+
+        $userData['block_reports'] = [];
+        foreach ($this->getBlockReports() as $blockReport) {
+            $userData['block_reports'][] = $blockReport->toArray();
+        }
+
+        return $userData;
+    }
 }

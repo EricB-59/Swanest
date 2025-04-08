@@ -88,4 +88,15 @@ class BlockReport
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'reporter' => $this->getReporter()?->getId(),
+            'reported' => $this->getReported()?->getId(),
+            'reason' => $this->getReason(),
+            'reported_at' => $this->getReportedAt()?->format('Y-m-d H:i:s'),
+        ];
+    }
 }
