@@ -20,4 +20,3 @@ export class AuthComponent {
     this.isRightSide = !this.isRightSide;
   }
 }
- 
