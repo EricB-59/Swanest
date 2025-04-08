@@ -119,4 +119,36 @@ class Message
 
         return $this;
     }
+
+    /**
+     * Convierte el objeto Message y sus relaciones a un array asociativo
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $messageData = [
+            'id' => $this->getId(),
+            'content' => $this->getContent(),
+            'is_read' => $this->isRead(),
+            'sent_at' => $this->getSentAt() ? $this->getSentAt()->format('Y-m-d H:i:s') : null,
+        ];
+
+        // No incluimos objetos completos para evitar referencias circulares
+        // Solo incluimos los IDs
+        $messageData['chat_id'] = $this->getChat() ? $this->getChat()->getId() : null;
+        $messageData['sender_id'] = $this->getSender() ? $this->getSender()->getId() : null;
+        $messageData['receiver_id'] = $this->getReceiver() ? $this->getReceiver()->getId() : null;
+
+        // Opcionalmente, podemos incluir información básica de los usuarios
+        if ($this->getSender()) {
+            $messageData['sender_username'] = $this->getSender()->getUsername();
+        }
+
+        if ($this->getReceiver()) {
+            $messageData['receiver_username'] = $this->getReceiver()->getUsername();
+        }
+
+        return $messageData;
+    }
 }

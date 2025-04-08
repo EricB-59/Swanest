@@ -12,10 +12,10 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
       <form
         [formGroup]="form"
         (submit)="login()"
-        class="font-basereg flex flex-col items-center"
+        class="font-family-regular flex flex-col items-center"
       >
         <div class="w-full">
-          <h1 class="font-basemedium text-5xl whitespace-nowrap">
+          <h1 class="font-family-medium text-5xl whitespace-nowrap">
             Iniciar sesión
           </h1>
         </div>
