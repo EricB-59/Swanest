@@ -83,7 +83,9 @@ final class UserController extends AbstractController
         // - At least one lowercase letter
         // - At least one uppercase letter
         // - At least one digit
-        $regexPassword = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$^';
+        // $regexPassword = '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$^';
+        $regexPassword = '^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$';
+
         if (!preg_match($regexPassword, $password)) {
             return new JsonResponse('Invalid password', Response::HTTP_BAD_REQUEST);
         }
