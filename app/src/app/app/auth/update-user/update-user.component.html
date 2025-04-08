@@ -147,24 +147,27 @@
           >
         </div>
 
-        <ul class="mt-2 flex flex-wrap gap-2">
+        <ul
+          class="flex w-full flex-wrap items-center justify-start gap-1 pt-2 text-sm"
+        >
           @for (label of this.labels; track $index) {
-            <li class="relative">
+            <li
+              class="relative float-left flex h-8 w-22 list-outside list-none items-center justify-center p-2.5"
+            >
               <input
+                class="absolute h-8 w-22 cursor-pointer appearance-none rounded-4xl border-1 border-black bg-white checked:bg-emerald-300"
                 type="checkbox"
                 id="{{ label.name }}"
                 name="{{ label.name }}"
                 value="{{ label.id }}"
-                class="peer absolute inset-0 cursor-pointer appearance-none rounded-full border border-black bg-white checked:bg-emerald-300"
                 [checked]="selectedInterests.includes(label.name)"
                 (change)="toggleInterest(label.name, $event)"
               />
               <label
                 for="{{ label.name }}"
-                class="inline-block cursor-pointer rounded-full border border-black px-4 py-2 font-light peer-checked:bg-emerald-300"
+                class="absolute inline-block cursor-pointer select-none"
+                >{{ label.name }}</label
               >
-                {{ label.name }}
-              </label>
             </li>
           }
         </ul>

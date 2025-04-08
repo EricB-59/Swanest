@@ -25,7 +25,7 @@ final class ProfileController extends AbstractController
     public function getProfile(int $id, EntityManagerInterface $entityManager)
     {
         $profileRepository = $entityManager->getRepository(Profile::class);
-        $profile = $profileRepository->find($id);
+        $profile = $profileRepository->findOneBy(['user' => $id]);
 
         if (!$profile) {
             return new JsonResponse(
@@ -34,41 +34,7 @@ final class ProfileController extends AbstractController
             );
         }
 
-        $gender = $profile->getGender() ? [
-            'id' => $profile->getGender()->getId(),
-        ] : null;
-
-        $province = $profile->getProvince() ? [
-            'id' => $profile->getProvince()->getId(),
-        ] : null;
-
-        $user = [
-            'id' => $profile->getUser()->getId(),
-        ];
-
-        $labels = $profile->getLabels() ? [
-            'id' => $profile->getLabels()->getId(),
-        ] : null;
-
-        $birthdate = $profile->getBirthdate() ? $profile->getBirthdate()->format('Y-m-d') : null;
-        $createdAt = $profile->getCreatedAt() ? $profile->getCreatedAt()->format('Y-m-d H:i:s') : null;
-        $updatedAt = $profile->getUpdatedAt() ? $profile->getUpdatedAt()->format('Y-m-d H:i:s') : null;
-
-        $profileData = [
-            'id' => $profile->getId(),
-            'firstName' => $profile->getFirstName(),
-            'lastName' => $profile->getLastName(),
-            'bio' => $profile->getBio(),
-            'birthdate' => $birthdate,
-            'gender' => $gender,
-            'province' => $province,
-            'user' => $user,
-            'labels' => $labels,
-            'createdAt' => $createdAt,
-            'updatedAt' => $updatedAt
-        ];
-
-        return new JsonResponse($profileData);
+        return new JsonResponse($profile->toArray());
     }
 
     #[Route(path: '/update/{id}', name: 'app_profile_update', methods: ['PUT'],)]
