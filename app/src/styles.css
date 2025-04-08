@@ -29,8 +29,8 @@
 }
 
 @font-face {
-  font-family: "baselight";
-  src: url("/assets/Fonts/BaseNeue-Light.ttf");
+  font-family: "base-neue-light";
+  src: url("assets/fonts/BaseNeue-Light.ttf");
 }
 
 @font-face {
