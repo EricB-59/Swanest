@@ -15,7 +15,7 @@ class Images
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'image_1', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'image', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
@@ -131,5 +131,29 @@ class Images
         $this->uploaded_at = $uploaded_at;
 
         return $this;
+    }
+
+    /**
+     * Convierte el objeto Images y sus relaciones a un array asociativo
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $imagesData = [
+            'id' => $this->getId(),
+            'image_1' => $this->getImage1(),
+            'image_2' => $this->getImage2(),
+            'image_3' => $this->getImage3(),
+            'image_4' => $this->getImage4(),
+            'image_5' => $this->getImage5(),
+            'uploaded_at' => $this->getUploadedAt() ? $this->getUploadedAt()->format('Y-m-d H:i:s') : null,
+        ];
+
+        // No incluimos la referencia al usuario para evitar referencias circulares
+        // Solo incluimos el ID del usuario
+        $imagesData['user_id'] = $this->getUser() ? $this->getUser()->getId() : null;
+
+        return $imagesData;
     }
 }

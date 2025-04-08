@@ -103,4 +103,34 @@ class Preference
 
         return $this;
     }
+
+    /**
+     * Convierte el objeto Preference y sus relaciones a un array asociativo
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $preferenceData = [
+            'id' => $this->getId(),
+            'age_min' => $this->getAgeMin(),
+            'age_max' => $this->getAgeMax(),
+        ];
+
+        // Añadir province si existe
+        if ($this->getProvince()) {
+            $preferenceData['province'] = $this->getProvince()->toArray();
+        }
+
+        // Añadir gender si existe
+        if ($this->getGender()) {
+            $preferenceData['gender'] = $this->getGender()->toArray();
+        }
+
+        // No incluimos la referencia al usuario para evitar referencias circulares
+        // Solo incluimos el ID del usuario
+        $preferenceData['user_id'] = $this->getUser() ? $this->getUser()->getId() : null;
+
+        return $preferenceData;
+    }
 }

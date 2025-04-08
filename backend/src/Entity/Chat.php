@@ -100,4 +100,38 @@ class Chat
 
         return $this;
     }
+
+    /**
+     * Convierte el objeto Chat y sus relaciones a un array asociativo
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $chatData = [
+            'id' => $this->getId(),
+        ];
+
+        // No incluimos los objetos completos de usuario para evitar referencias circulares
+        // Solo incluimos los IDs de los usuarios
+        $chatData['user1_id'] = $this->getUser1() ? $this->getUser1()->getId() : null;
+        $chatData['user2_id'] = $this->getUser2() ? $this->getUser2()->getId() : null;
+
+        // Opcionalmente, podemos incluir información básica de los usuarios
+        if ($this->getUser1()) {
+            $chatData['user1_username'] = $this->getUser1()->getUsername();
+        }
+
+        if ($this->getUser2()) {
+            $chatData['user2_username'] = $this->getUser2()->getUsername();
+        }
+
+        // Convertir colección de mensajes a array
+        $chatData['messages'] = [];
+        foreach ($this->getMessages() as $message) {
+            $chatData['messages'][] = $message->toArray();
+        }
+
+        return $chatData;
+    }
 }

@@ -72,4 +72,33 @@ class Like
 
         return $this;
     }
+
+    /**
+     * Convierte el objeto Like y sus relaciones a un array asociativo
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $likeData = [
+            'id' => $this->getId(),
+            'liked_at' => $this->getLikedAt() ? $this->getLikedAt()->format('Y-m-d H:i:s') : null,
+        ];
+
+        // No incluimos los objetos completos de usuario para evitar referencias circulares
+        // Solo incluimos los IDs de los usuarios
+        $likeData['liker_id'] = $this->getLiker() ? $this->getLiker()->getId() : null;
+        $likeData['liked_id'] = $this->getLiked() ? $this->getLiked()->getId() : null;
+
+        // Opcionalmente, podemos incluir información básica del usuario que dio like y el que recibió like
+        if ($this->getLiker()) {
+            $likeData['liker_username'] = $this->getLiker()->getUsername();
+        }
+
+        if ($this->getLiked()) {
+            $likeData['liked_username'] = $this->getLiked()->getUsername();
+        }
+
+        return $likeData;
+    }
 }

@@ -102,4 +102,16 @@ class UserLabel
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'first_label' => $this->getFirstLabel()?->toArray(),
+            'second_label' => $this->getSecondLabel()?->toArray(),
+            'third_label' => $this->getThirdLabel()?->toArray(),
+            'fourth_label' => $this->getFourthLabel()?->toArray(),
+            'fifth_label' => $this->getFifthLabel()?->toArray(),
+        ];
+    }
 }

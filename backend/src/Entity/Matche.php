@@ -72,4 +72,33 @@ class Matche
 
         return $this;
     }
+
+    /**
+     * Convierte el objeto Matche y sus relaciones a un array asociativo
+     * 
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $matchData = [
+            'id' => $this->getId(),
+            'matched_at' => $this->getMatchedAt() ? $this->getMatchedAt()->format('Y-m-d H:i:s') : null,
+        ];
+
+        // No incluimos los objetos completos de usuario para evitar referencias circulares
+        // Solo incluimos los IDs de los usuarios
+        $matchData['user1_id'] = $this->getUser1() ? $this->getUser1()->getId() : null;
+        $matchData['user2_id'] = $this->getUser2() ? $this->getUser2()->getId() : null;
+
+        // Opcionalmente, podemos incluir información básica de los usuarios
+        if ($this->getUser1()) {
+            $matchData['user1_username'] = $this->getUser1()->getUsername();
+        }
+
+        if ($this->getUser2()) {
+            $matchData['user2_username'] = $this->getUser2()->getUsername();
+        }
+
+        return $matchData;
+    }
 }

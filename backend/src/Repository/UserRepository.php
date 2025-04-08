@@ -15,7 +15,8 @@ class UserRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-    public function findByEmailOrUsername($value) : ?User {
+    public function findByEmailOrUsername($value): ?User
+    {
         return $this->createQueryBuilder('u')
             ->andWhere('u.email = :val')
             ->orWhere('u.username = :val')
