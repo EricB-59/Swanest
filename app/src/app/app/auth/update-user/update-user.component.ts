@@ -20,7 +20,7 @@ interface Label {
 export class UpdateUserComponent {
   constructor(private profileService: ProfileService) {}
 
-  profile: Profile = null;
+  profile: any;
   provinces: Province[] = [];
   labels: Label[] = [];
   selectedInterests: string[] = [];
@@ -42,7 +42,8 @@ export class UpdateUserComponent {
 
     this.profileService.getProfile(1).subscribe({
       next: (result) => {
-        console.log(result);
+        this.profile = result;
+        console.log(this.profile.first_name);
       },
     });
   }

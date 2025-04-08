@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Profile } from '../../models/profile';
 
 @Injectable({
   providedIn: 'root',
@@ -10,8 +11,8 @@ export class ProfileService {
 
   constructor(private connHttp: HttpClient) {}
 
-  getProfile(id: number): Observable<object> {
-    return this.connHttp.get(this.apiUrl + `/getProfile/${id}`);
+  getProfile(id: number): Observable<Profile> {
+    return this.connHttp.get<Profile>(this.apiUrl + `/getProfile/${id}`);
   }
 
   getProvinces(): Observable<object> {
