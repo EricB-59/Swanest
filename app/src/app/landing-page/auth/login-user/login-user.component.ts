@@ -2,10 +2,11 @@ import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user/user.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
 
 @Component({
   selector: 'app-login-user',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, ErrorFieldsDirective],
   template: `
     <section>
       <form
@@ -29,22 +30,26 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
               type="text"
               id="identifier"
               name="identifier"
+              minlength="3"
               formControlName="identifier"
+              appErrorFields
             />
           </label>
-          <label class="flex flex-col text-[1.0625rem]">
-            <div class="flex">
-              <span>Contraseña</span>
-              <span class="font-basesemibold text-[#9272E8]">*</span>
-            </div>
-            <input
-              class="h-10 w-full border-b-2 border-black outline-none"
-              type="password"
-              id="password"
-              name="password"
-              formControlName="password"
-            />
-          </label>
+            <label class="flex flex-col text-lg">
+              <div class="flex">
+                <span>Contraseña</span>
+                <span class="font-basesemibold text-[#9272E8]">*</span>
+              </div>
+              <input
+                class="h-10 w-full border-b-2 border-black outline-none"
+                type="password"
+                id="password"
+                name="password"
+                formControlName="password"
+                pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                appErrorFields
+              />
+            </label>
         </div>
         <span class="flex w-full justify-end underline"
           >Olvidé mi contraseña</span
