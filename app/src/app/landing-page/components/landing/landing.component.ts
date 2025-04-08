@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { gsap } from 'gsap';
 import interact from 'interactjs';
+import { AuthComponent } from '../../auth/auth.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-landing',
@@ -21,6 +23,12 @@ import interact from 'interactjs';
   `,
 })
 export class LandingComponent implements AfterViewInit {
+  constructor(private _matDialog: MatDialog) {}
+
+  openModalAuth(): void {
+    this._matDialog.open(AuthComponent);
+  }
+
   @ViewChildren('menuText') menuTexts!: QueryList<ElementRef>;
   @ViewChild('draggableImage') draggableImage!: ElementRef;
   @ViewChildren('animatedButton') buttonElements!: QueryList<ElementRef>;

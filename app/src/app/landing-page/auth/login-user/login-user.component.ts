@@ -11,7 +11,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
       <form
         [formGroup]="form"
         (submit)="login()"
-        class="font-basereg flex flex-col items-center"
+        class="font-family-regular flex flex-col items-center"
       >
         <div class="w-full">
           <h1 class="font-family-medium text-5xl whitespace-nowrap">
