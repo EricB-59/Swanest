@@ -11,6 +11,9 @@ import {
 } from '@angular/forms';
 import { User } from '../../../models/user';
 import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
+import { MatDialog } from '@angular/material/dialog';
+import { PersonalInfoComponent } from '../../profile/personal-info/personal-info.component';
+import { ProfileInfoComponent } from '../../profile/profile-info/profile-info.component';
 export function customEmailValidator(): (
   control: AbstractControl,
 ) => ValidationErrors | null {
@@ -22,6 +25,8 @@ export function customEmailValidator(): (
     return emailRegex.test(control.value) ? null : { email: true };
   };
 }
+
+
 @Component({
   selector: 'app-register-user',
   imports: [ReactiveFormsModule, ErrorFieldsDirective],
@@ -29,7 +34,10 @@ export function customEmailValidator(): (
   styles: ``,
 })
 export class RegisterUserComponent {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private _matDialog: MatDialog,
+  ) {}
 
   registerForm = new FormGroup({
     username: new FormControl(''),
@@ -45,7 +53,7 @@ export class RegisterUserComponent {
     });
 
     this.userService.create(user).subscribe((result) => {
-      console.log(result);
+      this._matDialog.open(PersonalInfoComponent);
     });
   }
 }
