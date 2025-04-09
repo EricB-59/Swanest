@@ -11,36 +11,39 @@
     <fieldset class="mt-10 flex w-full flex-col gap-6 text-[1.0625rem]">
       <div class="flex flex-col">
         <div class="flex">
-          <label for="Username">Nombre de usuario</label>
+          <span for="Username">Nombre de usuario</span>
           <span class="text-[#9272E8]">*</span>
         </div>
         <input
           class="h-10 w-full border-b-2 border-black outline-none"
           type="text"
+          id="username"
+          minlength="3"
           formControlName="username"
+          pattern="^[a-zA-Z0-9]+$"
+          appErrorFields
         />
       </div>
       <div class="flex flex-col">
         <div class="flex">
-          <label for="Email">Correo electrónico</label>
+          <span for="Email">Correo electrónico</span>
           <span class="font-basesemibold text-[#9272E8]">*</span>
         </div>
-        <input
-          class="h-10 w-full border-b-2 border-black outline-none"
-          type="text"
-          formControlName="email"
-        />
+        <input class="border-b-2 border-black outline-none w-full h-10" type="email" id="email" formControlName="email" appErrorFields />
       </div>
       <div class="flex flex-col">
         <div class="flex">
-          <label for="Password">Contraseña</label>
+          <span for="Password">Contraseña</span>
           <span class="font-basesemibold text-[#9272E8]">*</span>
         </div>
         <input
           class="h-10 w-full border-b-2 border-black outline-none"
-          type="text"
+          type="password"
           formControlName="password"
-        />
+          id="password"
+          pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          appErrorFields
+          />
       </div>
     </fieldset>
     <div class="mt-5 flex w-full items-center justify-end">
