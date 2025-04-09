@@ -1,44 +1,57 @@
-import { User } from './user';
-import { Gender } from './gender';
-import { Province } from './province';
-import { UserLabel } from './userLabel';
+export interface Profile {
+  id: number;
+  first_name: string;
+  last_name: string;
+  bio: string;
+  birthdate: string;
+  created_at: string;
+  updated_at: string;
+  gender: Gender;
+  province: Province;
+  labels: UserLabels;
+  user_id: number;
+}
 
-export class Profile {
-  id: number | null = null;
-  user: User | null = null;
-  first_name: string | null = null;
-  last_name: string | null = null;
-  bio: string | null = null;
-  gender: Gender | null = null;
-  birthdate: Date | null = null;
-  province: Province | null = null;
-  created_at: Date | null = null;
-  updated_at: Date | null = null;
-  labels: UserLabel | null = null;
+export interface Gender {
+  id: number;
+  name: string;
+}
 
-  constructor(
-    id: number | null = null,
-    user: User | null = null,
-    first_name: string | null = null,
-    last_name: string | null = null,
-    bio: string | null = null,
-    gender: Gender | null = null,
-    birthdate: Date | null = null,
-    province: Province | null = null,
-    created_at: Date | null = null,
-    updated_at: Date | null = null,
-    labels: UserLabel | null = null,
-  ) {
-    this.id = id;
-    this.user = user;
-    this.first_name = first_name;
-    this.last_name = last_name;
-    this.bio = bio;
-    this.gender = gender;
-    this.birthdate = birthdate;
-    this.province = province;
-    this.created_at = created_at;
-    this.updated_at = updated_at;
-    this.labels = labels;
-  }
+export interface Province {
+  id: number;
+  name: string;
+}
+
+export interface UserLabels {
+  id: number;
+  first_label: FirstLabel;
+  second_label: SecondLabel;
+  third_label: ThirdLabel;
+  fourth_label: FourthLabel;
+  fifth_label: FifthLabel;
+}
+
+export interface FirstLabel {
+  id: number;
+  name: string;
+}
+
+export interface SecondLabel {
+  id: number;
+  name: string;
+}
+
+export interface ThirdLabel {
+  id: number;
+  name: string;
+}
+
+export interface FourthLabel {
+  id: number;
+  name: string;
+}
+
+export interface FifthLabel {
+  id: number;
+  name: string;
 }

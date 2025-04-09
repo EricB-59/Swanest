@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ProfileService } from '../../../services/profile/profile.service';
+import { Profile } from '../../../models/profile';
 
 interface Province {
   id: number;
@@ -19,6 +20,7 @@ interface Label {
 export class UpdateUserComponent {
   constructor(private profileService: ProfileService) {}
 
+  profile: any;
   provinces: Province[] = [];
   labels: Label[] = [];
   selectedInterests: string[] = [];
@@ -34,6 +36,14 @@ export class UpdateUserComponent {
     this.profileService.getLabels().subscribe({
       next: (result) => {
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
+        console.log(result);
+      },
+    });
+
+    this.profileService.getProfile(1).subscribe({
+      next: (result) => {
+        this.profile = result;
+        console.log(this.profile.first_name);
       },
     });
   }
