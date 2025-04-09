@@ -26,12 +26,8 @@ final class ChatController extends AbstractController
             );
         }
 
-        // Forzar la inicialización (aunque deberías usar joins como alternativa)
-        $user->getChats()->count();
-
         $chatsData = [];
         foreach ($user->getChats() as $chat) {
-            // Asumiendo que el usuario actual es user1, obtenemos el user2
             $otherUser = $chat->getUser2();
 
             // Si el usuario actual es user2, entonces necesitamos user1
