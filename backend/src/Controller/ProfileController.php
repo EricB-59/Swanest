@@ -30,16 +30,18 @@ final class ProfileController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $id = $data["id"];
+        $userId = $data['user_id'];
         $firstName = $data["first_name"];
         $lastName = $data["last_name"];
         $bio = $data["bio"];
         $gender = $data["gender"];
         $birthDate = $data["birthdate"];
         $province = $data["province"];
+        $images = $data['images'];
+        $labels = $data['labels'];
 
         $newGender = $entityManager->getRepository(Gender::class)->findOneBy(['id' => $gender]);
-        $newProvince = $entityManager->getRepository(Province::class)->findOneBy(['id' => $province]);
+        $newProvince = $entityManager->getRepository(Province::class)->findOneBy(['name' => $province]);
         $newBirthDate = new DateTime($birthDate, null);
 
         if (empty($firstName) || empty($lastName) || empty($bio) || empty($gender) || empty($birthDate) || empty($province)) {
@@ -58,7 +60,6 @@ final class ProfileController extends AbstractController
             return new JsonResponse('Bio too long', Response::HTTP_BAD_REQUEST);
         }
 
-
         $actualYear = (int) date("Y");
 
         $year = explode("-", $birthDate);
@@ -69,7 +70,23 @@ final class ProfileController extends AbstractController
         }
 
         $profile = new Profile();
-        $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $id]);
+        $user = $entityManager->getRepository(User::class)->findOneBy(['id' => $userId]);
+
+        // Check if user already has a profile
+        $existingProfile = $entityManager->getRepository(Profile::class)->findOneBy(['user' => $user]);
+        if ($existingProfile) {
+            return new JsonResponse('User already has a profile', Response::HTTP_CONFLICT);
+        }
+
+        $newImages = new Images;
+        $newImages->setUser($user);
+        $newImages->setImage1($images['image_1']);
+        $newImages->setImage2($images['image_2']);
+        $newImages->setImage3($images['image_3']);
+        $newImages->setImage4($images['image_4']);
+        $newImages->setImage5($images['image_5']);
+        $newImages->setUploadedAt(now());
+        $user->setImage($newImages);
 
         $profile->setUser($user);
         $profile->setFirstName($firstName);
@@ -78,6 +95,18 @@ final class ProfileController extends AbstractController
         $profile->setGender($newGender);
         $profile->setBirthdate($newBirthDate);
         $profile->setProvince($newProvince);
+
+        $labelRepository = $entityManager->getRepository(Label::class);
+
+        $newLabels = new UserLabel;
+
+        $newLabels->setFirstLabel($labelRepository->findOneBy(['name' => $labels['first_label']['name']]));
+        $newLabels->setSecondLabel($labelRepository->findOneBy(['name' => $labels['second_label']['name']]));
+        $newLabels->setThirdLabel($labelRepository->findOneBy(['name' => $labels['third_label']['name']]));
+        $newLabels->setFourthLabel($labelRepository->findOneBy(['name' => $labels['fourth_label']['name']]));
+        $newLabels->setFifthLabel($labelRepository->findOneBy(['name' => $labels['fifth_label']['name']]));
+
+        $profile->setLabels($newLabels);
 
         $dateTimeZone = new DateTimeZone("Europe/Madrid");
         $profile->setCreatedAt(new DateTimeImmutable(timezone: $dateTimeZone));
