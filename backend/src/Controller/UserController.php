@@ -16,14 +16,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 #[Route('/user', name: 'app_user')]
 final class UserController extends AbstractController
 {
-    #[Route('/test', name: 'app_user_test')]
-    public function index(): JsonResponse
-    {
-        return $this->json([
-            'message' => 'Welcome to your user controller',
-        ]);
-    }
-
     /**
      * Create a new user account in the system.
      * 
@@ -133,49 +125,6 @@ final class UserController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route(path: '/find/{id}', name: 'app_find_user', methods: ['GET'])]
-    public function find(int $id, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $userRepository = $entityManager->getRepository(User::class);
-        $user = $userRepository->find($id);
-
-        if (!$user) {
-            return new JsonResponse(
-                ['message' => 'User not found'],
-                Response::HTTP_NOT_FOUND
-            );
-        }
-
-        $userData = [
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            'profile' => [
-                'gender' => $user->getProfile()->getGender()->getName(),
-                'province' => $user->getProfile()->getProvince()->getName(),
-                'bio' => $user->getProfile()->getBio(),
-                'first_name' => $user->getProfile()->getFirstName(),
-                'last_name' => $user->getProfile()->getLastName(),
-                'birthdate' => $user->getProfile()->getBirthdate()->format('Y-m-d')
-            ]
-        ];
-
-        return new JsonResponse($userData, Response::HTTP_OK);
-    }
-
-    #[Route('/delete/{id}', 'app_user_delete', methods: ['DELETE'])]
-    public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse
-    {
-        $repositoryUsers = $entityManager->getRepository(User::class);
-        $user = $repositoryUsers->findOneBy(['id' => $id]);
-        if ($user != null) {
-            $entityManager->remove($user);
-            $entityManager->flush();
-            return new JsonResponse(Response::HTTP_OK);
-        } else {
-            return new JsonResponse('Ese ID de usuario es inexistente!', Response::HTTP_NOT_FOUND);
-        }
-    }
-
     #[Route('/login', 'app_user_login', methods: ['POST'])]
     public function login(
         Request $request,
@@ -197,6 +146,39 @@ final class UserController extends AbstractController
         if (!($passwordHasher->isPasswordValid($user, $password))) {
             return $this->json(false, Response::HTTP_NOT_FOUND);
         }
+
         return new JsonResponse($user->toArray(), Response::HTTP_OK);
+    }
+
+    #[Route(path: '/find/{id}', name: 'app_find_user', methods: ['GET'])]
+    public function find(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $userRepository = $entityManager->getRepository(User::class);
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            return new JsonResponse(
+                ['message' => 'User not found'],
+                Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return new JsonResponse($user->toArray(), Response::HTTP_OK);
+    }
+
+    #[Route('/delete/{id}', 'app_user_delete', methods: ['DELETE'])]
+    public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $repositoryUsers = $entityManager->getRepository(User::class);
+        $user = $repositoryUsers->find($id);
+
+        if (!$user) {
+            return new JsonResponse('user-not-found', Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return new JsonResponse('user-removed', Response::HTTP_OK);
     }
 }
