@@ -211,28 +211,52 @@ import { MatDialogRef } from '@angular/material/dialog';
                 </label>
               </div>
             </div>
-
-            <div class="flex justify-end pt-4">
-              <button
-                type="button"
-                class="font-basereg flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded-4xl bg-black p-4 text-white"
-                (click)="submit()"
-              >
-                Siguiente
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
+            <div class="flex justify-between">
+              <div class="flex pt-4">
+                <button
+                  type="button"
+                  class="font-basereg flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded-4xl bg-gray-300 p-4 text-black"
+                  (click)="closeModal()"
                 >
-                  <path
-                    d="M2.9989 1C7.56708 2.03828 10.1618 2.20302 14.9989 1C14.4455 3.77251 14.6015 6.41903 14.9989 13"
-                    stroke="white"
-                  />
-                  <path d="M14.9696 1.06836L1.00001 15.3342" stroke="white" />
-                </svg>
-              </button>
+                  <svg
+                    class="rotate-225"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2.9989 1C7.56708 2.03828 10.1618 2.20302 14.9989 1C14.4455 3.77251 14.6015 6.41903 14.9989 13"
+                      stroke="black"
+                    />
+                    <path d="M14.9696 1.06836L1.00001 15.3342" stroke="black" />
+                  </svg>
+                  Volver
+                </button>
+              </div>
+              <div class="flex justify-end pt-4">
+                <button
+                  type="button"
+                  class="font-basereg flex h-11 w-32 cursor-pointer items-center justify-center gap-2 rounded-4xl bg-black p-4 text-white"
+                  (click)="submit()"
+                >
+                  Siguiente
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M2.9989 1C7.56708 2.03828 10.1618 2.20302 14.9989 1C14.4455 3.77251 14.6015 6.41903 14.9989 13"
+                      stroke="white"
+                    />
+                    <path d="M14.9696 1.06836L1.00001 15.3342" stroke="white" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </form>
         </section>
@@ -329,4 +353,8 @@ export class ImagesUploadComponent implements AfterViewInit {
   }
 
   submit() {}
+
+  closeModal() {
+    this.matDialogRef.close();
+  }
 }
