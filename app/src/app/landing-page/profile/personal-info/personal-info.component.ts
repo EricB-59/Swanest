@@ -10,7 +10,7 @@ import { ProfileInfoComponent } from '../profile-info/profile-info.component';
     <div class="fixed inset-0 flex items-center justify-center bg-black/50">
       <main class="grid h-full w-full place-content-center">
         <section
-          class="flex h-[642px] w-[553px] flex-col rounded-[64px] bg-white p-10"
+          class="flex h-[642px] w-[553px] flex-col justify-between rounded-[64px] bg-white p-10"
         >
           <div
             class="flex flex-row items-center justify-between pb-4 align-middle"
@@ -195,6 +195,28 @@ export class PersonalInfoComponent {
   ) {}
 
   submit() {
+    const name = (
+      document.querySelector('input[name="name"]') as HTMLInputElement
+    )?.value;
+    const surname = (
+      document.querySelector('input[name="surname"]') as HTMLInputElement
+    )?.value;
+    const birthdate = (
+      document.querySelector('input[name="birthdate"]') as HTMLInputElement
+    )?.value;
+    const genre = (
+      document.querySelector('input[name="genre"]:checked') as HTMLInputElement
+    )?.value;
+
+    const profileData = {
+      name,
+      surname,
+      birthdate,
+      genre,
+    };
+
+    localStorage.setItem('personal-info', JSON.stringify(profileData));
+
     this._matDialog.open(ProfileInfoComponent, {
       disableClose: true,
       hasBackdrop: false, // o true si quieres que se mantenga el fondo oscuro
