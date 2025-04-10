@@ -29,13 +29,14 @@ final class ChatController extends AbstractController
         $chatsData = [];
         foreach ($user->getChats() as $chat) {
             $otherUser = $chat->getUser2();
+            $otherUserImg = $chat->getUser2()->getImage()->getImage1();
 
-            // Si el usuario actual es user2, entonces necesitamos user1
+            // In case of the other user is the actual user
             if ($otherUser->getId() === $user->getId()) {
                 $otherUser = $chat->getUser1();
+                $otherUserImg = $chat->getUser1()->getImage()->getImage1();
             }
 
-            // Obtenemos el nombre del usuario (asumiendo que hay un profile con first_name)
             $userName = null;
             if ($otherUser->getProfile()) {
                 $userName = $otherUser->getProfile()->getFirstName() . ' ' . $otherUser->getProfile()->getLastName();
@@ -43,11 +44,11 @@ final class ChatController extends AbstractController
                 $userName = $otherUser->getUsername(); // Fallback al username si no hay profile
             }
 
-            // Agregamos la información al array
             $chatsData[] = [
                 'chat_id' => $chat->getId(),
                 'user_id' => $otherUser->getId(),
-                'user_name' => $userName
+                'user_name' => $userName,
+                'user_img' => $otherUserImg
             ];
         }
 
