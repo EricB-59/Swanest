@@ -1,6 +1,12 @@
 <div>
-  users
   @for (chats of this.chats; track $index) {
-    <h1>{{ chats.user_name }}</h1>
+    <button>
+      <div>
+        <img [src]="chats.user_img" alt="Error displaying" />
+      </div>
+      <div>
+        <h2>{{ chats.user_name }}</h2>
+      </div>
+    </button>
   }
 </div>

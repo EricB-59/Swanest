@@ -14,10 +14,15 @@ export class ChatSectionComponent implements OnInit {
   chats: any = [];
 
   ngOnInit(): void {
-    this.chatService.getChats(6).subscribe({
-      next: (result) => {
-        this.chats = result;
-      },
-    });
+    let user = sessionStorage.getItem('user');
+    if (user) {
+      let userObject = JSON.parse(user);
+      this.chatService.getChats(userObject.id).subscribe({
+        next: (result) => {
+          this.chats = result;
+          console.log(this.chats);
+        },
+      });
+    }
   }
 }

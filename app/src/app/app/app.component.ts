@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { UpdateUserComponent } from './auth/update-user/update-user.component';
+import { ChatSectionComponent } from './chat-section/chat-section.component';
 
 @Component({
   selector: 'app-app',
-  imports: [UpdateUserComponent],
+  imports: [ChatSectionComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
