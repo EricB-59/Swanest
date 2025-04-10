@@ -17,7 +17,7 @@ import { gsap } from 'gsap';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
+export class AppComponent implements AfterViewInit, OnDestroy {
   @ViewChild('cursorFollower') cursorFollower!: ElementRef;
 
   title = 'app';
@@ -38,17 +38,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   private linkLeaveListener: any;
 
   constructor(private _userService: UserService) {}
-
-  ngOnInit(): void {
-    this._userService.getTest().subscribe({
-      next: (result) => {
-        console.log(result);
-      },
-      error: (error) => {
-        console.log(error);
-      },
-    });
-  }
 
   ngAfterViewInit(): void {
     this.initializeCursor();

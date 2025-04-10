@@ -12,6 +12,7 @@ export class AuthComponent {
   isRightSide = false;
 
   constructor(public _matDialogRef: MatDialogRef<AuthComponent>) {}
+
   close() {
     this._matDialogRef.close();
   }
