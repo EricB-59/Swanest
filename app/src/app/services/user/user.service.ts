@@ -11,23 +11,15 @@ export class UserService {
 
   constructor(private connHttp: HttpClient) {}
 
-  getTest(): Observable<object> {
-    return this.connHttp.get(this.apiUrl + '/test', {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    });
-  }
-
   delete(id: number): Observable<boolean> {
-    let url = this.apiUrl + `/delete/${id}`;
+    let url = this.apiUrl + `/${id}`;
     return this.connHttp.delete<boolean>(url, {
       headers: new HttpHeaders({ 'Content Type': 'application/json' }),
     });
   }
 
   find(id: number): Observable<User> {
-    let url = `${this.apiUrl}/find/${id}`;
+    let url = `${this.apiUrl}/${id}`;
     return this.connHttp.get<User>(url, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -36,7 +28,7 @@ export class UserService {
   }
 
   create(user: User): Observable<object> {
-    return this.connHttp.post(this.apiUrl + '/create', user, {
+    return this.connHttp.post(this.apiUrl, user, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),

@@ -25,7 +25,7 @@ use function Symfony\Component\Clock\now;
 #[Route('/profile', name: 'app_profile')]
 final class ProfileController extends AbstractController
 {
-    #[Route(path: '/create', name: 'app_profile_create', methods: ['POST'],)]
+    #[Route(path: '', name: 'app_profile_create', methods: ['POST'],)]
     public function create(EntityManagerInterface $entityManager, Request $request)
     {
         $data = json_decode($request->getContent(), true);
@@ -118,7 +118,7 @@ final class ProfileController extends AbstractController
         return new JsonResponse('Profile Created succesfully!', Response::HTTP_OK);
     }
 
-    #[Route(path: '/getProfile/{id}', name: 'app_profile_get', methods: ['GET'])]
+    #[Route(path: '/{id}', name: 'app_profile_get', methods: ['GET'])]
     public function getProfile(int $id, EntityManagerInterface $entityManager)
     {
         $profileRepository = $entityManager->getRepository(Profile::class);
@@ -134,7 +134,7 @@ final class ProfileController extends AbstractController
         return new JsonResponse($profile->toArray());
     }
 
-    #[Route(path: '/update/{id}', name: 'app_profile_update', methods: ['PUT'],)]
+    #[Route(path: '/{id}', name: 'app_profile_update', methods: ['PUT'],)]
     public function updateProfile(int $id, EntityManagerInterface $entityManager, Request $request)
     {
         $data = json_decode($request->getContent(), true);
