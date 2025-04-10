@@ -212,7 +212,7 @@ export class ErrorFieldsDirective implements OnInit {
         return 'Mín. 8 caracteres, con mayúscula, minúscula y número';
       }
 
-      if (elementId === 'username' || elementId.includes('usuario')) {
+      if (elementId === 'username' || elementId.includes('username')) {
         return 'El nombre de usuario solo puede contener letras y números';
       }
       // Si no hay un caso específico, usar el mensaje genérico de pattern

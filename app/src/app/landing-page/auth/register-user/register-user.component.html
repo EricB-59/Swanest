@@ -21,6 +21,7 @@
           minlength="3"
           formControlName="username"
           pattern="^[a-zA-Z0-9]+$"
+          required
           appErrorFields
         />
       </div>
@@ -29,7 +30,13 @@
           <span for="Email">Correo electrónico</span>
           <span class="font-basesemibold text-[#9272E8]">*</span>
         </div>
-        <input class="border-b-2 border-black outline-none w-full h-10" type="email" id="email" formControlName="email" appErrorFields />
+        <input
+          class="h-10 w-full border-b-2 border-black outline-none"
+          type="email"
+          formControlName="email"
+          appErrorFields
+          required
+        />
       </div>
       <div class="flex flex-col">
         <div class="flex">
@@ -40,10 +47,10 @@
           class="h-10 w-full border-b-2 border-black outline-none"
           type="password"
           formControlName="password"
-          id="password"
           pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
+          required
           appErrorFields
-          />
+        />
       </div>
     </fieldset>
     <div class="mt-5 flex w-full items-center justify-end">
