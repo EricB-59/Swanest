@@ -1,5 +1,8 @@
 import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ProfileService } from '../../../services/profile/profile.service';
+import { Profile, UserLabels, Images } from '../../../models/profile';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-images-upload',
@@ -272,6 +275,7 @@ export class ImagesUploadComponent implements AfterViewInit {
   constructor(
     private cd: ChangeDetectorRef,
     public matDialogRef: MatDialogRef<ImagesUploadComponent>,
+    private profileService: ProfileService,
   ) {}
 
   ngAfterViewInit(): void {
@@ -352,7 +356,67 @@ export class ImagesUploadComponent implements AfterViewInit {
     }
   }
 
-  submit() {}
+  submit() {
+    const storagePersonal = localStorage.getItem('personal-info');
+    const storageProfile = localStorage.getItem('profile-info');
+
+    if (storagePersonal && storageProfile) {
+      const personalInfo = JSON.parse(storagePersonal);
+      const profileInfo = JSON.parse(storageProfile);
+
+      const interests = profileInfo.interests;
+
+      const firstLabel = interests[0];
+      const secondLabel = interests[0];
+      const thirdLabel = interests[0];
+      const fourthLabel = interests[0];
+      const fifthLabel = interests[0];
+
+      const name = personalInfo.name;
+      const surname = personalInfo.surname;
+      const genre = personalInfo.genre;
+      const birthDate = personalInfo.birthdate;
+
+      const bio = profileInfo.bio;
+      const userLabels = new UserLabels(
+        firstLabel,
+        secondLabel,
+        thirdLabel,
+        fourthLabel,
+        fifthLabel,
+      );
+      const province = profileInfo.province;
+
+      const image1 = this.images[0];
+      const image2 = this.images[1];
+      const image3 = this.images[2];
+      const image4 = this.images[3];
+      const image5 = this.images[4];
+
+      const images: Images = new Images(image1, image2, image3, image4, image5);
+
+      const user = sessionStorage.getItem('user');
+      if (user) {
+        const userObject = JSON.parse(user);
+
+        const userId = userObject.id;
+
+        const profile: Profile = new Profile(
+          name,
+          surname,
+          bio,
+          birthDate,
+          genre,
+          province,
+          userLabels,
+          userId,
+          images,
+        );
+
+        this.profileService.create(profile);
+      }
+    }
+  }
 
   closeModal() {
     this.matDialogRef.close();
