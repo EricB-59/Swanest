@@ -38,7 +38,7 @@ final class UserController extends AbstractController
      * - 200 OK: User successfully created
      * - 400 Bad Request: Validation errors (missing fields, duplicate user/email, invalid format)
      */
-    #[Route('/create', name: 'app_user_create', methods: ['POST'])]
+    #[Route('', name: 'app_user_create', methods: ['POST'])]
     public function create(
         Request $request,
         EntityManagerInterface $entityManager,
@@ -150,7 +150,7 @@ final class UserController extends AbstractController
         return new JsonResponse($user->toArray(), Response::HTTP_OK);
     }
 
-    #[Route(path: '/find/{id}', name: 'app_find_user', methods: ['GET'])]
+    #[Route(path: '/{id}', name: 'app_find_user', methods: ['GET'])]
     public function find(int $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $userRepository = $entityManager->getRepository(User::class);
@@ -166,7 +166,7 @@ final class UserController extends AbstractController
         return new JsonResponse($user->toArray(), Response::HTTP_OK);
     }
 
-    #[Route('/delete/{id}', 'app_user_delete', methods: ['DELETE'])]
+    #[Route('/{id}', 'app_user_delete', methods: ['DELETE'])]
     public function delete(int $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $repositoryUsers = $entityManager->getRepository(User::class);

@@ -11,8 +11,19 @@ export class ProfileService {
 
   constructor(private connHttp: HttpClient) {}
 
+  create(profile: Profile): Observable<Profile> {
+    return this.connHttp.post<Profile>(this.apiUrl, profile);
+  }
+
+  update(profile: Profile): Observable<Profile> {
+    return this.connHttp.put<Profile>(
+      this.apiUrl + `${profile.user_id}`,
+      profile,
+    );
+  }
+
   getProfile(id: number): Observable<Profile> {
-    return this.connHttp.get<Profile>(this.apiUrl + `/getProfile/${id}`);
+    return this.connHttp.get<Profile>(this.apiUrl + `/${id}`);
   }
 
   getProvinces(): Observable<object> {

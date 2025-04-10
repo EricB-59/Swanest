@@ -15,7 +15,7 @@ use App\Entity\FeedbackSupport;
 #[Route('/feedback', name: 'app_feed_back')]
 final class FeedBackController extends AbstractController
 {
-    #[Route('/add', name: 'app_feed_back', methods: ['POST'])]
+    #[Route('', name: 'app_feed_back', methods: ['POST'])]
     public function addFeedback(EntityManagerInterface $entityManager, Request $request)
     {
         $data = json_decode($request->getContent(), true);
@@ -24,9 +24,9 @@ final class FeedBackController extends AbstractController
         $subject = $data["subject"];
         $message = $data["message"];
 
-        
 
-        if(empty($email)||empty($subject)||empty($message)){
+
+        if (empty($email) || empty($subject) || empty($message)) {
             return new JsonResponse('Feedback incorrect, no empty fields!', Response::HTTP_BAD_REQUEST);
         }
 
@@ -34,21 +34,21 @@ final class FeedBackController extends AbstractController
             return new JsonResponse('Invalid email, bad format', Response::HTTP_BAD_REQUEST);
         }
 
-        if(strlen($subject) > 50){
+        if (strlen($subject) > 50) {
             return new JsonResponse('Invalid subject, too long', Response::HTTP_BAD_REQUEST);
         }
 
-        if(strlen($message) > 255){
+        if (strlen($message) > 255) {
             return new JsonResponse('Invalid message, too long', Response::HTTP_BAD_REQUEST);
         }
 
-        
+
         $feedback = new FeedbackSupport();
 
         $feedback->setEmail($email);
         $feedback->setSubject($subject);
         $feedback->setMessage($message);
-        
+
         $dateTimeZone = new DateTimeZone("Europe/Madrid");
         $feedback->setSubmittedAt(new DateTimeImmutable(timezone: $dateTimeZone));
 
@@ -57,13 +57,4 @@ final class FeedBackController extends AbstractController
 
         return new JsonResponse('Feedback correct!', Response::HTTP_OK);
     }
-
-
-    // #[Route('/list', name: 'app_feed_back')]
-    // public function listFeedback(): Response
-    // {
-    //     return $this->render('feed_back/index.html.twig', [
-    //         'controller_name' => 'FeedBackController',
-    //     ]);
-    // }
 }

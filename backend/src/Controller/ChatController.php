@@ -13,7 +13,7 @@ use App\Entity\Chat;
 #[Route('/chat', name: 'app_chat')]
 final class ChatController extends AbstractController
 {
-    #[Route(path: '/chats/{id}', name: 'app_find_user', methods: ['GET'])]
+    #[Route(path: '/{id}', name: 'app_find_user', methods: ['GET'])]
     public function chatsByUser(int $id, EntityManagerInterface $entityManager): JsonResponse
     {
         $userRepository = $entityManager->getRepository(User::class);

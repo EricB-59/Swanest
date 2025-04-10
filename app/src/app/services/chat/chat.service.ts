@@ -13,7 +13,7 @@ export class ChatService {
 
   // ! Chat section - List of chats
   getChats(id: number): Observable<object> {
-    return this.connHttp.get(this.apiUrl + `/chats/${id}`);
+    return this.connHttp.get(this.apiUrl + `/${id}`);
   }
 
   // ? Chat - Chat user to user
