@@ -5,10 +5,10 @@
     <img src="assets/images/ellipse.svg" class="h-auto w-auto blur-[100px]" />
   </div>
   <div
-    class="z-10 flex w-full flex-grow flex-col rounded-[4.4rem] border-[0.5px] border-black/20 px-9 pt-7 pb-12"
+    class="z-10 flex w-full flex-grow flex-col rounded-[4.4rem] px-9 pt-7 pb-12"
   >
     <div>
-      <header class="flex justify-between">
+      <header class="hidden justify-between lg:flex">
         <div class="flex items-center justify-center">
           <a href="">
             <img
@@ -60,14 +60,52 @@
           </button>
         </div>
       </header>
+      <header class="flex w-full items-end justify-end lg:hidden">
+        <nav class="flex">
+          <button class="w-16 cursor-pointer" onclick="modal.show()">
+            <img src="assets/icons/menu-icon.svg" alt="" />
+          </button>
+          <dialog class="z-10 ml-10 w-1/2 rounded-4xl bg-black" id="modal">
+            <ul
+              class="flex w-full flex-col items-center gap-10 py-10 [&>li]:text-3xl"
+            >
+              <li
+                class="flex h-[2.938rem] w-10/12 cursor-pointer items-center justify-center rounded-full border bg-white p-[0.313rem] text-black"
+              >
+                <span>Inicio</span>
+              </li>
+              <li
+                class="flex h-[2.938rem] w-10/12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
+              >
+                <span #menuText class="text-white/50">Aplicación</span>
+              </li>
+              <li
+                class="flex h-[2.938rem] w-10/12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
+              >
+                <span #menuText class="text-white/50">Novedades</span>
+              </li>
+              <li
+                class="flex h-[2.938rem] w-10/12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
+              >
+                <span #menuText class="text-white/50">Nosotros</span>
+              </li>
+              <li
+                class="flex h-[2.938rem] w-10/12 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-white/50 p-[0.313rem] hover:border-white"
+              >
+                <span #menuText class="text-white/50">Contacto</span>
+              </li>
+            </ul>
+          </dialog>
+        </nav>
+      </header>
     </div>
     <main class="relative flex-grow">
       <div
-        class="absolute top-1/2 left-1/2 h-min w-[70rem] -translate-x-1/2 -translate-y-1/2 select-none"
+        class="absolute top-1/2 left-1/2 h-min w-[70rem] -translate-x-1/6 -translate-y-1/2 select-none lg:-translate-x-1/2"
       >
-        <img src="/assets/images/swanest.svg" />
+        <img class="w-1/3 lg:w-full" src="/assets/images/swanest.svg" />
         <img
-          class="absolute -top-5 left-70 h-48 -translate-x-1/3 -translate-y-1/2"
+          class="absolute -top-5 left-35 h-48 w-33 -translate-x-1/3 -translate-y-1/2 lg:left-70 lg:w-full"
           src="/assets/images/swan-pair-sticker.svg"
         />
       </div>
@@ -89,8 +127,10 @@
           />
         </svg>
       </button>
-      <div class="absolute bottom-0 max-w-[33%] select-none">
-        <p class="font-family-regular text-[2.05rem] leading-tight break-words">
+      <div class="absolute bottom-0 max-w-[70%] select-none lg:max-w-[33%]">
+        <p
+          class="font-family-regular w-full text-xl leading-tight break-words lg:text-4xl"
+        >
           La web donde encontrarás tu compañero de vuelo.⛅😍
         </p>
       </div>
