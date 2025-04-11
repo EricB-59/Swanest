@@ -3,6 +3,7 @@ import { ProfileService } from '../../../services/profile/profile.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ImagesUploadComponent } from '../images-upload/images-upload.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
 
 interface Province {
   id: number;
@@ -16,7 +17,7 @@ interface Label {
 
 @Component({
   selector: 'app-profile-info',
-  imports: [],
+  imports: [ErrorFieldsDirective],
   template: `
     <div class="fixed inset-0 flex items-center justify-center bg-black/0">
       <main class="grid h-full w-full place-content-center">

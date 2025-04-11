@@ -4,17 +4,27 @@ import {
   HostListener,
   Input,
   OnInit,
+  Optional,
   Renderer2,
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
 @Directive({
   selector: '[appErrorFields]',
+  standalone: true
 })
 export class ErrorFieldsDirective implements OnInit {
   private errorElement: HTMLElement | null = null;
   private iconElement: HTMLElement | null = null;
   private textElement: Text | null = null;
+  private isValid = true;
+  private customErrorMessage = '';
+
+  // Puedes usar estas propiedades para validación manual en caso de no tener NgControl
+  @Input() required = false;
+  @Input() minLength: number | null = null;
+  @Input() pattern: string | null = null;
+  @Input() customError: string | null = null;
 
   private errorMessages: { [key: string]: string } = {
     required: 'Este campo es obligatorio',
@@ -29,19 +39,18 @@ export class ErrorFieldsDirective implements OnInit {
 
   constructor(
     private elRef: ElementRef,
-    private control: NgControl,
+    @Optional() private control: NgControl,
     private renderer: Renderer2,
   ) {}
+
   ngOnInit(): void {
-    // Create element to display errors
+    // Crear el elemento para mostrar errores
     this.errorElement = this.renderer.createElement('span');
     this.renderer.addClass(this.errorElement, 'error-message');
     this.renderer.setStyle(this.errorElement, 'color', '#FF3B30');
     this.renderer.setStyle(this.errorElement, 'font-size', '0.8rem');
     this.renderer.setStyle(this.errorElement, 'margin-top', '4px');
-
-    // Configurar como flex pero inicialmente oculto
-    this.renderer.setStyle(this.errorElement, 'display', 'none'); // Mover esta línea al final
+    this.renderer.setStyle(this.errorElement, 'display', 'none');
     this.renderer.setStyle(this.errorElement, 'align-items', 'center');
     this.renderer.setStyle(this.errorElement, 'gap', '6px');
 
@@ -69,102 +78,196 @@ export class ErrorFieldsDirective implements OnInit {
       this.renderer.appendChild(parentElement, this.errorElement);
     }
 
-    this.control.statusChanges?.subscribe(() => {
-      this.updateStyles();
-    });
+    // Si estamos utilizando NgControl, suscribirse a los cambios de estado
+    if (this.control) {
+      this.control.statusChanges?.subscribe(() => {
+        this.updateStyles();
+      });
+    }
 
-    // Initial validation after components are loaded
+    // Validación inicial después de cargar los componentes
     setTimeout(() => {
       this.updateStyles();
     });
   }
-  // Update styles when an input event occurs
-  @HostListener('input')
-  onInput(): void {
+
+  // Actualizar estilos cuando ocurre un evento de input
+  @HostListener('input', ['$event'])
+  onInput(event: Event): void {
+    // Si no tenemos NgControl, hacemos validación manual
+    if (!this.control) {
+      this.validateManually((event.target as HTMLInputElement).value);
+    }
     this.updateStyles();
   }
-  // Updating styles when focus is lost
+
+  // Actualizar estilos cuando se pierde el foco
   @HostListener('blur')
   onBlur(): void {
+    if (!this.control) {
+      this.validateManually((this.elRef.nativeElement as HTMLInputElement).value);
+    }
     this.updateStyles();
+  }
+
+  // Validación manual para cuando no hay NgControl
+  private validateManually(value: string): void {
+    let isValid = true;
+    let errorMessage = '';
+
+    // Validación required
+    if (this.required && (!value || value.trim() === '')) {
+      isValid = false;
+      errorMessage = this.errorMessages['required'];
+    }
+    // Validación minLength
+    else if (this.minLength && value && value.length < this.minLength) {
+      isValid = false;
+      errorMessage = `Mínimo ${this.minLength} caracteres (tiene ${value.length})`;
+    }
+    // Validación pattern
+    else if (this.pattern && value && !new RegExp(this.pattern).test(value)) {
+      isValid = false;
+      
+      // Determinar tipo de campo según su ID o tipo
+      const elementId = this.elRef.nativeElement.id;
+      const inputType = this.elRef.nativeElement.type;
+
+      if (inputType === 'email' || elementId.includes('email')) {
+        errorMessage = 'Formato de correo electrónico inválido';
+      } else if (inputType === 'password' || elementId === 'password') {
+        errorMessage = 'Mín. 8 caracteres, con mayúscula, minúscula y número';
+      } else if (elementId === 'username' || elementId.includes('username')) {
+        errorMessage = 'El usuario solo puede contener letras y números';
+      } else if (elementId === 'name' || elementId === 'surname') {
+        errorMessage = 'Debe contener solo letras';
+      } else {
+        errorMessage = this.errorMessages['pattern'];
+      }
+    }
+    // Error personalizado
+    else if (this.customError) {
+      isValid = false;
+      errorMessage = this.customError;
+    }
+
+    this.isValid = isValid;
+    this.customErrorMessage = errorMessage;
   }
 
   private updateStyles() {
-    // Check if the control exists and has a status
-    if (!this.control || !this.control.control) return;
-
-    const isInvalid =
-      this.control.invalid && (this.control.dirty || this.control.touched);
-    const isValid =
-      this.control.valid && (this.control.dirty || this.control.touched);
-    const isEmpty =
-      this.control.value === '' ||
-      this.control.value === null ||
-      this.control.value === undefined;
-    const isNeutral = !isValid && !isInvalid; // No es ni válido ni inválido
-
     const inputElement = this.elRef.nativeElement;
+    
     // Establecer el color del borde a negro por defecto
     this.renderer.setStyle(inputElement, 'border-color', 'black');
 
-    // Para campos válidos
-    if (isValid && !isEmpty) {
-      this.renderer.setStyle(inputElement, 'border-color', '#34C759'); // verde
-      if (this.errorElement) {
-        this.renderer.setStyle(this.errorElement, 'display', 'none');
-      }
-      this.updateLabelColor('valid');
-    }
+    // Si estamos usando NgControl
+    if (this.control && this.control.control) {
+      const isInvalid = this.control.invalid && (this.control.dirty || this.control.touched);
+      const isValid = this.control.valid && (this.control.dirty || this.control.touched);
+      const isEmpty = this.control.value === '' || this.control.value === null || this.control.value === undefined;
+      const isNeutral = !isValid && !isInvalid;
 
-    // Para campos inválidos
-    else if (isInvalid) {
-      this.renderer.setStyle(inputElement, 'border-color', '#FF3B30'); // rojo
-
-      if (this.errorElement) {
-        this.renderer.setStyle(this.errorElement, 'display', 'flex');
-        const errorMessage = this.getErrorMessage();
-        if (this.textElement) {
-          this.renderer.setValue(this.textElement, errorMessage);
+      // Para campos válidos
+      if (isValid && !isEmpty) {
+        this.renderer.setStyle(inputElement, 'border-color', '#34C759'); // verde
+        if (this.errorElement) {
+          this.renderer.setStyle(this.errorElement, 'display', 'none');
         }
+        this.updateLabelColor('valid');
       }
-      this.updateLabelColor('invalid');
-    }
-
-    // Para estado neutral (ni válido ni inválido)
+      // Para campos inválidos
+      else if (isInvalid) {
+        this.renderer.setStyle(inputElement, 'border-color', '#FF3B30'); // rojo
+        if (this.errorElement) {
+          this.renderer.setStyle(this.errorElement, 'display', 'flex');
+          const errorMessage = this.getErrorMessage();
+          if (this.textElement) {
+            this.renderer.setValue(this.textElement, errorMessage);
+          }
+        }
+        this.updateLabelColor('invalid');
+      }
+      // Para estado neutral
+      else {
+        if (this.errorElement) {
+          this.renderer.setStyle(this.errorElement, 'display', 'none');
+        }
+        this.updateLabelColor('neutral');
+      }
+    } 
+    // Si no estamos usando NgControl (validación manual)
     else {
-      if (this.errorElement) {
-        this.renderer.setStyle(this.errorElement, 'display', 'none');
+      const value = (inputElement as HTMLInputElement).value;
+      const isEmpty = !value || value.trim() === '';
+      
+      // Si es válido y no está vacío
+      if (this.isValid && !isEmpty) {
+        this.renderer.setStyle(inputElement, 'border-color', '#34C759'); // verde
+        if (this.errorElement) {
+          this.renderer.setStyle(this.errorElement, 'display', 'none');
+        }
+        this.updateLabelColor('valid');
       }
-      this.updateLabelColor('neutral');
+      // Si no es válido
+      else if (!this.isValid) {
+        this.renderer.setStyle(inputElement, 'border-color', '#FF3B30'); // rojo
+        if (this.errorElement) {
+          this.renderer.setStyle(this.errorElement, 'display', 'flex');
+          if (this.textElement) {
+            this.renderer.setValue(this.textElement, this.customErrorMessage);
+          }
+        }
+        this.updateLabelColor('invalid');
+      }
+      // Estado neutral
+      else {
+        if (this.errorElement) {
+          this.renderer.setStyle(this.errorElement, 'display', 'none');
+        }
+        this.updateLabelColor('neutral');
+      }
     }
   }
 
   private updateLabelColor(state: 'valid' | 'invalid' | 'neutral'): void {
-    // Buscar el span del label
-    if (this.elRef.nativeElement.parentElement) {
-      const spans =
-        this.elRef.nativeElement.parentElement.querySelectorAll('span');
-      if (spans && spans.length > 0) {
-        // Solo aplicar al texto del label principal, no al asterisco o mensaje de error
-        for (let i = 0; i < spans.length; i++) {
-          const span = spans[i];
-          if (span !== this.errorElement && !span.textContent?.includes('*')) {
-            let color = 'black'; // Color por defecto (neutral)
-
-            if (state === 'valid') {
-              color = '#34C759'; // verde para válido
-            } else if (state === 'invalid') {
-              color = '#FF3B30'; // rojo para inválido
-            }
-
-            this.renderer.setStyle(span, 'color', color);
-          }
+    // Buscar el elemento padre (label o contenedor)
+    const parentElement = this.elRef.nativeElement.parentElement;
+    if (!parentElement) return;
+  
+    // Buscar tanto spans como h2 dentro del padre
+    const spans = parentElement.querySelectorAll('span');
+    const headings = parentElement.querySelectorAll('h2');
+    
+    // Color según el estado
+    let color = 'black'; // Color por defecto (neutral)
+    if (state === 'valid') {
+      color = '#34C759'; // verde para válido
+    } else if (state === 'invalid') {
+      color = '#FF3B30'; // rojo para inválido
+    }
+  
+    // Aplicar color a los spans (excluyendo el mensaje de error)
+    if (spans && spans.length > 0) {
+      for (let i = 0; i < spans.length; i++) {
+        const span = spans[i];
+        if (span !== this.errorElement && !span.textContent?.includes('*')) {
+          this.renderer.setStyle(span, 'color', color);
         }
       }
     }
+  
+    // Aplicar color a los h2
+    if (headings && headings.length > 0) {
+      for (let i = 0; i < headings.length; i++) {
+        this.renderer.setStyle(headings[i], 'color', color);
+      }
+    }
   }
+
   private getErrorMessage(): string {
-    if (!this.control.errors) return '';
+    if (!this.control || !this.control.errors) return '';
+    
     const errorKey = Object.keys(this.control.errors)[0];
     if (errorKey === 'required') {
       return this.errorMessages['required'];
@@ -213,11 +316,17 @@ export class ErrorFieldsDirective implements OnInit {
       }
 
       if (elementId === 'username' || elementId.includes('username')) {
-        return 'El nombre de usuario solo puede contener letras y números';
+        return 'El usuario solo puede contener letras y números';
       }
+      
+      if(elementId === 'name' || elementId === 'surname') {
+        return 'Debe contener solo letras';
+      }
+      
       // Si no hay un caso específico, usar el mensaje genérico de pattern
       return this.errorMessages['pattern'];
     }
+    
     // Usar mensaje predefinido o mensaje genérico
     return this.errorMessages[errorKey] || 'Error de validación';
   }

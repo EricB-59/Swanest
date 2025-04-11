@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { ProfileInfoComponent } from '../profile-info/profile-info.component';
+import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
 
 @Component({
   selector: 'app-personal-info',
-  imports: [],
+  imports: [ErrorFieldsDirective],
   template: `
     <div class="fixed inset-0 flex items-center justify-center bg-black/50">
       <main class="grid h-full w-full place-content-center">
@@ -64,7 +65,12 @@ import { ProfileInfoComponent } from '../profile-info/profile-info.component';
               <input
                 type="text"
                 name="name"
+                id="name"
                 class="font-basereg h-8 w-full border-b-2 border-black"
+                [pattern]="'^[a-zA-Z]+$'"
+                [minLength]="3"
+                appErrorFields
+                [required]="true"
               />
             </label>
 
@@ -75,6 +81,10 @@ import { ProfileInfoComponent } from '../profile-info/profile-info.component';
                 type="text"
                 name="surname"
                 class="font-basereg h-8 w-full border-b-2 border-black"
+                [required]="true"
+                [minLength]="5"
+                [maxLength]="50"
+                appErrorFields
               />
             </label>
 
@@ -85,6 +95,8 @@ import { ProfileInfoComponent } from '../profile-info/profile-info.component';
                 type="date"
                 name="birthdate"
                 class="font-basereg h-8 w-full border-b-2 border-black"
+                [required]="true"
+                appErrorFields
               />
             </label>
 
