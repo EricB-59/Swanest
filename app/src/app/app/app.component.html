@@ -1,8 +1,8 @@
 <main class="bg-background-main flex h-screen w-screen gap-10 p-5">
   <header
-    class="flex w-96 flex-col justify-between rounded-4xl bg-white [&>*]:p-5"
+    class="flex w-96 flex-col justify-between rounded-[50px] bg-white [&>*]:p-8"
   >
-    <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-7">
       <div class="flex w-full justify-between">
         <div class="flex gap-4 align-middle">
           <img src="assets/images/app/logo-swanest-purple.svg" alt="" />
@@ -15,17 +15,25 @@
         </button>
       </div>
 
-      <article class="">
-        <img src="" alt="" />
+      <article class="flex content-center items-center gap-5 align-middle">
+        <img
+          class="w-14 rounded-2xl object-contain object-center"
+          [src]="user?.image?.image_1"
+          alt=""
+        />
         <div class="flex flex-col">
-          <h2 class="font-family-light text-xl">Buenos días 👋</h2>
-          <h2 class="font-family-semibold text-2xl">Victor Manuel</h2>
+          <h2 class="font-family-light text-lg">Buenos días 👋</h2>
+          <h2 class="font-family-semibold text-2xl">
+            {{ user?.profile?.first_name + " " + user?.profile?.last_name }}
+          </h2>
         </div>
       </article>
 
       <article>
         <h2 class="font-family-regular pb-5 opacity-20">MENÚ</h2>
-        <button class="bg-primary-main flex w-full gap-5 rounded-2xl p-3">
+        <button
+          class="bg-primary-main flex w-full cursor-pointer gap-5 rounded-2xl p-3"
+        >
           <img
             class="w-7"
             src="assets/images/app/icons/match-icon.svg"
@@ -34,7 +42,7 @@
           <p class="font-family-regular text-lg text-white">Match</p>
           <div></div>
         </button>
-        <button class="flex w-full gap-5 rounded-2xl p-3">
+        <button class="flex w-full cursor-pointer gap-5 rounded-2xl p-3">
           <img
             class="w-7"
             src="assets/images/app/icons/messages-icon.svg"
@@ -46,7 +54,7 @@
       </article>
     </div>
 
-    <div class="flex flex-col gap-10">
+    <div class="flex flex-col gap-7">
       <article>
         <h2 class="font-family-regular pb-5 opacity-20">AJUSTES</h2>
         <button class="bg-primary-main flex w-full gap-5 rounded-2xl p-3">
@@ -59,6 +67,13 @@
         </button>
       </article>
 
+      <article>
+        <button class="h-10 w-1/2 rounded-2xl bg-slate-300 p-2">
+          <div class="grid h-7 w-1/4 place-content-center rounded-2xl bg-white">
+            <img src="assets/images/app/icons/sun-icon.svg" alt="" />
+          </div>
+        </button>
+      </article>
       <article>
         <button class="flex w-full gap-5 rounded-2xl bg-slate-300 p-3">
           <img
