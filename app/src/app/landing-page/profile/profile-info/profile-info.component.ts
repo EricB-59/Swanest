@@ -78,6 +78,9 @@ interface Label {
                 name="bio"
                 id="bio"
                 class="font-basereg h-18 w-full border-b-2 border-black"
+                [minLength]="20"
+                [required]="true"
+                appErrorFields
               ></textarea>
             </label>
 
@@ -86,13 +89,17 @@ interface Label {
               <h2 class="font-basereg pt-6">Provincia</h2>
               <input
                 list="provinces"
+                id="province"
                 class="font-basereg h-8 w-full border-b-2 border-black"
+                [required]="true"
+                  [validList]="provinceNames"
+                appErrorFields
               />
               <datalist id="provinces">
-                @for (province of this.provinces; track $index) {
+              @for (province of this.provinces; track $index) {
                   <option value="{{ province.name }}"></option>
-                }
-              </datalist>
+                } 
+               </datalist>
             </label>
 
             <!--Labels-->
@@ -188,14 +195,16 @@ export class ProfileInfoComponent implements OnInit {
   ) {}
 
   provinces: Province[] = [];
+  provinceNames: string[] = [];
   labels: Label[] = [];
   selectedInterests: string[] = [];
 
   ngOnInit(): void {
     this.profileService.getProvinces().subscribe({
       next: (result) => {
-        this.provinces =
-          typeof result === 'string' ? JSON.parse(result) : result;
+        this.provinces = typeof result === 'string' ? JSON.parse(result) : result;
+        this.provinceNames = this.provinces.map(p => p.name);
+        console.log('provinceNames:', this.provinceNames);
       },
     });
 

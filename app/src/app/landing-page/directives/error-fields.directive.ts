@@ -20,11 +20,12 @@ export class ErrorFieldsDirective implements OnInit {
   private isValid = true;
   private customErrorMessage = '';
 
-  // Puedes usar estas propiedades para validación manual en caso de no tener NgControl
+  // Properties for manual validation in case NgControl is not provided
   @Input() required = false;
   @Input() minLength: number | null = null;
   @Input() pattern: string | null = null;
   @Input() customError: string | null = null;
+  @Input() validList: string[] | null = null;
 
   private errorMessages: { [key: string]: string } = {
     required: 'Este campo es obligatorio',
@@ -35,6 +36,7 @@ export class ErrorFieldsDirective implements OnInit {
     pattern: 'Formato No valido',
     min: 'El valor es menor al mínimo permitido',
     max: 'El valor es mayor al máximo permitido',
+    validList: 'Seleccione una opción válida de la lista'
   };
 
   constructor(
@@ -44,7 +46,7 @@ export class ErrorFieldsDirective implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Crear el elemento para mostrar errores
+    // Create the element to display errors
     this.errorElement = this.renderer.createElement('span');
     this.renderer.addClass(this.errorElement, 'error-message');
     this.renderer.setStyle(this.errorElement, 'color', '#FF3B30');
@@ -54,7 +56,7 @@ export class ErrorFieldsDirective implements OnInit {
     this.renderer.setStyle(this.errorElement, 'align-items', 'center');
     this.renderer.setStyle(this.errorElement, 'gap', '6px');
 
-    // Crear el icono
+    // Create the icon
     this.iconElement = this.renderer.createElement('img');
     this.renderer.setAttribute(
       this.iconElement,
@@ -65,43 +67,43 @@ export class ErrorFieldsDirective implements OnInit {
     this.renderer.setStyle(this.iconElement, 'height', '16px');
     this.renderer.setStyle(this.iconElement, 'vertical-align', 'middle');
 
-    // Crear nodo de texto (vacío por ahora)
+    // Create text node (empty for now)
     this.textElement = this.renderer.createText('');
 
-    // Añadir icono y texto al span
+    // Add icon and text to the span
     this.renderer.appendChild(this.errorElement, this.iconElement);
     this.renderer.appendChild(this.errorElement, this.textElement);
 
-    // Insertar el mensaje después del input
+    // Insert the error message after the input element
     const parentElement = this.elRef.nativeElement.parentElement;
     if (parentElement) {
       this.renderer.appendChild(parentElement, this.errorElement);
     }
 
-    // Si estamos utilizando NgControl, suscribirse a los cambios de estado
+    // If NgControl is being used, subscribe to status changes
     if (this.control) {
       this.control.statusChanges?.subscribe(() => {
         this.updateStyles();
       });
     }
 
-    // Validación inicial después de cargar los componentes
+    // Initial validation after components are loaded
     setTimeout(() => {
       this.updateStyles();
     });
   }
 
-  // Actualizar estilos cuando ocurre un evento de input
+  // Update styles when an input event occurs
   @HostListener('input', ['$event'])
   onInput(event: Event): void {
-    // Si no tenemos NgControl, hacemos validación manual
+    // If NgControl is not available, perform manual validation
     if (!this.control) {
       this.validateManually((event.target as HTMLInputElement).value);
     }
     this.updateStyles();
   }
 
-  // Actualizar estilos cuando se pierde el foco
+  // Update styles when focus is lost
   @HostListener('blur')
   onBlur(): void {
     if (!this.control) {
@@ -110,42 +112,55 @@ export class ErrorFieldsDirective implements OnInit {
     this.updateStyles();
   }
 
-  // Validación manual para cuando no hay NgControl
+  // Manual validation for when NgControl is not present
   private validateManually(value: string): void {
     let isValid = true;
     let errorMessage = '';
 
-    // Validación required
+    // Required validation
     if (this.required && (!value || value.trim() === '')) {
       isValid = false;
       errorMessage = this.errorMessages['required'];
     }
-    // Validación minLength
+    // minLength validation
     else if (this.minLength && value && value.length < this.minLength) {
       isValid = false;
       errorMessage = `Mínimo ${this.minLength} caracteres (tiene ${value.length})`;
+    } 
+    // Validation for provinces or valid list
+    else if (this.validList && value && !this.validList.includes(value)) {
+      isValid = false;
+      
+      const elementId = this.elRef.nativeElement.id;
+      if (elementId === 'province') {
+        errorMessage = 'Seleccione una provincia válida';
+      } else {
+        errorMessage = this.errorMessages['validList'];
+      }
     }
-    // Validación pattern
+    // Pattern validation
     else if (this.pattern && value && !new RegExp(this.pattern).test(value)) {
       isValid = false;
       
-      // Determinar tipo de campo según su ID o tipo
+      // Determine field type based on its ID or type
       const elementId = this.elRef.nativeElement.id;
       const inputType = this.elRef.nativeElement.type;
 
       if (inputType === 'email' || elementId.includes('email')) {
         errorMessage = 'Formato de correo electrónico inválido';
-      } else if (inputType === 'password' || elementId === 'password') {
+      } else if (inputType === 'password' || elementId.includes('password')) {
         errorMessage = 'Mín. 8 caracteres, con mayúscula, minúscula y número';
       } else if (elementId === 'username' || elementId.includes('username')) {
         errorMessage = 'El usuario solo puede contener letras y números';
-      } else if (elementId === 'name' || elementId === 'surname') {
+      } else if (elementId === 'name' || elementId.includes('name')) {
+        errorMessage = 'Debe contener solo letras';
+      } else if (elementId === 'surname' || elementId.includes('surname')) {
         errorMessage = 'Debe contener solo letras';
       } else {
         errorMessage = this.errorMessages['pattern'];
       }
     }
-    // Error personalizado
+    // Custom error
     else if (this.customError) {
       isValid = false;
       errorMessage = this.customError;
@@ -153,32 +168,32 @@ export class ErrorFieldsDirective implements OnInit {
 
     this.isValid = isValid;
     this.customErrorMessage = errorMessage;
-  }
+  } 
 
   private updateStyles() {
     const inputElement = this.elRef.nativeElement;
     
-    // Establecer el color del borde a negro por defecto
+    // Set the default border color to black
     this.renderer.setStyle(inputElement, 'border-color', 'black');
 
-    // Si estamos usando NgControl
+    // If using NgControl
     if (this.control && this.control.control) {
       const isInvalid = this.control.invalid && (this.control.dirty || this.control.touched);
       const isValid = this.control.valid && (this.control.dirty || this.control.touched);
       const isEmpty = this.control.value === '' || this.control.value === null || this.control.value === undefined;
       const isNeutral = !isValid && !isInvalid;
 
-      // Para campos válidos
+      // For valid fields
       if (isValid && !isEmpty) {
-        this.renderer.setStyle(inputElement, 'border-color', '#34C759'); // verde
+        this.renderer.setStyle(inputElement, 'border-color', '#34C759'); // green
         if (this.errorElement) {
           this.renderer.setStyle(this.errorElement, 'display', 'none');
         }
         this.updateLabelColor('valid');
       }
-      // Para campos inválidos
+      // For invalid fields
       else if (isInvalid) {
-        this.renderer.setStyle(inputElement, 'border-color', '#FF3B30'); // rojo
+        this.renderer.setStyle(inputElement, 'border-color', '#FF3B30'); // red
         if (this.errorElement) {
           this.renderer.setStyle(this.errorElement, 'display', 'flex');
           const errorMessage = this.getErrorMessage();
@@ -188,7 +203,7 @@ export class ErrorFieldsDirective implements OnInit {
         }
         this.updateLabelColor('invalid');
       }
-      // Para estado neutral
+      // For neutral state
       else {
         if (this.errorElement) {
           this.renderer.setStyle(this.errorElement, 'display', 'none');
@@ -196,22 +211,22 @@ export class ErrorFieldsDirective implements OnInit {
         this.updateLabelColor('neutral');
       }
     } 
-    // Si no estamos usando NgControl (validación manual)
+    // If NgControl is not used (manual validation)
     else {
       const value = (inputElement as HTMLInputElement).value;
       const isEmpty = !value || value.trim() === '';
       
-      // Si es válido y no está vacío
+      // If valid and not empty
       if (this.isValid && !isEmpty) {
-        this.renderer.setStyle(inputElement, 'border-color', '#34C759'); // verde
+        this.renderer.setStyle(inputElement, 'border-color', '#34C759'); // green
         if (this.errorElement) {
           this.renderer.setStyle(this.errorElement, 'display', 'none');
         }
         this.updateLabelColor('valid');
       }
-      // Si no es válido
+      // If not valid
       else if (!this.isValid) {
-        this.renderer.setStyle(inputElement, 'border-color', '#FF3B30'); // rojo
+        this.renderer.setStyle(inputElement, 'border-color', '#FF3B30'); // red
         if (this.errorElement) {
           this.renderer.setStyle(this.errorElement, 'display', 'flex');
           if (this.textElement) {
@@ -220,7 +235,7 @@ export class ErrorFieldsDirective implements OnInit {
         }
         this.updateLabelColor('invalid');
       }
-      // Estado neutral
+      // Neutral state
       else {
         if (this.errorElement) {
           this.renderer.setStyle(this.errorElement, 'display', 'none');
@@ -231,23 +246,23 @@ export class ErrorFieldsDirective implements OnInit {
   }
 
   private updateLabelColor(state: 'valid' | 'invalid' | 'neutral'): void {
-    // Buscar el elemento padre (label o contenedor)
+    // Find the parent element (label or container)
     const parentElement = this.elRef.nativeElement.parentElement;
     if (!parentElement) return;
   
-    // Buscar tanto spans como h2 dentro del padre
+    // Find both spans and h2 within the parent
     const spans = parentElement.querySelectorAll('span');
     const headings = parentElement.querySelectorAll('h2');
     
-    // Color según el estado
-    let color = 'black'; // Color por defecto (neutral)
+    // Color based on state
+    let color = 'black'; // Default color (neutral)
     if (state === 'valid') {
-      color = '#34C759'; // verde para válido
+      color = '#34C759'; // green for valid
     } else if (state === 'invalid') {
-      color = '#FF3B30'; // rojo para inválido
+      color = '#FF3B30'; // red for invalid
     }
   
-    // Aplicar color a los spans (excluyendo el mensaje de error)
+    // Apply color to spans (excluding the error message)
     if (spans && spans.length > 0) {
       for (let i = 0; i < spans.length; i++) {
         const span = spans[i];
@@ -257,7 +272,7 @@ export class ErrorFieldsDirective implements OnInit {
       }
     }
   
-    // Aplicar color a los h2
+    // Apply color to h2 elements
     if (headings && headings.length > 0) {
       for (let i = 0; i < headings.length; i++) {
         this.renderer.setStyle(headings[i], 'color', color);
@@ -269,16 +284,26 @@ export class ErrorFieldsDirective implements OnInit {
     if (!this.control || !this.control.errors) return '';
     
     const errorKey = Object.keys(this.control.errors)[0];
+    
+    // Special case for validList (provinces or other lists)
+    if (errorKey === 'validList') {
+      const elementId = this.elRef.nativeElement.id;
+      if (elementId === 'province') {
+        return 'Seleccione una provincia válida';
+      }
+      return this.errorMessages['validList'];
+    }
+    
     if (errorKey === 'required') {
       return this.errorMessages['required'];
     }
 
-    // Caso especial para email
+    // Special case for email
     if (errorKey === 'email') {
       return this.errorMessages['email'];
     }
 
-    // Mensajes específicos para errores con parámetros
+    // Specific messages for errors with parameters
     if (errorKey === 'minlength') {
       const requiredLength = this.control.errors['minlength'].requiredLength;
       const actualLength = this.control.errors['minlength'].actualLength;
@@ -302,16 +327,16 @@ export class ErrorFieldsDirective implements OnInit {
     }
 
     if (errorKey === 'pattern') {
-      // Determinar tipo de campo según su ID o tipo
+      // Determine field type based on its ID or type
       const elementId = this.elRef.nativeElement.id;
       const inputType = this.elRef.nativeElement.type;
 
-      // Mensajes específicos para cada tipo de campo con pattern
+      // Specific messages for each field type with pattern
       if (inputType === 'email' || elementId.includes('email')) {
         return 'Formato de correo electrónico inválido';
       }
 
-      if (inputType === 'password' || elementId === 'password') {
+      if (inputType === 'password' || elementId.includes('password')) {
         return 'Mín. 8 caracteres, con mayúscula, minúscula y número';
       }
 
@@ -319,15 +344,16 @@ export class ErrorFieldsDirective implements OnInit {
         return 'El usuario solo puede contener letras y números';
       }
       
-      if(elementId === 'name' || elementId === 'surname') {
+      if(elementId === 'name' || elementId.includes('name') || 
+         elementId === 'surname' || elementId.includes('surname')) {
         return 'Debe contener solo letras';
       }
       
-      // Si no hay un caso específico, usar el mensaje genérico de pattern
+      // If no specific case, use the generic pattern error message
       return this.errorMessages['pattern'];
     }
     
-    // Usar mensaje predefinido o mensaje genérico
+    // Use predefined message or generic error message
     return this.errorMessages[errorKey] || 'Error de validación';
   }
 }
