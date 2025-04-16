@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250407085917 extends AbstractMigration
+final class Version20250416124335 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -22,6 +22,7 @@ final class Version20250407085917 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE block_reports (id INT AUTO_INCREMENT NOT NULL, reporter_id INT NOT NULL, reported_id INT NOT NULL, reason LONGTEXT NOT NULL, reported_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_8B3C53BBE1CFE6F5 (reporter_id), INDEX IDX_8B3C53BB94BDEEB6 (reported_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE chats (id INT AUTO_INCREMENT NOT NULL, user1_id INT NOT NULL, user2_id INT NOT NULL, INDEX IDX_2D68180F56AE248B (user1_id), INDEX IDX_2D68180F441B8B65 (user2_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE dislike (id INT AUTO_INCREMENT NOT NULL, disliker_id INT NOT NULL, disliked_id INT NOT NULL, disliked_at DATETIME NOT NULL, INDEX IDX_FE3BECAA9DEB4BAF (disliker_id), INDEX IDX_FE3BECAAE89943EC (disliked_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE feedback_support (id INT AUTO_INCREMENT NOT NULL, email VARCHAR(50) NOT NULL, subject LONGTEXT NOT NULL, message LONGTEXT NOT NULL, submitted_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE genders (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(25) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE images (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, image_1 LONGTEXT NOT NULL, image_2 LONGTEXT NOT NULL, image_3 LONGTEXT DEFAULT NULL, image_4 LONGTEXT DEFAULT NULL, image_5 LONGTEXT DEFAULT NULL, uploaded_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_E01FBE6AA76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -38,6 +39,8 @@ final class Version20250407085917 extends AbstractMigration
         $this->addSql('ALTER TABLE block_reports ADD CONSTRAINT FK_8B3C53BB94BDEEB6 FOREIGN KEY (reported_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE chats ADD CONSTRAINT FK_2D68180F56AE248B FOREIGN KEY (user1_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE chats ADD CONSTRAINT FK_2D68180F441B8B65 FOREIGN KEY (user2_id) REFERENCES users (id)');
+        $this->addSql('ALTER TABLE dislike ADD CONSTRAINT FK_FE3BECAA9DEB4BAF FOREIGN KEY (disliker_id) REFERENCES users (id)');
+        $this->addSql('ALTER TABLE dislike ADD CONSTRAINT FK_FE3BECAAE89943EC FOREIGN KEY (disliked_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE images ADD CONSTRAINT FK_E01FBE6AA76ED395 FOREIGN KEY (user_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE likes ADD CONSTRAINT FK_49CA4E7D979F103A FOREIGN KEY (liker_id) REFERENCES users (id)');
         $this->addSql('ALTER TABLE likes ADD CONSTRAINT FK_49CA4E7DE2ED1879 FOREIGN KEY (liked_id) REFERENCES users (id)');
@@ -67,6 +70,8 @@ final class Version20250407085917 extends AbstractMigration
         $this->addSql('ALTER TABLE block_reports DROP FOREIGN KEY FK_8B3C53BB94BDEEB6');
         $this->addSql('ALTER TABLE chats DROP FOREIGN KEY FK_2D68180F56AE248B');
         $this->addSql('ALTER TABLE chats DROP FOREIGN KEY FK_2D68180F441B8B65');
+        $this->addSql('ALTER TABLE dislike DROP FOREIGN KEY FK_FE3BECAA9DEB4BAF');
+        $this->addSql('ALTER TABLE dislike DROP FOREIGN KEY FK_FE3BECAAE89943EC');
         $this->addSql('ALTER TABLE images DROP FOREIGN KEY FK_E01FBE6AA76ED395');
         $this->addSql('ALTER TABLE likes DROP FOREIGN KEY FK_49CA4E7D979F103A');
         $this->addSql('ALTER TABLE likes DROP FOREIGN KEY FK_49CA4E7DE2ED1879');
@@ -89,6 +94,7 @@ final class Version20250407085917 extends AbstractMigration
         $this->addSql('ALTER TABLE user_label DROP FOREIGN KEY FK_EC65ABB09C16BF04');
         $this->addSql('DROP TABLE block_reports');
         $this->addSql('DROP TABLE chats');
+        $this->addSql('DROP TABLE dislike');
         $this->addSql('DROP TABLE feedback_support');
         $this->addSql('DROP TABLE genders');
         $this->addSql('DROP TABLE images');

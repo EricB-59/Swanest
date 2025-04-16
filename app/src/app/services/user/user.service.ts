@@ -13,7 +13,7 @@ export class UserService {
 
   delete(id: number): Observable<boolean> {
     return this.connHttp.delete<boolean>(API_URL + this.PREFIX + '/' + id, {
-      headers: new HttpHeaders({ 'Content Type': 'application/json' }),
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
