@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\User;
-use App\Entity\Chat;
+use App\Entity\Message;
 
 #[Route('/chat', name: 'app_chat')]
 final class ChatController extends AbstractController
@@ -44,11 +44,34 @@ final class ChatController extends AbstractController
                 $userName = $otherUser->getUsername(); // Fallback al username si no hay profile
             }
 
+            $messageRepository = $entityManager->getRepository(Message::class);
+            $messages = $messageRepository->findOneBy(['chat' => $chat->getId()], ['sent_at' => 'DESC']);
+            $countMessagesNoRead = $messageRepository->count(['chat' => $chat->getId(), 'is_read' => false]);
+
+            $lastMessage = 'No hay mensajes';
+            $hourLastMessage = '-';
+            if ($messages !== null) {
+                // Additional null check on getContent() result if needed
+                $content = $messages->getContent();
+                $hour = $messages->getSentAt();
+
+                if ($content) {
+                    $lastMessage = $content;
+                }
+                if ($hour) {
+                    $convertedDate = $hour->format('H:i');
+                    $hourLastMessage = $convertedDate;
+                }
+            }
+
             $chatsData[] = [
                 'chat_id' => $chat->getId(),
                 'user_id' => $otherUser->getId(),
                 'user_name' => $userName,
-                'user_img' => $otherUserImg
+                'last_message_content' => $lastMessage,
+                'last_message_hour' => $hourLastMessage,
+                'messages_no_read' => $countMessagesNoRead,
+                'user_img' => $otherUserImg,
             ];
         }
 
