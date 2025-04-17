@@ -77,4 +77,18 @@ final class ChatController extends AbstractController
 
         return new JsonResponse($chatsData, Response::HTTP_OK);
     }
+
+    #[Route(path: '/messages/{chatId}', name: 'app_find_messages', methods: ['GET'])]
+    public function messageByChat(int $chatId, EntityManagerInterface $entityManager)
+    {
+        $messageRepository = $entityManager->getRepository(Message::class);
+        $messages = $messageRepository->findBy(['chat' => $chatId], ['sent_at' => 'ASC']);
+
+        $messagesData = [];
+        foreach ($messages as $message) {
+            array_push($messagesData, $message->toArray());
+        }
+
+        return new JsonResponse($messagesData, Response::HTTP_OK);
+    }
 }
