@@ -1,1 +1,22 @@
-<p>chat works!</p>
+<div class="h-full w-full bg-white">
+  <header class="p-5">
+    <div class="flex gap-5">
+      <div class="h-16 w-16 overflow-hidden rounded-full">
+        <img [src]="userImg" alt="Error displaying" />
+      </div>
+      <div
+        class="font-family-regular mt-1 mr-4 flex flex-col items-start gap-1 overflow-hidden"
+      >
+        <h2 class="text-lg">{{ userName }}</h2>
+      </div>
+    </div>
+  </header>
+  <div class="h-full w-full overflow-auto bg-[#E8E8E8]">
+    @for (message of this.messages; track $index) {
+      <app-message
+        [content]="message.content"
+        [hour]="message.sent_at.split(' ')[1].substring(0, 5)"
+      ></app-message>
+    }
+  </div>
+</div>

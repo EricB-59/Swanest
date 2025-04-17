@@ -1,97 +1,124 @@
-<section
-  class="scrollbar-hide flex h-full w-96 flex-col gap-5 overflow-auto scroll-smooth rounded-[50px] bg-white p-8"
->
-  <h1 class="font-family-regular ml-3 text-4xl">Mensajes</h1>
-  <article class="flex h-13 w-full justify-between rounded-3xl bg-slate-100">
-    <input
-      type="text"
-      placeholder="Buscar contacto"
-      class="font-family-regular h-full w-full p-5 text-lg outline-0"
-    />
-    <button class="cursor-pointer pr-5">
-      <img src="assets/icons/search-icon.svg" alt="" class="" />
-    </button>
-  </article>
-  <div class="flex justify-between px-2">
-    <button class="font-family-regular cursor-pointer text-lg text-gray-500/80">
-      Todos
-    </button>
-    <button class="font-family-regular cursor-pointer text-lg text-gray-500/80">
-      Recientes
-    </button>
-    <button
-      class="font-family-regular flex cursor-pointer items-center gap-2 text-lg text-gray-500/80"
-    >
-      Pendientes
-      <span
-        class="font-family-regular grid h-6 w-6 place-content-center rounded-full bg-gray-500 p-1 text-sm text-white"
+<section class="flex h-full w-full flex-row gap-10">
+  <article
+    class="scrollbar-hide flex h-full min-w-min flex-col gap-5 overflow-auto scroll-smooth rounded-[50px] bg-white p-8"
+  >
+    <h1 class="font-family-regular ml-3 text-4xl">Mensajes</h1>
+    <article class="flex h-13 w-full justify-between rounded-3xl bg-slate-100">
+      <input
+        type="text"
+        placeholder="Buscar contacto"
+        class="font-family-regular text h-full w-full p-5 text-lg outline-0"
+      />
+      <button class="cursor-pointer pr-5">
+        <img src="assets/icons/search-icon.svg" alt="" class="" />
+      </button>
+    </article>
+    <div class="flex justify-between px-2">
+      <button
+        class="font-family-regular text-text-secondary cursor-pointer text-lg"
       >
-        3
-      </span>
-    </button>
-  </div>
-  <!-- FIJADOS -->
-  <div class="flex flex-col gap-5 p-2">
-    <h2 class="font-family-regular text-gray-500">FIJADOS</h2>
-    @for (chats of this.chats; track $index) {
-      <button class="flex cursor-pointer justify-between">
-        <div class="flex gap-5">
-          <div class="h-16 w-16 overflow-hidden rounded-full">
-            <img [src]="chats.user_img" alt="Error displaying" />
-          </div>
-          <div
-            class="font-family-regular mt-1 mr-4 flex flex-col items-start gap-1 overflow-hidden"
-          >
-            <h2 class="text-lg">{{ chats.user_name }}</h2>
-            <h3 class="line-clamp-1 w-44 text-start text-sm text-gray-500">
-              {{ chats.last_message_content }}
-            </h3>
-          </div>
-        </div>
-
-        <div class="mt-1 flex flex-col items-center gap-1">
-          <span
-            class="font-family-regular bg-primary-main grid h-6 w-6 place-content-center rounded-full p-1 text-sm text-white"
-          >
-            {{ chats.messages_no_read }}
-          </span>
-          <div class="mt-1 text-sm">{{ chats.last_message_hour }}</div>
-        </div>
+        Todos
       </button>
-    }
-  </div>
-
-  <!-- CHATS -->
-  <div class="flex flex-col gap-5 p-2">
-    <h2 class="font-family-regular text-gray-500">CHATS</h2>
-    @for (chats of this.chats; track $index) {
-      <button class="flex cursor-pointer justify-between">
-        <div class="flex gap-5">
-          <div class="h-16 w-16 overflow-hidden rounded-full">
-            <img [src]="chats.user_img" alt="Error displaying" />
-          </div>
-          <div
-            class="font-family-regular mt-1 mr-4 flex flex-col items-start gap-1 overflow-hidden"
-          >
-            <h2 class="text-lg">{{ chats.user_name }}</h2>
-            <h3 class="line-clamp-1 w-44 text-start text-sm text-gray-500">
-              {{ chats.last_message_content }}
-            </h3>
-          </div>
-        </div>
-
-        <div class="mt-1 flex flex-col items-center gap-1">
-          <span
-            class="font-family-regular bg-primary-main grid h-6 w-6 place-content-center rounded-full p-1 text-sm text-white"
-          >
-            {{ chats.messages_no_read }}
-          </span>
-          <div class="mt-1 text-sm">{{ chats.last_message_hour }}</div>
-        </div>
+      <button
+        class="font-family-regular text-text-secondary cursor-pointer text-lg"
+      >
+        Recientes
       </button>
-    }
-  </div>
+      <button
+        class="font-family-regular text-text-secondary flex cursor-pointer items-center gap-2 text-lg"
+      >
+        Pendientes
+        <span
+          class="font-family-regular bg-text-secondary grid h-6 w-6 place-content-center rounded-full p-1 text-sm text-white"
+        >
+          3
+        </span>
+      </button>
+    </div>
+    <!-- FIJADOS -->
+    <div class="flex flex-col gap-5 p-2">
+      <h2 class="font-family-regular text-text-secondary">FIJADOS</h2>
+      @for (chats of this.chats; track $index) {
+        <button
+          [id]="chats.user_id"
+          class="flex cursor-pointer justify-between"
+          (click)="openChat($event)"
+        >
+          <div class="flex gap-5">
+            <div class="h-16 w-16 overflow-hidden rounded-full">
+              <img [src]="chats.user_img" alt="Error displaying" />
+            </div>
+            <div
+              class="font-family-regular mt-1 mr-4 flex flex-col items-start gap-1 overflow-hidden"
+            >
+              <h2 class="text-lg">{{ chats.user_name }}</h2>
+              <h3
+                class="text-text-secondary line-clamp-1 w-44 text-start text-sm"
+              >
+                {{ chats.last_message_content }}
+              </h3>
+            </div>
+          </div>
+
+          <div class="mt-1 flex flex-col items-center gap-1">
+            <span
+              class="font-family-regular bg-primary-main grid h-6 w-6 place-content-center rounded-full p-1 text-sm text-white"
+            >
+              {{ chats.messages_no_read }}
+            </span>
+            <div class="mt-1 text-sm">{{ chats.last_message_hour }}</div>
+          </div>
+        </button>
+      }
+    </div>
+
+    <!-- CHATS -->
+    <div class="flex flex-col gap-5 p-2">
+      <h2 class="font-family-regular text-text-secondary">CHATS</h2>
+      @for (chats of this.chats; track $index) {
+        <button
+          id="{{ chats.chat_id }}"
+          class="flex cursor-pointer justify-between"
+          (click)="openChat($event)"
+        >
+          <div class="flex gap-5">
+            <div class="h-16 w-16 overflow-hidden rounded-full">
+              <img [src]="chats.user_img" alt="Error displaying" />
+            </div>
+            <div
+              class="font-family-regular mt-1 mr-4 flex flex-col items-start gap-1 overflow-hidden"
+            >
+              <h2 class="text-lg">{{ chats.user_name }}</h2>
+              <h3 class="line-clamp-1 w-44 text-start text-sm text-gray-500">
+                {{ chats.last_message_content }}
+              </h3>
+            </div>
+          </div>
+
+          <div class="mt-1 flex flex-col items-center gap-1">
+            <span
+              class="font-family-regular bg-primary-main grid h-6 w-6 place-content-center rounded-full p-1 text-sm text-white"
+            >
+              {{ chats.messages_no_read }}
+            </span>
+            <div class="mt-1 text-sm">{{ chats.last_message_hour }}</div>
+          </div>
+        </button>
+      }
+    </div>
+  </article>
+  @if (chatActive) {
+    <article class="h-full w-full overflow-hidden rounded-[50px]">
+      <app-chat
+        id="app-chat"
+        [chatId]="chatId"
+        [userName]="userName"
+        [userImg]="userImg"
+      ></app-chat>
+    </article>
+  }
 </section>
+
 <style>
   .scrollbar-hide {
     -ms-overflow-style: none; /* Para Internet Explorer y Edge */

@@ -18,4 +18,7 @@ export class ChatService {
   }
 
   // ? Chat - Chat user to user
+  getMessagesByChatId(idChat: number): Observable<object> {
+    return this.connHttp.get(API_URL + this.PREFIX + '/messages/' + idChat);
+  }
 }
