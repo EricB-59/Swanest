@@ -27,6 +27,7 @@ export class ChatSectionComponent implements OnInit {
       this.chatService.getChats(userObject.id).subscribe({
         next: (result) => {
           this.chats = result;
+          console.log(this.chats);
         },
       });
     }
