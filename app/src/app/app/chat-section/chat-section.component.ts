@@ -14,10 +14,11 @@ export class ChatSectionComponent implements OnInit {
   chatActive: boolean = false;
 
   // User data to open the chat to a user
-  chatId: number = 0;
+  userId: number = 0;
   userName: string = '';
   userImg: string = '';
 
+  fixeds: any = [];
   chats: any = [];
 
   ngOnInit(): void {
@@ -26,8 +27,15 @@ export class ChatSectionComponent implements OnInit {
       let userObject = JSON.parse(user);
       this.chatService.getChats(userObject.id).subscribe({
         next: (result) => {
-          this.chats = result;
-          console.log(this.chats);
+          if (result && Array.isArray(result)) {
+            result.forEach((item) => {
+              if (item.is_fixed) {
+                this.fixeds.push(item);
+              } else {
+                this.chats.push(item);
+              }
+            });
+          }
         },
       });
     }
@@ -40,7 +48,7 @@ export class ChatSectionComponent implements OnInit {
     }
 
     const BUTTON_ELEMENT = event.currentTarget as HTMLButtonElement;
-    const CHAT_ID = BUTTON_ELEMENT.id;
+    const USER_ID = BUTTON_ELEMENT.id;
 
     let USER_IMG: string | undefined;
 
@@ -51,11 +59,11 @@ export class ChatSectionComponent implements OnInit {
 
     const USER_NAME = BUTTON_ELEMENT.querySelector('h2')?.textContent || '';
 
-    if (CHAT_ID) {
-      this.chatId = +CHAT_ID;
+    if (USER_ID) {
+      this.userId = +USER_ID;
     } else {
       console.warn('ID de usuario no válido');
-      this.chatId = 0;
+      this.userId = 0;
     }
 
     this.userName = USER_NAME;

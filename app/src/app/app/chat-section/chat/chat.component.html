@@ -1,7 +1,7 @@
-<div class="h-full w-full bg-white">
-  <header class="p-5">
+<div class="flex h-full w-full flex-col bg-white">
+  <header class="border-b-1 border-[#BFBFBF] p-5 pb-4">
     <div class="flex gap-5">
-      <div class="h-16 w-16 overflow-hidden rounded-full">
+      <div class="ml-1 h-16 w-16 overflow-hidden rounded-full">
         <img [src]="userImg" alt="Error displaying" />
       </div>
       <div
@@ -11,12 +11,31 @@
       </div>
     </div>
   </header>
-  <div class="h-full w-full overflow-auto bg-white">
+  <div
+    class="scroll-container flex h-full w-full flex-col overflow-auto bg-white"
+  >
     @for (message of this.messages; track $index) {
       <app-message
         [content]="message.content"
         [hour]="message.sent_at.split(' ')[1].substring(0, 5)"
+        [sender]="message.sender_id"
       ></app-message>
     }
+  </div>
+  <div class="z-10 flex items-center justify-center gap-10 bg-white pb-10">
+    <div class="h-min w-10/12">
+      <input
+        id="content_message"
+        type="text"
+        placeholder="Escribe un mensaje"
+        class="font-family-regular h-full w-full rounded-[50px] border-1 border-[#BFBFBF] bg-[#F6F6F6] p-5 outline-0"
+      />
+    </div>
+    <button
+      (click)="sendMessage()"
+      class="grid h-16 w-16 cursor-pointer place-content-center rounded-full bg-black pr-1"
+    >
+      <img src="assets/icons/send-icon.svg" alt="" />
+    </button>
   </div>
 </div>

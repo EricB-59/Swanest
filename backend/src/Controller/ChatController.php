@@ -2,6 +2,10 @@
 
 namespace App\Controller;
 
+use DateTimeImmutable;
+use DateTimeZone;
+
+use App\Entity\Chat;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -9,6 +13,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\User;
 use App\Entity\Message;
+use Symfony\Component\HttpFoundation\Request;
+
+use function Symfony\Component\Clock\now;
 
 #[Route('/chat', name: 'app_chat')]
 final class ChatController extends AbstractController
@@ -46,7 +53,7 @@ final class ChatController extends AbstractController
 
             $messageRepository = $entityManager->getRepository(Message::class);
             $messages = $messageRepository->findOneBy(['chat' => $chat->getId()], ['sent_at' => 'DESC']);
-            $countMessagesNoRead = $messageRepository->count(['chat' => $chat->getId(), 'is_read' => false]);
+            $countMessagesNoRead = $messageRepository->count(['receiver' => $user->getId(), 'is_read' => false]);
 
             $lastMessage = 'No hay mensajes';
             $hourLastMessage = '-';
@@ -72,17 +79,21 @@ final class ChatController extends AbstractController
                 'last_message_hour' => $hourLastMessage,
                 'messages_no_read' => $countMessagesNoRead,
                 'user_img' => $otherUserImg,
+                'is_fixed' => $chat->isFixed()
             ];
         }
 
         return new JsonResponse($chatsData, Response::HTTP_OK);
     }
 
-    #[Route(path: '/messages/{chatId}', name: 'app_find_messages', methods: ['GET'])]
-    public function messageByChat(int $chatId, EntityManagerInterface $entityManager)
+    #[Route(path: '/messages/{user1}/{user2}', name: 'app_find_messages', methods: ['GET'])]
+    public function messageByChat(int $user1, int $user2, EntityManagerInterface $entityManager)
     {
         $messageRepository = $entityManager->getRepository(Message::class);
-        $messages = $messageRepository->findBy(['chat' => $chatId], ['sent_at' => 'ASC']);
+        $messages = $messageRepository->findBy(
+            criteria: ['sender' => [$user1, $user2], 'receiver' => [$user1, $user2]],
+            orderBy: ['sent_at' => 'ASC']
+        );
 
         $messagesData = [];
         foreach ($messages as $message) {
@@ -90,5 +101,43 @@ final class ChatController extends AbstractController
         }
 
         return new JsonResponse($messagesData, Response::HTTP_OK);
+    }
+
+    #[Route(path: '', name: 'app_create_message', methods: ['POST'])]
+    public function create(
+        Request $request,
+        EntityManagerInterface $entityManager
+    ) {
+        // Parse JSON data from request body
+        $data = json_decode($request->getContent(), true);
+        $sender_id = $data['sender_id'];
+        $receiver_id = $data['receiver_id'];
+        $content = $data['content'];
+
+        if (empty($sender_id) || empty($receiver_id) || empty($content)) {
+            return new JsonResponse('empty-fields', Response::HTTP_BAD_REQUEST);
+        }
+
+        $message = new Message();
+
+        $chat = $entityManager->getRepository(Chat::class)->findOneBy(['user1' => $sender_id, 'user2' => $receiver_id]);
+        $message->setChat($chat);
+
+        $sender = $entityManager->getRepository(User::class)->find($sender_id);
+        $message->setSender($sender);
+
+        $receiver = $entityManager->getRepository(User::class)->find($receiver_id);
+        $message->setReceiver($receiver);
+
+        $message->setContent($content);
+        $message->setIsRead(false);
+
+        $dateTimeZone = new DateTimeZone("Europe/Madrid");
+        $message->setSentAt(new DateTimeImmutable(timezone: $dateTimeZone));
+
+        $entityManager->persist($message);
+        $entityManager->flush();
+
+        return new JsonResponse('message_created', Response::HTTP_OK);
     }
 }
