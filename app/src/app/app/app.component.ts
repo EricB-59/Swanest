@@ -1,16 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatSectionComponent } from './chat-section/chat-section.component';
 import { User } from '../models/user';
+import { MatchSectionComponent } from './match-section/match-section.component';
+import { UpdateUserComponent } from './auth/update-user/update-user.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-app',
-  imports: [ChatSectionComponent],
+  imports: [
+    ChatSectionComponent,
+    MatchSectionComponent,
+    UpdateUserComponent,
+    CommonModule,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   user: User | null = null;
   userLoadError = false;
+
+  display_component: string = 'match-section';
 
   ngOnInit(): void {
     this.loadUserFromSession();
