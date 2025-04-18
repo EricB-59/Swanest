@@ -80,7 +80,6 @@ export class MatchSectionComponent implements AfterViewInit {
 
         // no distance
         if (pullDistanceX === 0) return;
-        console.log(pullDistanceX);
 
         // change the flag
         isAnimating = true;
@@ -103,8 +102,6 @@ export class MatchSectionComponent implements AfterViewInit {
 
         // user make a choise?
         const decisionMade = Math.abs(pullDistanceX) >= DECISION_THRESHOLD;
-        console.log(pullDistanceX);
-        console.log(decisionMade);
 
         // In this point the user had make a decision
         if (decisionMade) {

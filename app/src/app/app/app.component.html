@@ -32,23 +32,49 @@
       <article>
         <h2 class="font-family-regular pb-5 opacity-20">MENÚ</h2>
         <button
-          class="bg-primary-main flex w-full cursor-pointer gap-5 rounded-2xl p-3"
+          (click)="display_component = 'match-section'"
+          class="flex w-full cursor-pointer gap-5 rounded-2xl p-3"
+          [class]="{
+            'bg-primary-main': display_component === 'match-section',
+          }"
         >
           <img
             class="w-7"
             src="assets/images/app/icons/match-icon.svg"
             alt=""
           />
-          <p class="font-family-regular text-lg text-white">Match</p>
+          <p
+            class="font-family-regular text-lg"
+            [class]="{
+              'text-white': display_component == 'match-section',
+              'text-black': display_component != 'match-section',
+            }"
+          >
+            Match
+          </p>
           <div></div>
         </button>
-        <button class="flex w-full cursor-pointer gap-5 rounded-2xl p-3">
+        <button
+          (click)="display_component = 'chat-section'"
+          class="flex w-full cursor-pointer gap-5 rounded-2xl p-3"
+          [class]="{
+            'bg-primary-main': display_component === 'chat-section',
+          }"
+        >
           <img
             class="w-7"
             src="assets/images/app/icons/messages-icon.svg"
             alt=""
           />
-          <p class="font-family-regular text-lg">Mensajes</p>
+          <p
+            class="font-family-regular text-lg"
+            [class]="{
+              'text-white': display_component == 'chat-section',
+              'text-black': display_component != 'chat-section',
+            }"
+          >
+            Mensajes
+          </p>
           <div></div>
         </button>
       </article>
@@ -57,13 +83,27 @@
     <div class="flex flex-col gap-7">
       <article>
         <h2 class="font-family-regular pb-5 opacity-20">AJUSTES</h2>
-        <button class="bg-primary-main flex w-full gap-5 rounded-2xl p-3">
+        <button
+          (click)="display_component = 'update-section'"
+          class="flex w-full gap-5 rounded-2xl p-3"
+          [class]="{
+            'bg-primary-main': display_component === 'update-section',
+          }"
+        >
           <img
             class="w-6"
             src="assets/images/app/icons/update-profile-icon.svg"
             alt=""
           />
-          <p class="font-family-regular text-w">Editar perfil</p>
+          <p
+            class="font-family-regular text-w"
+            [class]="{
+              'text-white': display_component == 'update-section',
+              'text-black': display_component != 'update-section',
+            }"
+          >
+            Editar perfil
+          </p>
         </button>
       </article>
 
@@ -87,6 +127,16 @@
     </div>
   </header>
   <section class="h-full w-full">
-    <app-chat-section></app-chat-section>
+    @switch (display_component) {
+      @case ("match-section") {
+        <app-match-section></app-match-section>
+      }
+      @case ("chat-section") {
+        <app-chat-section></app-chat-section>
+      }
+      @case ("update-section") {
+        <app-update-user></app-update-user>
+      }
+    }
   </section>
 </main>
