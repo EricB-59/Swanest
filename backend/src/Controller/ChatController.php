@@ -97,8 +97,16 @@ final class ChatController extends AbstractController
 
         $messagesData = [];
         foreach ($messages as $message) {
+            // If the receiver is user1, mark the message as read
+            if ($message->getReceiver()->getId() === $user1 && !$message->isRead()) {
+                $message->setIsRead(true);
+            }
+
             array_push($messagesData, $message->toArray());
         }
+
+        // Persist the changes to the database
+        $entityManager->flush();
 
         return new JsonResponse($messagesData, Response::HTTP_OK);
     }

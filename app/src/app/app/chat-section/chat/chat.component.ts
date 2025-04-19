@@ -1,7 +1,10 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ChatService } from '../../../services/chat/chat.service';
 import { MessageComponent } from './message/message.component';
 import { Message } from '../../../models/message';
+
+import { interval, Subscription } from 'rxjs';
+import { switchMap, filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-chat',
@@ -9,7 +12,7 @@ import { Message } from '../../../models/message';
   templateUrl: './chat.component.html',
   styles: ``,
 })
-export class ChatComponent implements OnChanges {
+export class ChatComponent implements OnChanges, OnInit, OnDestroy {
   @Input() userName: string = '';
   @Input() userImg: string = '';
   @Input() userId: number = 0;
@@ -18,7 +21,32 @@ export class ChatComponent implements OnChanges {
 
   USER_ID: number = 0;
 
+  private intervalSub!: Subscription;
   constructor(private chatService: ChatService) {}
+
+  ngOnInit(): void {
+    this.intervalSub = interval(1000)
+      .pipe(
+        filter(() => !!sessionStorage.getItem('user')),
+        switchMap(() => {
+          const userString = sessionStorage.getItem('user');
+          const userObj = JSON.parse(userString!);
+          this.USER_ID = userObj.id;
+          return this.chatService.getMessagesByChatId(
+            this.USER_ID,
+            this.userId,
+          );
+        }),
+      )
+      .subscribe({
+        next: (result) => {
+          this.messages = result;
+        },
+        error: (err) => {
+          console.error('Error fetching messages:', err);
+        },
+      });
+  }
 
   ngOnChanges(): void {
     const userString = sessionStorage.getItem('user');
@@ -31,14 +59,14 @@ export class ChatComponent implements OnChanges {
     this.chatService.getMessagesByChatId(this.USER_ID, this.userId).subscribe({
       next: (result) => {
         this.messages = result;
-        console.log(this.messages);
       },
     });
+  }
 
-    // const container = document.getElementById('scroll-container');
-    // if (container) {
-    //   container.scrollTop = container.scrollHeight;
-    // }
+  ngOnDestroy(): void {
+    if (this.intervalSub) {
+      this.intervalSub.unsubscribe();
+    }
   }
 
   sendMessage() {
@@ -61,8 +89,8 @@ export class ChatComponent implements OnChanges {
     let message = new Message(this.USER_ID, this.userId, CONTENT_MESSAGE);
 
     this.chatService.createMessage(message).subscribe({
-      next: (r) => {
-        console.log(r);
+      next: () => {
+        INPUT_MESSAGE.value = '';
       },
     });
   }
