@@ -12,7 +12,8 @@
     </div>
   </header>
   <div
-    class="scroll-container flex h-full w-full flex-col overflow-auto bg-white"
+    id="scroll-container"
+    class="flex h-300 w-full flex-col overflow-auto bg-white"
   >
     @for (message of this.messages; track $index) {
       <app-message

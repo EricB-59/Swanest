@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-match-section',
@@ -6,13 +6,13 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
   template: `
     <section>
       <div class="cards relative w-60">
-        <article class="absolute top-0 cursor-grab">
+        <article class="card absolute top-0 cursor-grab">
           <img src="assets/images/test-match.png" alt="error" />
           <h2 class="absolute bottom-10 text-white">
             Guillem<span class="text-white">21</span>
           </h2>
         </article>
-        <article class="absolute top-0 cursor-grab">
+        <article class="card absolute top-0 cursor-grab">
           <img src="assets/images/test-match.png" alt="error" />
           <h2 class="absolute bottom-10 text-white">
             Joel<span class="text-white">21</span>
@@ -52,7 +52,7 @@ export class MatchSectionComponent implements AfterViewInit {
 
       const target = event.target as HTMLElement;
       // Get the first article
-      const actualCard = target.closest('article');
+      const actualCard = target.closest('.card') as HTMLElement;
 
       // Get initial position of mouse or finger
       const startX = event.pageX ?? event.touches[0].pageX;
