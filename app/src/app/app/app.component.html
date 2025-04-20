@@ -1,6 +1,8 @@
-<main class="bg-background-main flex h-screen w-screen gap-10 p-5">
+<main
+  class="bg-background-main flex h-screen w-screen flex-col gap-10 p-5 lg:flex-row"
+>
   <header
-    class="flex w-96 flex-col justify-between rounded-[50px] bg-white [&>*]:p-8"
+    class="hidden w-96 flex-col justify-between rounded-[50px] bg-white lg:flex [&>*]:p-8"
   >
     <div class="flex flex-col gap-7">
       <div class="flex w-full justify-between">
@@ -139,4 +141,66 @@
       }
     }
   </section>
+  <header class="flex h-20 overflow-hidden rounded-[50px] lg:hidden">
+    <div class="flex h-full w-full flex-row justify-between bg-white p-3">
+      <div class="mx-2 flex gap-5">
+        <img
+          src="assets/images/app/logo-swanest-purple.svg"
+          class="mr-3 w-7"
+          alt=""
+        />
+        <button
+          (click)="display_component = 'match-section'"
+          class="flex h-full w-full cursor-pointer content-center rounded-2xl p-3"
+          [class]="{
+            'bg-primary-main': display_component === 'match-section',
+          }"
+        >
+          <img
+            class="w-7 scale-140"
+            src="assets/images/app/icons/match-icon.svg"
+            alt=""
+          />
+        </button>
+        <button
+          (click)="display_component = 'chat-section'"
+          class="flex h-full w-full cursor-pointer content-center rounded-2xl p-3"
+          [class]="{
+            'bg-primary-main': display_component === 'chat-section',
+          }"
+        >
+          <img
+            class="w-7 scale-140"
+            src="assets/images/app/icons/messages-icon.svg"
+            alt=""
+          />
+        </button>
+      </div>
+      <div class="flex">
+        <button
+          (click)="display_component = 'update-section'"
+          class="flex h-full w-full cursor-pointer content-center rounded-2xl p-3"
+          [class]="{
+            'bg-secondary-light': display_component === 'update-section',
+          }"
+        >
+          <img
+            class="w-7 scale-140"
+            src="assets/images/app/icons/setting-icon.svg"
+            alt=""
+          />
+        </button>
+        <button
+          (click)="display_component = 'update-section'"
+          class="flex h-full w-full cursor-pointer content-center rounded-2xl bg-[#CDCDCD] p-3"
+        >
+          <img
+            class="ml-1 w-7 scale-110"
+            src="assets/images/app/icons/logout-icon.svg"
+            alt=""
+          />
+        </button>
+      </div>
+    </div>
+  </header>
 </main>
