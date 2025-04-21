@@ -1,33 +1,34 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+// import { MatchService } from '../../services/match/match.service';
+// import { Profile } from '../../models/profile';
+
 
 @Component({
   selector: 'app-match-section',
   imports: [],
-  template: `
-    <section>
-      <div class="cards relative w-60">
-        <article class="absolute top-0 cursor-grab">
-          <img src="assets/images/test-match.png" alt="error" />
-          <h2 class="absolute bottom-10 text-white">
-            Guillem<span class="text-white">21</span>
-          </h2>
-        </article>
-        <article class="absolute top-0 cursor-grab">
-          <img src="assets/images/test-match.png" alt="error" />
-          <h2 class="absolute bottom-10 text-white">
-            Joel<span class="text-white">21</span>
-          </h2>
-        </article>
-      </div>
-      <div class="buttons">
-        <button class="like"></button>
-        <button class="dislike"></button>
-      </div>
-    </section>
-  `,
+  templateUrl: './match-section.component.html',
   styleUrl: './match-section.component.css',
 })
 export class MatchSectionComponent implements AfterViewInit {
+  // matchService: MatchService = inject(MatchService);
+  // profiles!: Profile[]
+  // user = sessionStorage.getItem('user')
+
+  // ngOnInit(): void {
+  //   if (this.user) {
+  //     const user_id = JSON.parse(this.user).id;
+  //     this.matchService.getProfiles(user_id).subscribe({
+  //       next: (data) => { 
+  //         this.profiles = data;
+  //         console.info(this.profiles)
+  //       },
+  //       error: (error) => {
+  //         console.error(error)
+  //       }
+  //     })
+  //   }
+  // }
+
   ngAfterViewInit(): void {
     // As of this grades we consider the user maked a decision
     const DECISION_THRESHOLD = 75;
