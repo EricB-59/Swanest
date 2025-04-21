@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../../../services/user/user.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -35,21 +35,21 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
               appErrorFields
             />
           </label>
-            <label class="flex flex-col text-lg">
-              <div class="flex">
-                <span>Contraseña</span>
-                <span class="font-basesemibold text-[#9272E8]">*</span>
-              </div>
-              <input
-                class="h-10 w-full border-b-2 border-black outline-none"
-                type="password"
-                id="password"
-                name="password"
-                formControlName="password"
-                pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                appErrorFields
-              />
-            </label>
+          <label class="flex flex-col text-lg">
+            <div class="flex">
+              <span>Contraseña</span>
+              <span class="font-basesemibold text-[#9272E8]">*</span>
+            </div>
+            <input
+              class="h-10 w-full border-b-2 border-black outline-none"
+              type="password"
+              id="password"
+              name="password"
+              formControlName="password"
+              pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              appErrorFields
+            />
+          </label>
         </div>
         <span class="flex w-full justify-end underline"
           >Olvidé mi contraseña</span
@@ -118,6 +118,14 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
 export class LoginUserComponent {
   constructor(private router: Router) {}
 
+  @Input() closeModal: () => void = () => {};
+
+  closeAuthModal() {
+    if (this.closeModal) {
+      this.closeModal();
+    }
+  }
+
   exist: boolean = false;
 
   identifier: any = '';
@@ -137,12 +145,15 @@ export class LoginUserComponent {
     this.password = this.form.value.password;
 
     this.userService.login(this.identifier, this.password).subscribe({
-      next: (v) => console.log(v),
-      error: (e) => console.error(e),
-      complete: () => {
-        this.exist = true;
-        console.info('complete');
+      next: (v) => {
+        if (!v.profile) {
+          console.log('error');
+        }
+        sessionStorage.setItem('user', JSON.stringify(v));
+        this.router.navigate(['app']);
+        this.closeAuthModal();
       },
+      error: (e) => console.error(e),
     });
   }
 }

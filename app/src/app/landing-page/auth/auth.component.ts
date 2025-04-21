@@ -9,9 +9,11 @@ import { RegisterUserComponent } from './register-user/register-user.component';
   styles: ``,
 })
 export class AuthComponent {
+  display: boolean = true;
   isRightSide = false;
 
   constructor(public _matDialogRef: MatDialogRef<AuthComponent>) {}
+
   close() {
     this._matDialogRef.close();
   }
@@ -20,4 +22,3 @@ export class AuthComponent {
     this.isRightSide = !this.isRightSide;
   }
 }
- 

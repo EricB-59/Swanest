@@ -1,4 +1,6 @@
-<div class="fixed inset-0 flex items-center justify-center bg-black/50">
+<div
+  class="fixed inset-0 hidden items-center justify-center bg-black/50 lg:flex"
+>
   <div
     class="relative flex h-145 w-[57.5rem] items-start justify-between overflow-hidden rounded-[4.625rem] bg-white p-3"
   >
@@ -28,22 +30,38 @@
       <app-register-user></app-register-user>
     </div>
     <div class="relative h-full w-114 p-10">
-      <app-login-user></app-login-user>
+      <app-login-user [closeModal]="close.bind(this)"></app-login-user>
     </div>
   </div>
 </div>
-<!-- <div
-(click)="close()"
-class="absolute top-4 right-4 z-10 flex h-13 w-13 cursor-pointer items-center justify-center rounded-full border-2 border-black"
+
+<!-- MOBILE -->
+<div
+  class="fixed inset-0 flex items-center justify-center bg-black/50 lg:hidden"
 >
-<svg
-  width="17"
-  height="17"
-  viewBox="0 0 17 17"
-  fill="none"
-  xmlns="http://www.w3.org/2000/svg"
->
-  <path d="M1 1L16.558 16.5547" stroke="black" />
-  <path d="M16.5586 1L1.00061 16.5547" stroke="black" />
-</svg>
-</div> -->
+  <div
+    class="relative m-15 flex h-175 w-full items-start justify-between overflow-hidden rounded-[4.625rem] bg-white p-3 pl-10"
+  >
+    @if (display) {
+      <div class="relative flex h-full w-10/12 flex-col gap-10 p-10">
+        <app-register-user></app-register-user>
+        <button
+          class="font-family-regular rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
+          (click)="display = !display"
+        >
+          {{ display ? "Iniciar sesión" : "Registrarse" }}
+        </button>
+      </div>
+    } @else {
+      <div class="relative flex h-full w-10/12 flex-col gap-10 p-10">
+        <app-login-user [closeModal]="close.bind(this)"></app-login-user>
+        <button
+          class="font-family-regular rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
+          (click)="display = !display"
+        >
+          {{ isRightSide ? "Iniciar sesión" : "Registrarse" }}
+        </button>
+      </div>
+    }
+  </div>
+</div>

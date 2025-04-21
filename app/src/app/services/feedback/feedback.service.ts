@@ -2,21 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Feedback } from '../../models/feedback';
+import { API_URL } from '../../../config/const';
 
 @Injectable({
   providedIn: 'root',
 })
 export class FeedbackService {
-  private apiUrl = 'http://localhost:8000/feedback';
-
+  private PREFIX = 'feedback';
   constructor(private connHttp: HttpClient) {}
 
-  add(feedback: Feedback): Observable<object> {
-    console.log(feedback);
-    return this.connHttp.post(this.apiUrl + '/add', feedback, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    });
+  create(feedback: Feedback): Observable<object> {
+    return this.connHttp.post(API_URL + this.PREFIX, feedback);
   }
 }

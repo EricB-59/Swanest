@@ -10,13 +10,12 @@ export const routes: Routes = [
     path: 'app',
     loadChildren: () =>
       import('./app/app.routes').then((m) => {
-        // ! AUTH: Check if the user is logged in
-        if (true) {
-          return m.APP_ROUTES;
+        // ! AUTH: Check if the user had profile
+        if (!sessionStorage.getItem('user')) {
+          return [{ path: '', component: LandingPageComponent }];
         }
+
+        return m.APP_ROUTES;
       }),
   },
-  { path: 'profile', component: ProfileInfoComponent },
-  { path: 'personal', component: PersonalInfoComponent },
-  { path: 'images', component: ImagesUploadComponent },
 ];

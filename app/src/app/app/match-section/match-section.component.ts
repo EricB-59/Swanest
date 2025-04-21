@@ -1,7 +1,4 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
-// import { MatchService } from '../../services/match/match.service';
-// import { Profile } from '../../models/profile';
-
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-match-section',
@@ -53,7 +50,7 @@ export class MatchSectionComponent implements AfterViewInit {
 
       const target = event.target as HTMLElement;
       // Get the first article
-      const actualCard = target.closest('article');
+      const actualCard = target.closest('.card') as HTMLElement;
 
       // Get initial position of mouse or finger
       const startX = event.pageX ?? event.touches[0].pageX;
@@ -81,7 +78,6 @@ export class MatchSectionComponent implements AfterViewInit {
 
         // no distance
         if (pullDistanceX === 0) return;
-        console.log(pullDistanceX);
 
         // change the flag
         isAnimating = true;
@@ -104,8 +100,6 @@ export class MatchSectionComponent implements AfterViewInit {
 
         // user make a choise?
         const decisionMade = Math.abs(pullDistanceX) >= DECISION_THRESHOLD;
-        console.log(pullDistanceX);
-        console.log(decisionMade);
 
         // In this point the user had make a decision
         if (decisionMade) {

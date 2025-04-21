@@ -26,6 +26,11 @@ doctrine:
                 alias: App
         controller_resolver:
             auto_mapping: false
+        dql:
+            numeric_functions:
+                rand: DoctrineExtensions\Query\Mysql\Rand
+            datetime_functions:
+                timestampdiff: DoctrineExtensions\Query\Mysql\TimestampDiff
 
 when@test:
     doctrine:

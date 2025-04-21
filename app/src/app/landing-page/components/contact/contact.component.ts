@@ -29,7 +29,7 @@ export class ContactComponent {
       message: this.form.value.message as string,
     });
 
-    this.feedbackService.add(feedback).subscribe((result) => {
+    this.feedbackService.create(feedback).subscribe((result) => {
       console.log(result);
     });
   }
