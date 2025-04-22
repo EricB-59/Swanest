@@ -96,10 +96,10 @@ interface Label {
                 appErrorFields
               />
               <datalist id="provinces">
-              @for (province of this.provinces; track $index) {
+                @for (province of this.provinces; track $index) {
                   <option value="{{ province.name }}"></option>
-                } 
-               </datalist>
+                }
+              </datalist>
             </label>
 
             <!--Labels-->
@@ -200,19 +200,17 @@ export class ProfileInfoComponent implements OnInit {
   selectedInterests: string[] = [];
 
   ngOnInit(): void {
-    console.log('Cargando provincias desde:', this.profileService['apiUrl'] + '/provinces');
     this.profileService.getProvinces().subscribe({
       next: (result) => {
         console.log('Respuesta de API de provincias:', result);
         if (result && Array.isArray(result)) {
           this.provinces = result;
-          this.provinceNames = this.provinces.map(p => p.name);
+          this.provinceNames = this.provinces.map((p) => p.name);
           console.log('Provincias procesadas:', this.provinceNames);
         }
       },
     });
-  
-    console.log('Cargando etiquetas desde:', this.profileService['apiUrl'] + '/labels');
+
     this.profileService.getLabels().subscribe({
       next: (result) => {
         console.log('Respuesta de API de etiquetas:', result);
@@ -221,7 +219,7 @@ export class ProfileInfoComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al cargar etiquetas:', err);
-      }
+      },
     });
   }
 
@@ -248,15 +246,17 @@ export class ProfileInfoComponent implements OnInit {
     const provinceInput = (
       document.querySelector('input[list="provinces"]') as HTMLInputElement
     )?.value;
-  
+
     const isValidProvince = this.provinceNames.some(
-      p => p.toLowerCase() === provinceInput.toLowerCase()
+      (p) => p.toLowerCase() === provinceInput.toLowerCase(),
     );
-  
+
     if (!isValidProvince) {
       console.log('Provincia no válida:', provinceInput);
       console.log('Provincias válidas:', this.provinceNames);
-      const provinceElement = document.querySelector('#province') as HTMLInputElement;
+      const provinceElement = document.querySelector(
+        '#province',
+      ) as HTMLInputElement;
       provinceElement.focus();
       provinceElement.blur(); // Activar validación
       return;
