@@ -111,6 +111,13 @@ export class ErrorFieldsDirective implements OnInit {
     }
     this.updateStyles();
   }
+  @HostListener('change', ['$event'])
+  onChange(event: Event): void {
+    if (!this.control) {
+    this.validateManually((event.target as HTMLInputElement).value);
+  }
+  this.updateStyles();
+}
 
   // Manual validation for when NgControl is not present
   private validateManually(value: string): void {
@@ -128,14 +135,22 @@ export class ErrorFieldsDirective implements OnInit {
       errorMessage = `Mínimo ${this.minLength} caracteres (tiene ${value.length})`;
     } 
     // Validation for provinces or valid list
-    else if (this.validList && value && !this.validList.includes(value)) {
-      isValid = false;
+    else if (this.validList && value && this.validList.length > 0) {
+      // Normaliza el valor del input y los valores de la lista para comparación
+      const normalizedValue = value.trim().toLowerCase();
+      const normalizedList = this.validList.map(item => item.trim().toLowerCase());
       
-      const elementId = this.elRef.nativeElement.id;
-      if (elementId === 'province') {
-        errorMessage = 'Seleccione una provincia válida';
-      } else {
-        errorMessage = this.errorMessages['validList'];
+      if (!normalizedList.includes(normalizedValue)) {
+        isValid = false;
+        
+        const elementId = this.elRef.nativeElement.id;
+        if (elementId === 'province') {
+          errorMessage = 'Seleccione una provincia válida';
+          console.log('Valor no válido:', value); 
+          console.log('Lista válida:', this.validList);
+        } else {
+          errorMessage = this.errorMessages['validList'];
+        }
       }
     }
     // Pattern validation

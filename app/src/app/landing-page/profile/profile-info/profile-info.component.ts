@@ -92,7 +92,7 @@ interface Label {
                 id="province"
                 class="font-basereg h-8 w-full border-b-2 border-black"
                 [required]="true"
-                  [validList]="provinceNames"
+                [validList]="provinceNames"
                 appErrorFields
               />
               <datalist id="provinces">
@@ -200,20 +200,31 @@ export class ProfileInfoComponent implements OnInit {
   selectedInterests: string[] = [];
 
   ngOnInit(): void {
+    console.log('Cargando provincias desde:', this.profileService['apiUrl'] + '/provinces');
     this.profileService.getProvinces().subscribe({
       next: (result) => {
-        this.provinces = typeof result === 'string' ? JSON.parse(result) : result;
-        this.provinceNames = this.provinces.map(p => p.name);
-        console.log('provinceNames:', this.provinceNames);
+        console.log('Respuesta de API de provincias:', result);
+        if (result && Array.isArray(result)) {
+          this.provinces = result;
+          this.provinceNames = this.provinces.map(p => p.name);
+          console.log('Provincias procesadas:', this.provinceNames);
+        }
       },
     });
-
+  
+    console.log('Cargando etiquetas desde:', this.profileService['apiUrl'] + '/labels');
     this.profileService.getLabels().subscribe({
       next: (result) => {
+        console.log('Respuesta de API de etiquetas:', result);
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
+        console.log('Etiquetas procesadas:', this.labels);
       },
+      error: (err) => {
+        console.error('Error al cargar etiquetas:', err);
+      }
     });
   }
+
   toggleInterest(interest: string, event: Event) {
     const checkbox = event.target as HTMLInputElement;
 
@@ -237,6 +248,19 @@ export class ProfileInfoComponent implements OnInit {
     const provinceInput = (
       document.querySelector('input[list="provinces"]') as HTMLInputElement
     )?.value;
+  
+    const isValidProvince = this.provinceNames.some(
+      p => p.toLowerCase() === provinceInput.toLowerCase()
+    );
+  
+    if (!isValidProvince) {
+      console.log('Provincia no válida:', provinceInput);
+      console.log('Provincias válidas:', this.provinceNames);
+      const provinceElement = document.querySelector('#province') as HTMLInputElement;
+      provinceElement.focus();
+      provinceElement.blur(); // Activar validación
+      return;
+    }
 
     const profileData = {
       bio,

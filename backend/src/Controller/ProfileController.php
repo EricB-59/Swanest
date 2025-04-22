@@ -230,7 +230,7 @@ final class ProfileController extends AbstractController
             array_push($out, ["id" => $province->getId(), "name" => $province->getName()]);
         }
 
-        return new JsonResponse(json_encode($out));
+        return new JsonResponse($out);
     }
 
     #[Route(path: '/labels', name: 'get_labels', methods: ['GET'],)]
@@ -245,6 +245,6 @@ final class ProfileController extends AbstractController
             array_push($out, ["id" => $label->getId(), "name" => $label->getName()]);
         }
 
-        return new JsonResponse(json_encode($out));
+        return new JsonResponse($out);
     }
 }
