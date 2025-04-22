@@ -4,6 +4,7 @@ import { User } from '../models/user';
 import { MatchSectionComponent } from './match-section/match-section.component';
 import { UpdateUserComponent } from './auth/update-user/update-user.component';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-app',
@@ -17,6 +18,8 @@ import { CommonModule } from '@angular/common';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
+  constructor(private router: Router) {}
+
   user: User | null = null;
   userLoadError = false;
 
@@ -85,5 +88,10 @@ export class AppComponent implements OnInit {
     this.userLoadError = true;
     this.user = null;
     sessionStorage.removeItem('user'); // Clear invalid data
+  }
+
+  public userLogout(): void {
+    sessionStorage.clear();
+    this.router.navigate(['/']);
   }
 }

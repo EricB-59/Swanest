@@ -40,11 +40,20 @@
             'bg-primary-main': display_component === 'match-section',
           }"
         >
-          <img
-            class="w-7"
-            src="assets/images/app/icons/match-icon.svg"
-            alt=""
-          />
+          @if (display_component === "match-section") {
+            <img
+              class="w-7"
+              src="assets/images/app/icons/match-icon.svg"
+              alt=""
+            />
+          } @else {
+            <img
+              class="w-7"
+              src="assets/images/app/icons/match-black-icon.svg"
+              alt=""
+            />
+          }
+
           <p
             class="font-family-regular text-lg"
             [class]="{
@@ -63,11 +72,20 @@
             'bg-primary-main': display_component === 'chat-section',
           }"
         >
-          <img
-            class="w-7"
-            src="assets/images/app/icons/messages-icon.svg"
-            alt=""
-          />
+          @if (display_component === "chat-section") {
+            <img
+              class="w-7"
+              src="assets/images/app/icons/messages-white-icon.svg"
+              alt=""
+            />
+          } @else {
+            <img
+              class="w-7"
+              src="assets/images/app/icons/messages-icon.svg"
+              alt=""
+            />
+          }
+
           <p
             class="font-family-regular text-lg"
             [class]="{
@@ -92,11 +110,20 @@
             'bg-primary-main': display_component === 'update-section',
           }"
         >
-          <img
-            class="w-6"
-            src="assets/images/app/icons/update-profile-icon.svg"
-            alt=""
-          />
+          @if (display_component === "update-section") {
+            <img
+              class="w-6"
+              src="assets/images/app/icons/update-profile-icon.svg"
+              alt=""
+            />
+          } @else {
+            <img
+              class="w-6"
+              src="assets/images/app/icons/update-profile-black-icon.svg"
+              alt=""
+            />
+          }
+
           <p
             class="font-family-regular text-w"
             [class]="{
@@ -109,7 +136,10 @@
         </button>
       </article>
       <article>
-        <button class="flex w-full gap-5 rounded-2xl bg-slate-300 p-3">
+        <button
+          (click)="userLogout()"
+          class="flex w-full gap-5 rounded-2xl bg-slate-300 p-3"
+        >
           <img
             class="w-5"
             src="assets/images/app/icons/logout-icon.svg"
@@ -135,7 +165,7 @@
   </section>
   <header class="flex h-20 overflow-hidden rounded-[50px] lg:hidden">
     <div class="flex h-full w-full flex-row justify-between bg-white p-3">
-      <div class="mx-2 flex gap-5">
+      <div class="mx-2 flex gap-4">
         <img
           src="assets/images/app/logo-swanest-purple.svg"
           class="mr-3 w-7"
@@ -148,11 +178,19 @@
             'bg-primary-main': display_component === 'match-section',
           }"
         >
-          <img
-            class="w-7 scale-140"
-            src="assets/images/app/icons/match-icon.svg"
-            alt=""
-          />
+          @if (display_component === "match-section") {
+            <img
+              class="w-7 scale-140"
+              src="assets/images/app/icons/match-icon.svg"
+              alt=""
+            />
+          } @else {
+            <img
+              class="w-7 scale-140"
+              src="assets/images/app/icons/match-black-icon.svg"
+              alt=""
+            />
+          }
         </button>
         <button
           (click)="display_component = 'chat-section'"
@@ -161,11 +199,19 @@
             'bg-primary-main': display_component === 'chat-section',
           }"
         >
-          <img
-            class="w-7 scale-140"
-            src="assets/images/app/icons/messages-icon.svg"
-            alt=""
-          />
+          @if (display_component === "chat-section") {
+            <img
+              class="w-7 scale-140"
+              src="assets/images/app/icons/messages-white-icon.svg"
+              alt=""
+            />
+          } @else {
+            <img
+              class="w-7 scale-140"
+              src="assets/images/app/icons/messages-icon.svg"
+              alt=""
+            />
+          }
         </button>
       </div>
       <div class="flex">

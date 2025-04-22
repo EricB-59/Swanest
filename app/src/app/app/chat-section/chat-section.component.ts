@@ -70,4 +70,8 @@ export class ChatSectionComponent implements OnInit {
     this.userImg = USER_IMG || '';
     this.chatActive = true;
   }
+
+  closeChat() {
+    this.chatActive = false;
+  }
 }

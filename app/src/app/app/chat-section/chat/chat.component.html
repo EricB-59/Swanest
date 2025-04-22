@@ -10,6 +10,9 @@
         <h2 class="text-lg">{{ userName }}</h2>
       </div>
     </div>
+    <button (click)="closeChat()" class="lg:hidden">
+      <img src="assets/images/app/icons/arrows-icon.svg" alt="" />
+    </button>
   </header>
   <div
     id="scroll-container"
@@ -24,7 +27,7 @@
     }
   </div>
   <div class="z-10 flex items-center justify-center gap-10 bg-white pb-10">
-    <div class="h-min w-10/12">
+    <div class="h-min w-full lg:w-10/12">
       <input
         id="content_message"
         type="text"
