@@ -1,43 +1,22 @@
-<section class="flex h-full w-full flex-row gap-10">
+<section class="flex h-full w-full flex-row gap-10 p-2">
   <article
-    class="scrollbar-hide flex h-full w-full flex-col gap-5 overflow-auto scroll-smooth rounded-[50px] bg-white p-4 lg:min-w-min lg:p-8"
+    class="scrollbar-hide flex h-full w-full flex-col gap-5 overflow-auto scroll-smooth rounded-[50px] border-1 border-[#DFDFDF] bg-white p-4 lg:min-w-min lg:p-8"
   >
-    <h1 class="font-family-regular ml-3 py-3 text-4xl lg:p-0">Mensajes</h1>
+    <h1 class="font-family-regular ml-3 py-3 text-5xl lg:p-0">Mensajes</h1>
     <article class="flex h-13 w-full justify-between rounded-3xl bg-slate-100">
       <input
         type="text"
         placeholder="Buscar contacto"
-        class="font-family-regular text h-full w-10/12 p-5 text-lg outline-0 lg:w-full"
+        class="font-family-regular text h-full w-10/12 p-5 text-xl outline-0 lg:w-full"
       />
       <button class="cursor-pointer pr-5">
         <img src="assets/icons/search-icon.svg" alt="" class="" />
       </button>
     </article>
-    <div class="flex justify-between px-2">
-      <button
-        class="font-family-regular text-text-secondary cursor-pointer text-lg"
-      >
-        Todos
-      </button>
-      <button
-        class="font-family-regular text-text-secondary cursor-pointer text-lg"
-      >
-        Recientes
-      </button>
-      <button
-        class="font-family-regular text-text-secondary flex cursor-pointer items-center gap-2 text-lg"
-      >
-        Pendientes
-        <span
-          class="font-family-regular bg-text-secondary grid h-6 w-6 place-content-center rounded-full p-1 text-sm text-white"
-        >
-          3
-        </span>
-      </button>
-    </div>
+
     <!-- FIJADOS -->
     <div class="flex flex-col gap-5 p-2">
-      <h2 class="font-family-regular text-text-secondary">FIJADOS</h2>
+      <h2 class="font-family-regular text-text-secondary text-xl">FIJADOS</h2>
       @for (chats of this.fixeds; track $index) {
         <button
           [id]="chats.user_id"
@@ -79,7 +58,7 @@
 
     <!-- CHATS -->
     <div class="flex flex-col gap-5 p-2">
-      <h2 class="font-family-regular text-text-secondary">CHATS</h2>
+      <h2 class="font-family-regular text-text-secondary text-xl">CHATS</h2>
       @for (chats of this.chats; track $index) {
         <button
           id="{{ chats.user_id }}"
@@ -119,7 +98,7 @@
   </article>
   @if (chatActive) {
     <article
-      class="absolute h-10/12 w-10/12 overflow-hidden rounded-[50px] lg:static lg:h-full lg:w-full"
+      class="absolute h-10/12 w-fit overflow-hidden rounded-[50px] pr-5 lg:static lg:h-full lg:w-full"
     >
       <app-chat
         id="app-chat"
