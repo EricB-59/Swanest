@@ -217,34 +217,4 @@ final class ProfileController extends AbstractController
 
         return new JsonResponse($updateUser->toArray(), Response::HTTP_OK);
     }
-
-    #[Route(path: '/provinces', name: 'get_provinces', methods: ['GET'],)]
-    public function getProvinces(EntityManagerInterface $entityManager)
-    {
-
-        $provinces = $entityManager->getRepository(Province::class)->findAll();
-
-        $out = [];
-
-        foreach ($provinces as $province) {
-            array_push($out, ["id" => $province->getId(), "name" => $province->getName()]);
-        }
-
-        return new JsonResponse(json_encode($out));
-    }
-
-    #[Route(path: '/labels', name: 'get_labels', methods: ['GET'],)]
-    public function getLabels(EntityManagerInterface $entityManager)
-    {
-
-        $labels = $entityManager->getRepository(Label::class)->findAll();
-
-        $out = [];
-
-        foreach ($labels as $label) {
-            array_push($out, ["id" => $label->getId(), "name" => $label->getName()]);
-        }
-
-        return new JsonResponse(json_encode($out));
-    }
 }
