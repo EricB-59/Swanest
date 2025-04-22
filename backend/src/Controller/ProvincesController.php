@@ -25,6 +25,6 @@ final class ProvincesController extends AbstractController
             array_push($out, ["id" => $province->getId(), "name" => $province->getName()]);
         }
 
-        return new JsonResponse(json_encode($out));
+        return new JsonResponse($out);
     }
 }

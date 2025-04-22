@@ -200,10 +200,8 @@ export class ProfileInfoComponent implements OnInit {
   selectedInterests: string[] = [];
 
   ngOnInit(): void {
-    console.log('Cargando provincias desde:', this.profileService['apiUrl'] + '/provinces');
     this.profileService.getProvinces().subscribe({
       next: (result) => {
-        console.log('Respuesta de API de provincias:', result);
         if (result && Array.isArray(result)) {
           this.provinces = result;
           this.provinceNames = this.provinces.map(p => p.name);
@@ -212,10 +210,8 @@ export class ProfileInfoComponent implements OnInit {
       },
     });
   
-    console.log('Cargando etiquetas desde:', this.profileService['apiUrl'] + '/labels');
     this.profileService.getLabels().subscribe({
       next: (result) => {
-        console.log('Respuesta de API de etiquetas:', result);
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
         console.log('Etiquetas procesadas:', this.labels);
       },
