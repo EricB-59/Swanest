@@ -26,7 +26,6 @@ export function customEmailValidator(): (
   };
 }
 
-
 @Component({
   selector: 'app-register-user',
   imports: [ReactiveFormsModule, ErrorFieldsDirective],
@@ -53,6 +52,7 @@ export class RegisterUserComponent {
     });
 
     this.userService.create(user).subscribe((result) => {
+      sessionStorage.setItem('user', JSON.stringify(result));
       this._matDialog.open(PersonalInfoComponent);
     });
   }

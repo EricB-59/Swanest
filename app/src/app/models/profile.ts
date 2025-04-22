@@ -1,57 +1,33 @@
-export interface Profile {
-  id: number;
-  first_name: string;
-  last_name: string;
-  bio: string;
-  birthdate: string;
-  created_at: string;
-  updated_at: string;
-  gender: Gender;
-  province: Province;
-  labels: UserLabels;
-  user_id: number;
+export class UserLabels {
+  constructor(
+    public first_label: string,
+    public second_label: string,
+    public third_label: string,
+    public fourth_label: string,
+    public fifth_label: string,
+  ) {}
 }
 
-export interface Gender {
-  id: number;
-  name: string;
+export class Images {
+  constructor(
+    public image_1: string,
+    public image_2: string,
+    public image_3: string,
+    public image_4: string,
+    public image_5: string,
+  ) {}
 }
 
-export interface Province {
-  id: number;
-  name: string;
-}
-
-export interface UserLabels {
-  id: number;
-  first_label: FirstLabel;
-  second_label: SecondLabel;
-  third_label: ThirdLabel;
-  fourth_label: FourthLabel;
-  fifth_label: FifthLabel;
-}
-
-export interface FirstLabel {
-  id: number;
-  name: string;
-}
-
-export interface SecondLabel {
-  id: number;
-  name: string;
-}
-
-export interface ThirdLabel {
-  id: number;
-  name: string;
-}
-
-export interface FourthLabel {
-  id: number;
-  name: string;
-}
-
-export interface FifthLabel {
-  id: number;
-  name: string;
+export class Profile {
+  constructor(
+    public first_name: string,
+    public last_name: string,
+    public bio: string,
+    public birthdate: string,
+    public gender: number,
+    public province: string,
+    public labels: UserLabels,
+    public user_id: number,
+    public images: Images,
+  ) {}
 }

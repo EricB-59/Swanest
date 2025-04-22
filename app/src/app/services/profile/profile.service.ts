@@ -8,10 +8,14 @@ import { Profile } from '../../models/profile';
 })
 export class ProfileService {
   private apiUrl = 'http://localhost:8000/profile';
+  private provinceUrl = 'http://localhost:8000/provinces';
+  private labelsUrl = 'http://localhost:8000/labels';
 
   constructor(private connHttp: HttpClient) {}
 
   create(profile: Profile): Observable<Profile> {
+    console.log('gola');
+    localStorage.clear();
     return this.connHttp.post<Profile>(this.apiUrl, profile);
   }
 
@@ -27,10 +31,10 @@ export class ProfileService {
   }
 
   getProvinces(): Observable<object> {
-    return this.connHttp.get(this.apiUrl + '/provinces');
+    return this.connHttp.get(this.provinceUrl);
   }
 
   getLabels(): Observable<object> {
-    return this.connHttp.get(this.apiUrl + '/labels');
+    return this.connHttp.get(this.labelsUrl);
   }
 }

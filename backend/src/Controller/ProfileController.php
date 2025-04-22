@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Gender;
 use App\Entity\Images;
 use App\Entity\Label;
+use App\Entity\UserLabel;
 use App\Entity\Profile;
 use App\Entity\User;
 use App\Entity\Province;
@@ -13,7 +14,6 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
-use Proxies\__CG__\App\Entity\UserLabel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -230,7 +230,7 @@ final class ProfileController extends AbstractController
             array_push($out, ["id" => $province->getId(), "name" => $province->getName()]);
         }
 
-        return new JsonResponse($out);
+        return new JsonResponse(json_encode($out));
     }
 
     #[Route(path: '/labels', name: 'get_labels', methods: ['GET'],)]
@@ -245,6 +245,6 @@ final class ProfileController extends AbstractController
             array_push($out, ["id" => $label->getId(), "name" => $label->getName()]);
         }
 
-        return new JsonResponse($out);
+        return new JsonResponse(json_encode($out));
     }
 }
