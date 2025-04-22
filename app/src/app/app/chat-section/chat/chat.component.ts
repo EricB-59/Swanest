@@ -12,7 +12,9 @@ import { switchMap, filter } from 'rxjs/operators';
   templateUrl: './chat.component.html',
   styles: ``,
 })
-export class ChatComponent implements OnChanges, OnInit, OnDestroy {
+export class ChatComponent implements OnInit, OnDestroy {
+  @Input() closeChat: () => void = () => {};
+
   @Input() userName: string = '';
   @Input() userImg: string = '';
   @Input() userId: number = 0;
@@ -25,7 +27,7 @@ export class ChatComponent implements OnChanges, OnInit, OnDestroy {
   constructor(private chatService: ChatService) {}
 
   ngOnInit(): void {
-    this.intervalSub = interval(1000)
+    this.intervalSub = interval(2000)
       .pipe(
         filter(() => !!sessionStorage.getItem('user')),
         switchMap(() => {
@@ -48,20 +50,21 @@ export class ChatComponent implements OnChanges, OnInit, OnDestroy {
       });
   }
 
-  ngOnChanges(): void {
-    const userString = sessionStorage.getItem('user');
+  // ngOnChanges(): void {
+  //   console.log('on changes');
+  //   const userString = sessionStorage.getItem('user');
 
-    if (userString) {
-      const userObj = JSON.parse(userString);
-      this.USER_ID = userObj.id;
-    }
+  //   if (userString) {
+  //     const userObj = JSON.parse(userString);
+  //     this.USER_ID = userObj.id;
+  //   }
 
-    this.chatService.getMessagesByChatId(this.USER_ID, this.userId).subscribe({
-      next: (result) => {
-        this.messages = result;
-      },
-    });
-  }
+  //   this.chatService.getMessagesByChatId(this.USER_ID, this.userId).subscribe({
+  //     next: (result) => {
+  //       this.messages = result;
+  //     },
+  //   });
+  // }
 
   ngOnDestroy(): void {
     if (this.intervalSub) {
