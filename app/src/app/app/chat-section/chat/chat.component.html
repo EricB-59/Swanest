@@ -15,8 +15,10 @@
     </button>
   </header>
   <div
+    #scrollContainer
     id="scroll-container"
     class="flex h-300 w-full flex-col overflow-auto bg-white"
+    (scroll)="onScroll()"
   >
     @for (message of this.messages; track $index) {
       <app-message

@@ -1,4 +1,12 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { ChatService } from '../../../services/chat/chat.service';
 import { MessageComponent } from './message/message.component';
 import { Message } from '../../../models/message';
@@ -13,6 +21,10 @@ import { switchMap, filter } from 'rxjs/operators';
   styles: ``,
 })
 export class ChatComponent implements OnInit, OnDestroy {
+  @ViewChild('scrollContainer') private scrollContainer: ElementRef | null =
+    null;
+  private shouldScrollToBottom = true;
+
   @Input() closeChat: () => void = () => {};
 
   @Input() userName: string = '';
@@ -65,6 +77,41 @@ export class ChatComponent implements OnInit, OnDestroy {
   //     },
   //   });
   // }
+
+  ngAfterViewChecked() {
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+    }
+  }
+
+  // Función para desplazar hacia abajo
+  scrollToBottom(): void {
+    try {
+      if (this.scrollContainer) {
+        this.scrollContainer.nativeElement.scrollTop =
+          this.scrollContainer.nativeElement.scrollHeight;
+      } else {
+        console.log('scroll null');
+      }
+    } catch (err) {}
+  }
+
+  // Llamar a esta función cuando se añaden nuevos mensajes
+  onNewMessage() {
+    this.shouldScrollToBottom = true;
+  }
+
+  // Si el usuario hace scroll manual, deja de hacer scroll automático
+  onScroll() {
+    if (this.scrollContainer) {
+      const element = this.scrollContainer.nativeElement;
+      const atBottom =
+        element.scrollHeight - element.scrollTop - element.clientHeight < 30;
+      this.shouldScrollToBottom = atBottom;
+    } else {
+      console.log('scroll null');
+    }
+  }
 
   ngOnDestroy(): void {
     if (this.intervalSub) {
