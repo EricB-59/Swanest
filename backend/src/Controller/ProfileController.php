@@ -9,7 +9,6 @@ use App\Entity\UserLabel;
 use App\Entity\Profile;
 use App\Entity\User;
 use App\Entity\Province;
-use Composer\Pcre\Regex;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;

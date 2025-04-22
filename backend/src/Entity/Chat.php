@@ -30,6 +30,9 @@ class Chat
     #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'chat', orphanRemoval: true)]
     private Collection $messages;
 
+    #[ORM\Column]
+    private ?bool $fixed = null;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
@@ -133,5 +136,17 @@ class Chat
         }
 
         return $chatData;
+    }
+
+    public function isFixed(): ?bool
+    {
+        return $this->fixed;
+    }
+
+    public function setFixed(bool $fixed): static
+    {
+        $this->fixed = $fixed;
+
+        return $this;
     }
 }

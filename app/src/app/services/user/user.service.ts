@@ -2,25 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
+import { API_URL } from '../../../config/const';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8000/user';
-
+  private PREFIX = 'user';
   constructor(private connHttp: HttpClient) {}
 
   delete(id: number): Observable<boolean> {
-    let url = this.apiUrl + `/${id}`;
-    return this.connHttp.delete<boolean>(url, {
-      headers: new HttpHeaders({ 'Content Type': 'application/json' }),
+    return this.connHttp.delete<boolean>(API_URL + this.PREFIX + '/' + id, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
   find(id: number): Observable<User> {
-    let url = `${this.apiUrl}/${id}`;
-    return this.connHttp.get<User>(url, {
+    return this.connHttp.get<User>(API_URL + this.PREFIX + '/' + id, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
@@ -28,7 +26,7 @@ export class UserService {
   }
 
   create(user: User): Observable<object> {
-    return this.connHttp.post(this.apiUrl, user, {
+    return this.connHttp.post(API_URL + this.PREFIX, user, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
       }),
@@ -37,7 +35,6 @@ export class UserService {
 
   login(identifier: string, password: string): Observable<User> {
     const data = { identifier, password };
-    let url = `${this.apiUrl}/login`;
-    return this.connHttp.post<User>(url, data);
+    return this.connHttp.post<User>(API_URL + this.PREFIX + '/login', data);
   }
 }

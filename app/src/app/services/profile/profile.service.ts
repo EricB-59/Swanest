@@ -2,39 +2,39 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Profile } from '../../models/profile';
+import { API_URL } from '../../../config/const';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private apiUrl = 'http://localhost:8000/profile';
-  private provinceUrl = 'http://localhost:8000/provinces';
-  private labelsUrl = 'http://localhost:8000/labels';
+  private PREFIX = 'profile';
+  private PREFIX_PROVINCES = 'provinces';
+  private PREFIX_LABELS = 'labels';
 
   constructor(private connHttp: HttpClient) {}
 
   create(profile: Profile): Observable<Profile> {
-    console.log('gola');
     localStorage.clear();
-    return this.connHttp.post<Profile>(this.apiUrl, profile);
+    return this.connHttp.post<Profile>(API_URL + this.PREFIX, profile);
   }
 
   update(profile: Profile): Observable<Profile> {
     return this.connHttp.put<Profile>(
-      this.apiUrl + `${profile.user_id}`,
+      API_URL + this.PREFIX + '/' + profile.user_id,
       profile,
     );
   }
 
   getProfile(id: number): Observable<Profile> {
-    return this.connHttp.get<Profile>(this.apiUrl + `/${id}`);
+    return this.connHttp.get<Profile>(API_URL + this.PREFIX + '/' + id);
   }
 
   getProvinces(): Observable<object> {
-    return this.connHttp.get(this.provinceUrl);
+    return this.connHttp.get(API_URL + this.PREFIX_PROVINCES);
   }
 
   getLabels(): Observable<object> {
-    return this.connHttp.get(this.labelsUrl);
+    return this.connHttp.get(API_URL + this.PREFIX_LABELS);
   }
 }

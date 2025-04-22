@@ -1,33 +1,31 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-match-section',
   imports: [],
-  template: `
-    <section>
-      <div class="cards relative w-60">
-        <article class="absolute top-0 cursor-grab">
-          <img src="assets/images/test-match.png" alt="error" />
-          <h2 class="absolute bottom-10 text-white">
-            Guillem<span class="text-white">21</span>
-          </h2>
-        </article>
-        <article class="absolute top-0 cursor-grab">
-          <img src="assets/images/test-match.png" alt="error" />
-          <h2 class="absolute bottom-10 text-white">
-            Joel<span class="text-white">21</span>
-          </h2>
-        </article>
-      </div>
-      <div class="buttons">
-        <button class="like"></button>
-        <button class="dislike"></button>
-      </div>
-    </section>
-  `,
+  templateUrl: './match-section.component.html',
   styleUrl: './match-section.component.css',
 })
 export class MatchSectionComponent implements AfterViewInit {
+  // matchService: MatchService = inject(MatchService);
+  // profiles!: Profile[]
+  // user = sessionStorage.getItem('user')
+
+  // ngOnInit(): void {
+  //   if (this.user) {
+  //     const user_id = JSON.parse(this.user).id;
+  //     this.matchService.getProfiles(user_id).subscribe({
+  //       next: (data) => { 
+  //         this.profiles = data;
+  //         console.info(this.profiles)
+  //       },
+  //       error: (error) => {
+  //         console.error(error)
+  //       }
+  //     })
+  //   }
+  // }
+
   ngAfterViewInit(): void {
     // As of this grades we consider the user maked a decision
     const DECISION_THRESHOLD = 75;
@@ -52,7 +50,7 @@ export class MatchSectionComponent implements AfterViewInit {
 
       const target = event.target as HTMLElement;
       // Get the first article
-      const actualCard = target.closest('article');
+      const actualCard = target.closest('.card') as HTMLElement;
 
       // Get initial position of mouse or finger
       const startX = event.pageX ?? event.touches[0].pageX;
@@ -80,7 +78,6 @@ export class MatchSectionComponent implements AfterViewInit {
 
         // no distance
         if (pullDistanceX === 0) return;
-        console.log(pullDistanceX);
 
         // change the flag
         isAnimating = true;
@@ -103,8 +100,6 @@ export class MatchSectionComponent implements AfterViewInit {
 
         // user make a choise?
         const decisionMade = Math.abs(pullDistanceX) >= DECISION_THRESHOLD;
-        console.log(pullDistanceX);
-        console.log(decisionMade);
 
         // In this point the user had make a decision
         if (decisionMade) {

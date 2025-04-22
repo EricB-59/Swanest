@@ -36,14 +36,12 @@ export class UpdateUserComponent {
     this.profileService.getLabels().subscribe({
       next: (result) => {
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
-        console.log(result);
       },
     });
 
     this.profileService.getProfile(1).subscribe({
       next: (result) => {
         this.profile = result;
-        console.log(this.profile.first_name);
       },
     });
   }

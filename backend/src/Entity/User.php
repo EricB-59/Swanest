@@ -72,6 +72,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: BlockReport::class, mappedBy: 'reporter', orphanRemoval: true)]
     private Collection $blockReports;
 
+    /**
+     * @var Collection<int, Dislike>
+     */
+    #[ORM\OneToMany(targetEntity: Dislike::class, mappedBy: 'disliker', orphanRemoval: true)]
+    private Collection $dislikeGiven;
+
+    /**
+     * @var Collection<int, Dislike>
+     */
+    #[ORM\OneToMany(targetEntity: Dislike::class, mappedBy: 'disliked', orphanRemoval: true)]
+    private Collection $dislikesReceived;
+
     public function __construct()
     {
         $this->likes = new ArrayCollection();
@@ -79,6 +91,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->chats = new ArrayCollection();
         $this->messages = new ArrayCollection();
         $this->blockReports = new ArrayCollection();
+        $this->dislikeGiven = new ArrayCollection();
+        $this->dislikesReceived = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -435,5 +449,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $userData;
+    }
+
+    /**
+     * @return Collection<int, Dislike>
+     */
+    public function getDislikeGiven(): Collection
+    {
+        return $this->dislikeGiven;
+    }
+
+    public function addDislikeGiven(Dislike $dislikeGiven): static
+    {
+        if (!$this->dislikeGiven->contains($dislikeGiven)) {
+            $this->dislikeGiven->add($dislikeGiven);
+            $dislikeGiven->setDisliker($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDislikeGiven(Dislike $dislikeGiven): static
+    {
+        if ($this->dislikeGiven->removeElement($dislikeGiven)) {
+            // set the owning side to null (unless already changed)
+            if ($dislikeGiven->getDisliker() === $this) {
+                $dislikeGiven->setDisliker(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Dislike>
+     */
+    public function getDislikesReceived(): Collection
+    {
+        return $this->dislikesReceived;
+    }
+
+    public function addDislikesReceived(Dislike $dislikesReceived): static
+    {
+        if (!$this->dislikesReceived->contains($dislikesReceived)) {
+            $this->dislikesReceived->add($dislikesReceived);
+            $dislikesReceived->setDisliked($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDislikesReceived(Dislike $dislikesReceived): static
+    {
+        if ($this->dislikesReceived->removeElement($dislikesReceived)) {
+            // set the owning side to null (unless already changed)
+            if ($dislikesReceived->getDisliked() === $this) {
+                $dislikesReceived->setDisliked(null);
+            }
+        }
+
+        return $this;
     }
 }
