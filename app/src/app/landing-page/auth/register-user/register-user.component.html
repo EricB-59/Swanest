@@ -18,10 +18,10 @@
           class="h-10 w-full border-b-2 border-black outline-none"
           type="text"
           id="username"
-          minlength="3"
+          [minLength]="3"
           formControlName="username"
-          pattern="^[a-zA-Z0-9]+$"
-          required
+          [pattern]="'^[a-zA-Z0-9]+$'"
+          [required]="true"
           appErrorFields
         />
       </div>
@@ -35,7 +35,7 @@
           type="email"
           formControlName="email"
           appErrorFields
-          required
+          [required]="true"
         />
       </div>
       <div class="flex flex-col">
@@ -47,8 +47,8 @@
           class="h-10 w-full border-b-2 border-black outline-none"
           type="password"
           formControlName="password"
-          pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
-          required
+          [pattern]="'(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}'"
+          [required]="true"
           appErrorFields
         />
       </div>

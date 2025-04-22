@@ -30,8 +30,9 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
               type="text"
               id="identifier"
               name="identifier"
-              minlength="3"
+              [minLength]="3"
               formControlName="identifier"
+              [required]="true"
               appErrorFields
             />
           </label>
@@ -46,7 +47,8 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
               id="password"
               name="password"
               formControlName="password"
-              pattern="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              [pattern]="'(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}'"
+              [required]="true"
               appErrorFields
             />
           </label>

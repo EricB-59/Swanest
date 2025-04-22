@@ -3,6 +3,7 @@ import { ProfileService } from '../../../services/profile/profile.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ImagesUploadComponent } from '../images-upload/images-upload.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
 
 interface Province {
   id: number;
@@ -16,7 +17,7 @@ interface Label {
 
 @Component({
   selector: 'app-profile-info',
-  imports: [],
+  imports: [ErrorFieldsDirective],
   template: `
     <div class="fixed inset-0 flex items-center justify-center bg-black/0">
       <main class="grid h-full w-full place-content-center">
@@ -77,6 +78,9 @@ interface Label {
                 name="bio"
                 id="bio"
                 class="font-basereg h-18 w-full border-b-2 border-black"
+                [minLength]="20"
+                [required]="true"
+                appErrorFields
               ></textarea>
             </label>
 
@@ -85,13 +89,17 @@ interface Label {
               <h2 class="font-basereg pt-6">Provincia</h2>
               <input
                 list="provinces"
+                id="province"
                 class="font-basereg h-8 w-full border-b-2 border-black"
+                [required]="true"
+                [validList]="provinceNames"
+                appErrorFields
               />
               <datalist id="provinces">
-                @for (province of this.provinces; track $index) {
+              @for (province of this.provinces; track $index) {
                   <option value="{{ province.name }}"></option>
-                }
-              </datalist>
+                } 
+               </datalist>
             </label>
 
             <!--Labels-->
@@ -187,23 +195,36 @@ export class ProfileInfoComponent implements OnInit {
   ) {}
 
   provinces: Province[] = [];
+  provinceNames: string[] = [];
   labels: Label[] = [];
   selectedInterests: string[] = [];
 
   ngOnInit(): void {
+    console.log('Cargando provincias desde:', this.profileService['apiUrl'] + '/provinces');
     this.profileService.getProvinces().subscribe({
       next: (result) => {
-        this.provinces =
-          typeof result === 'string' ? JSON.parse(result) : result;
+        console.log('Respuesta de API de provincias:', result);
+        if (result && Array.isArray(result)) {
+          this.provinces = result;
+          this.provinceNames = this.provinces.map(p => p.name);
+          console.log('Provincias procesadas:', this.provinceNames);
+        }
       },
     });
-
+  
+    console.log('Cargando etiquetas desde:', this.profileService['apiUrl'] + '/labels');
     this.profileService.getLabels().subscribe({
       next: (result) => {
+        console.log('Respuesta de API de etiquetas:', result);
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
+        console.log('Etiquetas procesadas:', this.labels);
       },
+      error: (err) => {
+        console.error('Error al cargar etiquetas:', err);
+      }
     });
   }
+
   toggleInterest(interest: string, event: Event) {
     const checkbox = event.target as HTMLInputElement;
 
@@ -227,6 +248,19 @@ export class ProfileInfoComponent implements OnInit {
     const provinceInput = (
       document.querySelector('input[list="provinces"]') as HTMLInputElement
     )?.value;
+  
+    const isValidProvince = this.provinceNames.some(
+      p => p.toLowerCase() === provinceInput.toLowerCase()
+    );
+  
+    if (!isValidProvince) {
+      console.log('Provincia no válida:', provinceInput);
+      console.log('Provincias válidas:', this.provinceNames);
+      const provinceElement = document.querySelector('#province') as HTMLInputElement;
+      provinceElement.focus();
+      provinceElement.blur(); // Activar validación
+      return;
+    }
 
     const profileData = {
       bio,
