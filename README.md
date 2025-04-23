@@ -132,11 +132,3 @@ backend/
 3. Commit your changes (`git commit -am 'Add new feature'`)
 4. Push to the branch (`git push origin feature/new-feature`)
 5. Create a new Pull Request
-
-## License
-
-[Include license information]
-
-## Contact
-
-[Include contact information]
