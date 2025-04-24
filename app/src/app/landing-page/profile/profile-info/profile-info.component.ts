@@ -103,7 +103,10 @@ interface Label {
             </label>
 
             <!--Labels-->
-            <label for="" class="flex flex-row justify-between">
+            <label for="" class="flex flex-row justify-between"
+            appErrorFields
+            [exactSelections]="5"
+            [currentSelections]="selectedInterests">
               <h2 class="font-basereg pt-6">Intereses</h2>
               <h2 id="counter" class="font-basereg pt-6 pr-6">
                 {{ selectedInterests.length }}/5
@@ -235,6 +238,11 @@ export class ProfileInfoComponent implements OnInit {
         (i) => i !== interest,
       );
     }
+    const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
+    if (interestsLabel) {
+      const event = new Event('change', { bubbles: true });
+      interestsLabel.dispatchEvent(event);
+    }
   }
 
   submit() {
@@ -257,7 +265,15 @@ export class ProfileInfoComponent implements OnInit {
       provinceElement.blur(); // Activar validación
       return;
     }
-
+    if (this.selectedInterests.length !== 5) {
+      // Mostrar error
+      const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
+      if (interestsLabel) {
+        const event = new Event('change', { bubbles: true });
+        interestsLabel.dispatchEvent(event);
+      }
+      return;
+    }
     const profileData = {
       bio,
       province: provinceInput,

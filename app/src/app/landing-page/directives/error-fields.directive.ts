@@ -26,6 +26,9 @@ export class ErrorFieldsDirective implements OnInit {
   @Input() pattern: string | null = null;
   @Input() customError: string | null = null;
   @Input() validList: string[] | null = null;
+  @Input() exactSelections: number | null = null;
+  @Input() currentSelections: any[] | null = null;
+
 
   private errorMessages: { [key: string]: string } = {
     required: 'Este campo es obligatorio',
@@ -36,7 +39,9 @@ export class ErrorFieldsDirective implements OnInit {
     pattern: 'Formato No valido',
     min: 'El valor es menor al mínimo permitido',
     max: 'El valor es mayor al máximo permitido',
-    validList: 'Seleccione una opción válida de la lista'
+    validList: 'Seleccione una opción válida de la lista',
+    exactSelections: 'Debe seleccionar exactamente 5 opciones',
+
   };
 
   constructor(
@@ -152,6 +157,9 @@ export class ErrorFieldsDirective implements OnInit {
           errorMessage = this.errorMessages['validList'];
         }
       }
+    } else if (this.exactSelections !== null && this.currentSelections &&  this.currentSelections.length !== this.exactSelections) {
+        isValid = false;
+        errorMessage = this.errorMessages['exactSelections'];
     }
     // Pattern validation
     else if (this.pattern && value && !new RegExp(this.pattern).test(value)) {
@@ -294,7 +302,20 @@ export class ErrorFieldsDirective implements OnInit {
       }
     }
   }
-
+  private validateSelections(): void {
+    if (!this.currentSelections) return;
+    
+    let isValid = true;
+    let errorMessage = '';
+    
+    if (this.exactSelections !== null && this.currentSelections.length !== this.exactSelections) {
+      isValid = false;
+      errorMessage = `Debe seleccionar exactamente ${this.exactSelections} opciones`;
+    }
+    
+    this.isValid = isValid;
+    this.customErrorMessage = errorMessage;
+  }
   private getErrorMessage(): string {
     if (!this.control || !this.control.errors) return '';
     
