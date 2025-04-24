@@ -208,7 +208,6 @@ export class ProfileInfoComponent implements OnInit {
         if (result && Array.isArray(result)) {
           this.provinces = result;
           this.provinceNames = this.provinces.map(p => p.name);
-          console.log('Provincias procesadas:', this.provinceNames);
         }
       },
     });
@@ -216,7 +215,6 @@ export class ProfileInfoComponent implements OnInit {
     this.profileService.getLabels().subscribe({
       next: (result) => {
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
-        console.log('Etiquetas procesadas:', this.labels);
       },
       error: (err) => {
         console.error('Error al cargar etiquetas:', err);
@@ -240,8 +238,11 @@ export class ProfileInfoComponent implements OnInit {
     }
     const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
     if (interestsLabel) {
-      const event = new Event('change', { bubbles: true });
-      interestsLabel.dispatchEvent(event);
+      // Usamos setTimeout para asegurar que la actualización del array se complete primero
+      setTimeout(() => {
+        const event = new Event('change', { bubbles: true });
+        interestsLabel.dispatchEvent(event);
+      },0);
     }
   }
 
@@ -258,8 +259,7 @@ export class ProfileInfoComponent implements OnInit {
     );
   
     if (!isValidProvince) {
-      console.log('Provincia no válida:', provinceInput);
-      console.log('Provincias válidas:', this.provinceNames);
+ 
       const provinceElement = document.querySelector('#province') as HTMLInputElement;
       provinceElement.focus();
       provinceElement.blur(); // Activar validación

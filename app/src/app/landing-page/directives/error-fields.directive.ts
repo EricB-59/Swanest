@@ -82,7 +82,15 @@ export class ErrorFieldsDirective implements OnInit {
     // Insert the error message after the input element
     const parentElement = this.elRef.nativeElement.parentElement;
     if (parentElement) {
-      this.renderer.appendChild(parentElement, this.errorElement);
+      // Busca un elemento ul que siga al elemento actual
+      const nextElement = parentElement.querySelector('ul');
+      if (nextElement && this.exactSelections !== null) {
+        // Si es para validar selecciones, coloca el error antes de la lista
+        this.renderer.insertBefore(parentElement, this.errorElement, nextElement);
+      } else {
+        // Para otros casos, añádelo al final como antes
+        this.renderer.appendChild(parentElement, this.errorElement);
+      }
     }
 
     // If NgControl is being used, subscribe to status changes
@@ -116,13 +124,17 @@ export class ErrorFieldsDirective implements OnInit {
     }
     this.updateStyles();
   }
-  @HostListener('change', ['$event'])
-  onChange(event: Event): void {
-    if (!this.control) {
-    this.validateManually((event.target as HTMLInputElement).value);
+  @HostListener('change')
+  onChange(): void {
+    // Si tenemos exactSelections y currentSelections, validamos las selecciones
+    if (this.exactSelections !== null && this.currentSelections) {
+      this.validateSelections();
+    } else if (!this.control) {
+      // Validación manual para otros tipos de inputs
+      this.validateManually((this.elRef.nativeElement as HTMLInputElement).value);
+    }
+    this.updateStyles();
   }
-  this.updateStyles();
-}
 
   // Manual validation for when NgControl is not present
   private validateManually(value: string): void {
@@ -151,8 +163,6 @@ export class ErrorFieldsDirective implements OnInit {
         const elementId = this.elRef.nativeElement.id;
         if (elementId === 'province') {
           errorMessage = 'Seleccione una provincia válida';
-          console.log('Valor no válido:', value); 
-          console.log('Lista válida:', this.validList);
         } else {
           errorMessage = this.errorMessages['validList'];
         }
@@ -198,7 +208,51 @@ export class ErrorFieldsDirective implements OnInit {
     
     // Set the default border color to black
     this.renderer.setStyle(inputElement, 'border-color', 'black');
-
+   // Para validaciones de selecciones exactas (como los intereses)
+  if (this.exactSelections !== null && this.currentSelections) {
+    // Determinar si el usuario ha interactuado con el selector de intereses
+    // (esto podría ser cuando hay al menos una selección o cuando el formulario ha sido tocado)
+    const hasInteraction = this.currentSelections.length > 0;
+    const hasExactSelections = this.currentSelections.length === this.exactSelections;
+    
+    // Debug para verificar los valores
+    console.log('Current selections:', this.currentSelections.length, 'Required:', this.exactSelections, 'Valid:', hasExactSelections);
+    
+    if (hasExactSelections) {
+      // CASO VÁLIDO: Tiene exactamente el número de selecciones requeridas
+      if (this.errorElement) {
+        this.renderer.setStyle(this.errorElement, 'display', 'none');
+      }
+      // Importante: cambia el color del borde a verde
+      this.renderer.setStyle(inputElement, 'border-color', '#34C759');
+      this.updateLabelColor('valid');
+    } 
+    else if (hasInteraction) {
+      // CASO INVÁLIDO: Ya hay interacción pero no tiene el número exacto
+      if (this.errorElement) {
+        this.renderer.setStyle(this.errorElement, 'display', 'flex');
+        if (this.textElement) {
+          this.renderer.setValue(
+            this.textElement, 
+            `Debe seleccionar exactamente ${this.exactSelections} opciones`
+          );
+        }
+      }
+      // Importante: cambia el color del borde a rojo
+      this.renderer.setStyle(inputElement, 'border-color', '#FF3B30');
+      this.updateLabelColor('invalid');
+    } 
+    else {
+      // CASO INICIAL: Sin interacción aún
+      if (this.errorElement) {
+        this.renderer.setStyle(this.errorElement, 'display', 'none');
+      }
+      this.updateLabelColor('neutral');
+    }
+    
+    // Importante: return para que no continúe con el resto de la validación
+    return;
+  }
     // If using NgControl
     if (this.control && this.control.control) {
       const isInvalid = this.control.invalid && (this.control.dirty || this.control.touched);
@@ -269,52 +323,68 @@ export class ErrorFieldsDirective implements OnInit {
   }
 
   private updateLabelColor(state: 'valid' | 'invalid' | 'neutral'): void {
-    // Find the parent element (label or container)
-    const parentElement = this.elRef.nativeElement.parentElement;
-    if (!parentElement) return;
-  
-    // Find both spans and h2 within the parent
-    const spans = parentElement.querySelectorAll('span');
-    const headings = parentElement.querySelectorAll('h2');
+    // Encuentra el elemento actual o su contenedor
+    const currentElement = this.elRef.nativeElement;
     
-    // Color based on state
-    let color = 'black'; // Default color (neutral)
-    if (state === 'valid') {
-      color = '#34C759'; // green for valid
-    } else if (state === 'invalid') {
-      color = '#FF3B30'; // red for invalid
-    }
-  
-    // Apply color to spans (excluding the error message)
-    if (spans && spans.length > 0) {
-      for (let i = 0; i < spans.length; i++) {
-        const span = spans[i];
-        if (span !== this.errorElement && !span.textContent?.includes('*')) {
-          this.renderer.setStyle(span, 'color', color);
-        }
+    // Para evitar que afecte a otras etiquetas, verifica si currentElement es un label o input
+    const elementsToUpdate = [];
+    
+    if (currentElement.tagName === 'LABEL') {
+      // Si es una etiqueta, solo afecta a esta etiqueta
+      elementsToUpdate.push(currentElement);
+    } else {
+      // Si es un input, busca su etiqueta asociada
+      const parentLabel = currentElement.closest('label');
+      if (parentLabel) {
+        elementsToUpdate.push(parentLabel);
       }
     }
-  
-    // Apply color to h2 elements
-    if (headings && headings.length > 0) {
-      for (let i = 0; i < headings.length; i++) {
-        this.renderer.setStyle(headings[i], 'color', color);
+    
+    // Color basado en el estado
+    let color = 'black'; // Color por defecto (neutral)
+    if (state === 'valid') {
+      color = '#34C759'; // verde para válido
+    } else if (state === 'invalid') {
+      color = '#FF3B30'; // rojo para inválido
+    }
+    
+    // Aplica el color solo a los elementos específicos
+    for (const element of elementsToUpdate) {
+      // Encuentra y actualiza spans y h2 dentro del elemento
+      const spans = element.querySelectorAll('span:not(.error-message)');
+      const headings = element.querySelectorAll('h2');
+      
+      // Aplica color a los spans (excluyendo el mensaje de error)
+      if (spans && spans.length > 0) {
+        for (let i = 0; i < spans.length; i++) {
+          const span = spans[i];
+          if (span !== this.errorElement && !span.textContent?.includes('*')) {
+            this.renderer.setStyle(span, 'color', color);
+          }
+        }
+      }
+      
+      // Aplica color a los elementos h2
+      if (headings && headings.length > 0) {
+        for (let i = 0; i < headings.length; i++) {
+          this.renderer.setStyle(headings[i], 'color', color);
+        }
       }
     }
   }
   private validateSelections(): void {
     if (!this.currentSelections) return;
     
-    let isValid = true;
-    let errorMessage = '';
+    // Comprobación directa - simplifica la lógica
+    const hasExactSelections = this.currentSelections.length === this.exactSelections;
     
-    if (this.exactSelections !== null && this.currentSelections.length !== this.exactSelections) {
-      isValid = false;
-      errorMessage = `Debe seleccionar exactamente ${this.exactSelections} opciones`;
+    this.isValid = hasExactSelections;
+    
+    if (!hasExactSelections) {
+      this.customErrorMessage = `Debe seleccionar exactamente ${this.exactSelections} opciones`;
+    } else {
+      this.customErrorMessage = '';
     }
-    
-    this.isValid = isValid;
-    this.customErrorMessage = errorMessage;
   }
   private getErrorMessage(): string {
     if (!this.control || !this.control.errors) return '';

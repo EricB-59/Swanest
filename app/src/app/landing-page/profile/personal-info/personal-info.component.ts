@@ -83,6 +83,7 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
                 class="font-basereg h-8 w-full border-b-2 border-black"
                 [required]="true"
                 [minLength]="5"
+                [pattern]="'^[A-Za-z ]+$'"
                 [maxLength]="50"
                 appErrorFields
               />
