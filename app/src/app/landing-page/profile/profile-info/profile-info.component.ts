@@ -224,45 +224,34 @@ export class ProfileInfoComponent implements OnInit {
 
   toggleInterest(interest: string, event: Event) {
     const checkbox = event.target as HTMLInputElement;
-
+  
     if (checkbox.checked) {
       if (this.selectedInterests.length < 5) {
         this.selectedInterests.push(interest);
       } else {
         checkbox.checked = false;
+        return;
       }
     } else {
       this.selectedInterests = this.selectedInterests.filter(
         (i) => i !== interest,
       );
     }
-     const counterElement = document.getElementById('counter');
-  if (counterElement) {
-    counterElement.textContent = `${this.selectedInterests.length}/5`;
     
-    // Actualizar color según estado
-    if (this.selectedInterests.length === 5) {
-      counterElement.style.color = '#34C759'; // verde
-    } else if (this.selectedInterests.length > 0) {
-      counterElement.style.color = '#FF3B30'; // rojo
-    } else {
-      counterElement.style.color = 'black'; // negro
-    }
-  }
-
-  // Forzar la validación inmediatamente
-  const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
-  if (interestsLabel) {
-    // Dispara un CustomEvent con información de validez
-    const customEvent = new CustomEvent('selectionChanged', { 
-      bubbles: true,
-      detail: { 
-        count: this.selectedInterests.length,
-        isValid: this.selectedInterests.length === 5
+    // Actualizar SOLO el contador
+    const counterElement = document.getElementById('counter');
+    if (counterElement) {
+      counterElement.textContent = `${this.selectedInterests.length}/5`;
+      
+      // Actualizar color según estado
+      if (this.selectedInterests.length === 5) {
+        counterElement.style.color = '#34C759'; // verde
+      } else if (this.selectedInterests.length > 0) {
+        counterElement.style.color = '#FF3B30'; // rojo
+      } else {
+        counterElement.style.color = 'black'; // negro
       }
-    });
-    interestsLabel.dispatchEvent(customEvent);
-  }
+    }
   }
 
   submit() {

@@ -151,17 +151,17 @@ export class ErrorFieldsDirective implements OnInit, OnChanges {
     }
     this.updateStyles();
   }
-  @HostListener('selectionChanged', ['$event'])
-onSelectionChanged(event: CustomEvent): void {
-  if (this.exactSelections !== null && event.detail) {
-    const isValid = event.detail.count === this.exactSelections;
-    this.isValid = isValid;
-    this.customErrorMessage = isValid ? '' : 
-      `Debe seleccionar exactamente ${this.exactSelections} opciones`;
+//   @HostListener('selectionChanged', ['$event'])
+// onSelectionChanged(event: CustomEvent): void {
+//   if (this.exactSelections !== null && event.detail) {
+//     const isValid = event.detail.count === this.exactSelections;
+//     this.isValid = isValid;
+//     this.customErrorMessage = isValid ? '' : 
+//       `Debe seleccionar exactamente ${this.exactSelections} opciones`;
     
-    this.updateInterestStyles();
-  }
-}
+//     this.updateInterestStyles();
+//   }
+// }
 
   // Manual validation for when NgControl is not present
   private validateManually(value: string): void {
@@ -310,53 +310,7 @@ onSelectionChanged(event: CustomEvent): void {
 
   // Método específico para actualizar los estilos de intereses
   private updateInterestStyles(): void {
-    if (!this.currentSelections || this.exactSelections === null) return;
-    
-    // Comprobar si tenemos el número exacto de selecciones
-    const hasExactSelections = this.currentSelections.length === this.exactSelections;
-    const hasInteraction = this.currentSelections.length > 0;
-    
-    // Encontrar el elemento label que contiene el texto "Intereses"
-    const parentElement = this.elRef.nativeElement;
-    const h2Elements = parentElement.querySelectorAll('h2');
-    
-    // Aplicar estilos a los h2 según el estado
-    if (h2Elements && h2Elements.length > 0) {
-      for (let i = 0; i < h2Elements.length; i++) {
-        const h2 = h2Elements[i];
-        
-        if (hasExactSelections) {
-          // Estado válido - verde
-          this.renderer.setStyle(h2, 'color', '#34C759');
-        } else if (hasInteraction) {
-          // Estado inválido - rojo
-          this.renderer.setStyle(h2, 'color', '#FF3B30');
-        } else {
-          // Estado neutro - negro
-          this.renderer.setStyle(h2, 'color', 'black');
-        }
-      }
-    }
   
-    // Manejar el mensaje de error
-    if (this.errorElement) {
-      if (hasExactSelections) {
-        // Ocultar el error si es válido
-        this.renderer.setStyle(this.errorElement, 'display', 'none');
-      } else if (hasInteraction) {
-        // Mostrar el error si hay interacción pero no tiene exactamente las selecciones requeridas
-        this.renderer.setStyle(this.errorElement, 'display', 'flex');
-        if (this.textElement) {
-          this.renderer.setValue(
-            this.textElement, 
-            `Debe seleccionar exactamente ${this.exactSelections} opciones`
-          );
-        }
-      } else {
-        // Ocultar en estado neutro
-        this.renderer.setStyle(this.errorElement, 'display', 'none');
-      }
-    }
   }
 
   private updateLabelColor(state: 'valid' | 'invalid' | 'neutral'): void {
