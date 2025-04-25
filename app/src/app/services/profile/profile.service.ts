@@ -17,6 +17,7 @@ export class ProfileService {
 
   create(profile: Profile): Observable<Profile> {
     localStorage.clear();
+    console.log(profile);
     return this.connHttp.post<Profile>(API_URL + this.PREFIX, profile);
   }
 

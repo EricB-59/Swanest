@@ -33,13 +33,13 @@ export class Profile {
 }
 
 export interface Gender {
-  name: string
+  name: string;
 }
 
 export interface Province {
-  name: string
+  name: string;
 }
 
 export interface label {
-  name: string
+  name: string;
 }
