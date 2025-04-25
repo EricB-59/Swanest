@@ -150,6 +150,7 @@ export class LoginUserComponent {
       next: (v) => {
         if (!v.profile) {
           console.log('error');
+          return;
         }
         sessionStorage.setItem('user', JSON.stringify(v));
         this.router.navigate(['app']);
