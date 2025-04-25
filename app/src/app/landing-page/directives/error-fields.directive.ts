@@ -323,59 +323,42 @@ export class ErrorFieldsDirective implements OnInit {
   }
 
   private updateLabelColor(state: 'valid' | 'invalid' | 'neutral'): void {
-    // Encuentra el elemento actual o su contenedor
-    const currentElement = this.elRef.nativeElement;
+    // Find the parent element (label or container)
+    const parentElement = this.elRef.nativeElement.parentElement;
+    if (!parentElement) return;
+  
+    // Find both spans and h2 within the parent
+    const spans = parentElement.querySelectorAll('span');
+    const headings = parentElement.querySelectorAll('h2');
     
-    // Para evitar que afecte a otras etiquetas, verifica si currentElement es un label o input
-    const elementsToUpdate = [];
-    
-    if (currentElement.tagName === 'LABEL') {
-      // Si es una etiqueta, solo afecta a esta etiqueta
-      elementsToUpdate.push(currentElement);
-    } else {
-      // Si es un input, busca su etiqueta asociada
-      const parentLabel = currentElement.closest('label');
-      if (parentLabel) {
-        elementsToUpdate.push(parentLabel);
-      }
-    }
-    
-    // Color basado en el estado
-    let color = 'black'; // Color por defecto (neutral)
+    // Color based on state
+    let color = 'black'; // Default color (neutral)
     if (state === 'valid') {
-      color = '#34C759'; // verde para válido
+      color = '#34C759'; // green for valid
     } else if (state === 'invalid') {
-      color = '#FF3B30'; // rojo para inválido
+      color = '#FF3B30'; // red for invalid
     }
-    
-    // Aplica el color solo a los elementos específicos
-    for (const element of elementsToUpdate) {
-      // Encuentra y actualiza spans y h2 dentro del elemento
-      const spans = element.querySelectorAll('span:not(.error-message)');
-      const headings = element.querySelectorAll('h2');
-      
-      // Aplica color a los spans (excluyendo el mensaje de error)
-      if (spans && spans.length > 0) {
-        for (let i = 0; i < spans.length; i++) {
-          const span = spans[i];
-          if (span !== this.errorElement && !span.textContent?.includes('*')) {
-            this.renderer.setStyle(span, 'color', color);
-          }
+  
+    // Apply color to spans (excluding the error message)
+    if (spans && spans.length > 0) {
+      for (let i = 0; i < spans.length; i++) {
+        const span = spans[i];
+        if (span !== this.errorElement && !span.textContent?.includes('*')) {
+          this.renderer.setStyle(span, 'color', color);
         }
       }
-      
-      // Aplica color a los elementos h2
-      if (headings && headings.length > 0) {
-        for (let i = 0; i < headings.length; i++) {
-          this.renderer.setStyle(headings[i], 'color', color);
-        }
+    }
+  
+    // Apply color to h2 elements
+    if (headings && headings.length > 0) {
+      for (let i = 0; i < headings.length; i++) {
+        this.renderer.setStyle(headings[i], 'color', color);
       }
     }
   }
   private validateSelections(): void {
-    if (!this.currentSelections) return;
+    if (!this.currentSelections || this.exactSelections === null) return;
     
-    // Comprobación directa - simplifica la lógica
     const hasExactSelections = this.currentSelections.length === this.exactSelections;
     
     this.isValid = hasExactSelections;
@@ -385,6 +368,9 @@ export class ErrorFieldsDirective implements OnInit {
     } else {
       this.customErrorMessage = '';
     }
+    
+    // Forzar actualización de los estilos inmediatamente
+    setTimeout(() => this.updateStyles(), 0);
   }
   private getErrorMessage(): string {
     if (!this.control || !this.control.errors) return '';

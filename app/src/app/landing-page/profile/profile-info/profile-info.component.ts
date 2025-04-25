@@ -236,14 +236,14 @@ export class ProfileInfoComponent implements OnInit {
         (i) => i !== interest,
       );
     }
-    const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
-    if (interestsLabel) {
-      // Usamos setTimeout para asegurar que la actualización del array se complete primero
-      setTimeout(() => {
-        const event = new Event('change', { bubbles: true });
-        interestsLabel.dispatchEvent(event);
-      },0);
-    }
+    setTimeout(() => {
+      const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
+      if (interestsLabel) {
+        console.log('Disparando evento change en el label de intereses');
+        const changeEvent = new Event('change', { bubbles: true });
+        interestsLabel.dispatchEvent(changeEvent);
+      }
+    }, 0);
   }
 
   submit() {
