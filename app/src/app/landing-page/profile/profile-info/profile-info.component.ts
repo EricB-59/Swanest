@@ -236,14 +236,33 @@ export class ProfileInfoComponent implements OnInit {
         (i) => i !== interest,
       );
     }
-    setTimeout(() => {
-      const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
-      if (interestsLabel) {
-        console.log('Disparando evento change en el label de intereses');
-        const changeEvent = new Event('change', { bubbles: true });
-        interestsLabel.dispatchEvent(changeEvent);
+     const counterElement = document.getElementById('counter');
+  if (counterElement) {
+    counterElement.textContent = `${this.selectedInterests.length}/5`;
+    
+    // Actualizar color según estado
+    if (this.selectedInterests.length === 5) {
+      counterElement.style.color = '#34C759'; // verde
+    } else if (this.selectedInterests.length > 0) {
+      counterElement.style.color = '#FF3B30'; // rojo
+    } else {
+      counterElement.style.color = 'black'; // negro
+    }
+  }
+
+  // Forzar la validación inmediatamente
+  const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
+  if (interestsLabel) {
+    // Dispara un CustomEvent con información de validez
+    const customEvent = new CustomEvent('selectionChanged', { 
+      bubbles: true,
+      detail: { 
+        count: this.selectedInterests.length,
+        isValid: this.selectedInterests.length === 5
       }
-    }, 0);
+    });
+    interestsLabel.dispatchEvent(customEvent);
+  }
   }
 
   submit() {

@@ -6,6 +6,8 @@ import {
   OnInit,
   Optional,
   Renderer2,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
@@ -13,7 +15,7 @@ import { NgControl } from '@angular/forms';
   selector: '[appErrorFields]',
   standalone: true
 })
-export class ErrorFieldsDirective implements OnInit {
+export class ErrorFieldsDirective implements OnInit, OnChanges {
   private errorElement: HTMLElement | null = null;
   private iconElement: HTMLElement | null = null;
   private textElement: Text | null = null;
@@ -29,7 +31,6 @@ export class ErrorFieldsDirective implements OnInit {
   @Input() exactSelections: number | null = null;
   @Input() currentSelections: any[] | null = null;
 
-
   private errorMessages: { [key: string]: string } = {
     required: 'Este campo es obligatorio',
     email: 'Debe ingresar un correo electrónico válido',
@@ -41,7 +42,6 @@ export class ErrorFieldsDirective implements OnInit {
     max: 'El valor es mayor al máximo permitido',
     validList: 'Seleccione una opción válida de la lista',
     exactSelections: 'Debe seleccionar exactamente 5 opciones',
-
   };
 
   constructor(
@@ -51,6 +51,32 @@ export class ErrorFieldsDirective implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.createErrorElement();
+    
+    // If NgControl is being used, subscribe to status changes
+    if (this.control) {
+      this.control.statusChanges?.subscribe(() => {
+        this.updateStyles();
+      });
+    }
+
+    // Initial validation after components are loaded
+    setTimeout(() => {
+      this.updateStyles();
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    // Detectar cambios en currentSelections
+    if (changes['currentSelections'] && this.exactSelections !== null) {
+      const selectionCount = this.currentSelections?.length || 0;
+      this.isValid = selectionCount === this.exactSelections;
+      this.validateSelections();
+      this.updateInterestStyles();
+    }
+  }
+
+  private createErrorElement(): void {
     // Create the element to display errors
     this.errorElement = this.renderer.createElement('span');
     this.renderer.addClass(this.errorElement, 'error-message');
@@ -60,7 +86,7 @@ export class ErrorFieldsDirective implements OnInit {
     this.renderer.setStyle(this.errorElement, 'display', 'none');
     this.renderer.setStyle(this.errorElement, 'align-items', 'center');
     this.renderer.setStyle(this.errorElement, 'gap', '6px');
-
+    
     // Create the icon
     this.iconElement = this.renderer.createElement('img');
     this.renderer.setAttribute(
@@ -82,28 +108,17 @@ export class ErrorFieldsDirective implements OnInit {
     // Insert the error message after the input element
     const parentElement = this.elRef.nativeElement.parentElement;
     if (parentElement) {
-      // Busca un elemento ul que siga al elemento actual
-      const nextElement = parentElement.querySelector('ul');
-      if (nextElement && this.exactSelections !== null) {
-        // Si es para validar selecciones, coloca el error antes de la lista
-        this.renderer.insertBefore(parentElement, this.errorElement, nextElement);
+      if (this.exactSelections !== null) {
+        const checkboxList = parentElement.querySelector('ul');
+        if (checkboxList) {
+          this.renderer.insertBefore(parentElement, this.errorElement, checkboxList);
+        } else {
+          this.renderer.appendChild(parentElement, this.errorElement);
+        }
       } else {
-        // Para otros casos, añádelo al final como antes
         this.renderer.appendChild(parentElement, this.errorElement);
       }
     }
-
-    // If NgControl is being used, subscribe to status changes
-    if (this.control) {
-      this.control.statusChanges?.subscribe(() => {
-        this.updateStyles();
-      });
-    }
-
-    // Initial validation after components are loaded
-    setTimeout(() => {
-      this.updateStyles();
-    });
   }
 
   // Update styles when an input event occurs
@@ -124,6 +139,7 @@ export class ErrorFieldsDirective implements OnInit {
     }
     this.updateStyles();
   }
+  
   @HostListener('change')
   onChange(): void {
     // Si tenemos exactSelections y currentSelections, validamos las selecciones
@@ -135,6 +151,17 @@ export class ErrorFieldsDirective implements OnInit {
     }
     this.updateStyles();
   }
+  @HostListener('selectionChanged', ['$event'])
+onSelectionChanged(event: CustomEvent): void {
+  if (this.exactSelections !== null && event.detail) {
+    const isValid = event.detail.count === this.exactSelections;
+    this.isValid = isValid;
+    this.customErrorMessage = isValid ? '' : 
+      `Debe seleccionar exactamente ${this.exactSelections} opciones`;
+    
+    this.updateInterestStyles();
+  }
+}
 
   // Manual validation for when NgControl is not present
   private validateManually(value: string): void {
@@ -167,9 +194,6 @@ export class ErrorFieldsDirective implements OnInit {
           errorMessage = this.errorMessages['validList'];
         }
       }
-    } else if (this.exactSelections !== null && this.currentSelections &&  this.currentSelections.length !== this.exactSelections) {
-        isValid = false;
-        errorMessage = this.errorMessages['exactSelections'];
     }
     // Pattern validation
     else if (this.pattern && value && !new RegExp(this.pattern).test(value)) {
@@ -204,55 +228,17 @@ export class ErrorFieldsDirective implements OnInit {
   } 
 
   private updateStyles() {
+    // Caso especial para validaciones de intereses
+    if (this.exactSelections !== null && this.currentSelections) {
+      this.updateInterestStyles();
+      return; // Importante: salir de la función aquí
+    }
+    
     const inputElement = this.elRef.nativeElement;
     
     // Set the default border color to black
     this.renderer.setStyle(inputElement, 'border-color', 'black');
-   // Para validaciones de selecciones exactas (como los intereses)
-  if (this.exactSelections !== null && this.currentSelections) {
-    // Determinar si el usuario ha interactuado con el selector de intereses
-    // (esto podría ser cuando hay al menos una selección o cuando el formulario ha sido tocado)
-    const hasInteraction = this.currentSelections.length > 0;
-    const hasExactSelections = this.currentSelections.length === this.exactSelections;
     
-    // Debug para verificar los valores
-    console.log('Current selections:', this.currentSelections.length, 'Required:', this.exactSelections, 'Valid:', hasExactSelections);
-    
-    if (hasExactSelections) {
-      // CASO VÁLIDO: Tiene exactamente el número de selecciones requeridas
-      if (this.errorElement) {
-        this.renderer.setStyle(this.errorElement, 'display', 'none');
-      }
-      // Importante: cambia el color del borde a verde
-      this.renderer.setStyle(inputElement, 'border-color', '#34C759');
-      this.updateLabelColor('valid');
-    } 
-    else if (hasInteraction) {
-      // CASO INVÁLIDO: Ya hay interacción pero no tiene el número exacto
-      if (this.errorElement) {
-        this.renderer.setStyle(this.errorElement, 'display', 'flex');
-        if (this.textElement) {
-          this.renderer.setValue(
-            this.textElement, 
-            `Debe seleccionar exactamente ${this.exactSelections} opciones`
-          );
-        }
-      }
-      // Importante: cambia el color del borde a rojo
-      this.renderer.setStyle(inputElement, 'border-color', '#FF3B30');
-      this.updateLabelColor('invalid');
-    } 
-    else {
-      // CASO INICIAL: Sin interacción aún
-      if (this.errorElement) {
-        this.renderer.setStyle(this.errorElement, 'display', 'none');
-      }
-      this.updateLabelColor('neutral');
-    }
-    
-    // Importante: return para que no continúe con el resto de la validación
-    return;
-  }
     // If using NgControl
     if (this.control && this.control.control) {
       const isInvalid = this.control.invalid && (this.control.dirty || this.control.touched);
@@ -322,6 +308,57 @@ export class ErrorFieldsDirective implements OnInit {
     }
   }
 
+  // Método específico para actualizar los estilos de intereses
+  private updateInterestStyles(): void {
+    if (!this.currentSelections || this.exactSelections === null) return;
+    
+    // Comprobar si tenemos el número exacto de selecciones
+    const hasExactSelections = this.currentSelections.length === this.exactSelections;
+    const hasInteraction = this.currentSelections.length > 0;
+    
+    // Encontrar el elemento label que contiene el texto "Intereses"
+    const parentElement = this.elRef.nativeElement;
+    const h2Elements = parentElement.querySelectorAll('h2');
+    
+    // Aplicar estilos a los h2 según el estado
+    if (h2Elements && h2Elements.length > 0) {
+      for (let i = 0; i < h2Elements.length; i++) {
+        const h2 = h2Elements[i];
+        
+        if (hasExactSelections) {
+          // Estado válido - verde
+          this.renderer.setStyle(h2, 'color', '#34C759');
+        } else if (hasInteraction) {
+          // Estado inválido - rojo
+          this.renderer.setStyle(h2, 'color', '#FF3B30');
+        } else {
+          // Estado neutro - negro
+          this.renderer.setStyle(h2, 'color', 'black');
+        }
+      }
+    }
+  
+    // Manejar el mensaje de error
+    if (this.errorElement) {
+      if (hasExactSelections) {
+        // Ocultar el error si es válido
+        this.renderer.setStyle(this.errorElement, 'display', 'none');
+      } else if (hasInteraction) {
+        // Mostrar el error si hay interacción pero no tiene exactamente las selecciones requeridas
+        this.renderer.setStyle(this.errorElement, 'display', 'flex');
+        if (this.textElement) {
+          this.renderer.setValue(
+            this.textElement, 
+            `Debe seleccionar exactamente ${this.exactSelections} opciones`
+          );
+        }
+      } else {
+        // Ocultar en estado neutro
+        this.renderer.setStyle(this.errorElement, 'display', 'none');
+      }
+    }
+  }
+
   private updateLabelColor(state: 'valid' | 'invalid' | 'neutral'): void {
     // Find the parent element (label or container)
     const parentElement = this.elRef.nativeElement.parentElement;
@@ -356,6 +393,7 @@ export class ErrorFieldsDirective implements OnInit {
       }
     }
   }
+  
   private validateSelections(): void {
     if (!this.currentSelections || this.exactSelections === null) return;
     
@@ -369,9 +407,10 @@ export class ErrorFieldsDirective implements OnInit {
       this.customErrorMessage = '';
     }
     
-    // Forzar actualización de los estilos inmediatamente
-    setTimeout(() => this.updateStyles(), 0);
+    // Forzar actualización inmediata
+    setTimeout(() => this.updateInterestStyles(), 0);
   }
+  
   private getErrorMessage(): string {
     if (!this.control || !this.control.errors) return '';
     
