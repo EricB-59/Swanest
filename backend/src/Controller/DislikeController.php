@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Dislike;
+use App\Entity\Like;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,6 +27,14 @@ final class DislikeController extends AbstractController
         if (!$disliker || !$disliked){
             return new JsonResponse('user not found', Response::HTTP_NOT_FOUND);
         }
+
+        $existingLike = $entityManager->getRepository(Like::class)->findOneBy([
+            'liker' => $disliker,
+            'liked' => $disliked
+        ]);
+
+        if ($existingLike)
+            $entityManager->remove($existingLike);
 
         $existingDislike = $entityManager->getRepository(Dislike::class)->findOneBy([
             'disliker' => $disliker,

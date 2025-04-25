@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { UserService } from '../../../services/user/user.service';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
+import { MatDialog } from '@angular/material/dialog';
+import { ErrorModalComponent } from '../../../app/components/error-modal/error-modal.component';
 
 @Component({
   selector: 'app-login-user',
@@ -81,7 +83,7 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
             </div>
           </button>
         </div>
-        <button
+        <!-- <button
           class="mt-4 flex w-75 items-center justify-center gap-3 rounded-full bg-[#E8E8E8] p-3"
         >
           <div>
@@ -111,14 +113,17 @@ import { ErrorFieldsDirective } from '../../directives/error-fields.directive';
             </svg>
           </div>
           <span class="text-[1rem]">Iniciar sesión con google</span>
-        </button>
+        </button> -->
       </form>
     </section>
   `,
   styles: ``,
 })
 export class LoginUserComponent {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private _matDialog: MatDialog,
+  ) {}
 
   @Input() closeModal: () => void = () => {};
 
@@ -149,7 +154,13 @@ export class LoginUserComponent {
     this.userService.login(this.identifier, this.password).subscribe({
       next: (v) => {
         if (!v.profile) {
-          console.log('error');
+          this._matDialog.open(ErrorModalComponent, {
+            data: { error: 'Perfil' },
+            panelClass: 'transparent-modal',
+            backdropClass: 'transparent-backdrop',
+            hasBackdrop: true,
+          });
+          return;
         }
         sessionStorage.setItem('user', JSON.stringify(v));
         this.router.navigate(['app']);

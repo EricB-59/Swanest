@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { MatchSectionComponent } from './match-section/match-section.component';
 import { AppComponent } from './app.component';
+import { ErrorModalComponent } from './components/error-modal/error-modal.component';
 
 export const APP_ROUTES: Routes = [
   { path: '', component: AppComponent },
-  { path: 'match', component: MatchSectionComponent },
+  { path: 'modal', component: ErrorModalComponent },
 ];

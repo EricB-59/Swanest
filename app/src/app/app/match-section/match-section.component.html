@@ -1,78 +1,323 @@
-<section>
-    <div class="cards">
-        <!-- @for (profile of profiles; track $index) { -->
-        <div class="card relative flex flex-col justify-between text-white w-[482px] h-[662px] p-5">
-            <!-- Capa con la imagen de fondo enmascarada -->
-            <div class="absolute inset-0 mask-custom-shape overflow-hidden">
-              <div class="swiper w-full h-full">
-                <div class="swiper-wrapper">
-                  <div class="swiper-slide">
-                    <img class="w-full h-full object-cover absolute top-0 left-0" src="https://static.messi.com/wp-content/uploads/2020/03/Partido-Real-Sociedad-scaled.jpg?v=1588690905" alt="Messi 1">
-                  </div>
-                  <div class="swiper-slide">
-                    <img  class="w-full h-full object-cover absolute top-0 left-0" src="https://resizer.glanacion.com/resizer/v2/cristiano-ronaldo-celebra-tras-convertir-su-VVURF6CSJNBUTOKW2IIZDIF4X4.JPG?auth=b9b1482f64ebef7adb8350aee09cb9993fdfcd4baf19447945cb39cb04ca13ad&width=1280&height=854&quality=70&smart=true" alt="">
-                  </div>
-                  <div class="swiper-slide">
-                    <img class="w-full h-full object-cover absolute top-0 left-0" src="https://upload.wikimedia.org/wikipedia/commons/5/55/Luka_Modri%C4%87_in_2018.jpg" alt="">
-                  </div>
-                  <div class="swiper-slide">
-                    <img class="w-full h-full object-cover absolute top-0 left-0" src="https://www.elespectador.com/resizer/v2/HBESESIU2JBQVPYBVLG3EXGQIY.png?auth=d397b170be9beb8a0176a997461c2ee8f5ccf5c8125afa54149f50fdd2227edc&width=920&height=613&smart=true&quality=60" alt="">
-                  </div>
-                  <div class="swiper-slide">
-                    <img class="w-full h-full object-cover absolute top-0 left-0" src="https://media.admagazine.com/photos/664f5fa21de730eb1ac665b6/2:3/w_1332,h_1998,c_limit/%C2%A1La%20residencia%20estelar%20de%20James%20Rodri%CC%81guez%20esta%CC%81%20en%20venta!.jpg" alt="">
-                  </div>
+<section class="relative">
+  <div class="relative h-[640px] w-full lg:w-[482px]">
+    @for (profile of profiles; track $index) {
+      <div
+        class="card absolute z-1 flex h-full w-full flex-col justify-between px-2 py-15 text-white lg:p-5"
+      >
+        <!-- Capa con la imagen de fondo enmascarada -->
+        <div class="mask-custom-shape absolute inset-0 overflow-hidden">
+          <div class="swiper h-full w-full" id="swiper-{{ $index }}">
+            <div class="swiper-wrapper">
+              <!-- Imagen principal del perfil -->
+              @if (imagenes[$index] && imagenes[$index].length > 0) {
+                <div class="swiper-slide">
+                  <img
+                    class="absolute top-0 left-0 h-full w-full object-cover"
+                    [src]="imagenes[$index][0].image_1 || ''"
+                    alt="{{ profile.first_name }} {{ profile.last_name }}"
+                  />
                 </div>
-              </div>
-            </div> 
-            <div class="absolute inset-0 mask-custom-shape overflow-hidden">
-              <div class="absolute bottom-0 w-full h-64 bg-gradient-to-b from-transparent to-black/80"></div>
-              <div class="absolute top-0 w-full h-40 bg-gradient-to-t from-transparent to-black/50"></div>
-            </div>
-            <!-- --------------------------------------- -->
-            <div class="relative z-10 select-none ">
-              <div id="slide-counter" class="text-4xl p-3.5 font-family-regular flex">
-                <span class="text-white">1</span>
-                <span class="text-white/50 mt-1">/5</span>
-              </div>
-            </div>
-            <div class="relative z-10 flex flex-col gap-4">
-              <!-- Contenido del artículo -->
-              <article class="p-1.5 select-none">
-                <div class="w-fit py-2.5 px-4 rounded-full bg-black/40 flex justify-center items-center gap-1.5 backdrop-blur-[10px]">
-                  <span class="w-[8px] h-[8px] rounded-full bg-[#1ECF64]"></span>
-                  <span class="font-family-regular tracking-[0.6px]">Activo</span>
+
+                <!-- Imágenes adicionales del perfil -->
+                <div class="swiper-slide">
+                  <img
+                    class="absolute top-0 left-0 h-full w-full object-cover"
+                    [src]="imagenes[$index][0].image_2 || ''"
+                    alt="{{ profile.first_name }} {{ profile.last_name }}"
+                  />
                 </div>
-                <h3 class="text-5xl font-family-medium flex flex-col mb-2 tracking-[1.5px]">
-                  <!-- <span>{{profile.first_name}}</span> -->
-                  <!-- <span>{{profile.last_name}}, 21</span> -->
-                </h3>
-                <span class="text-xl ml-1 flex font-family-light items-center gap-2 tracking-[0.6px]">
-                <svg width="20" height="25" viewBox="0 0 20 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M12.9972 10.716C12.9972 9.05926 11.6548 7.7168 9.99923 7.7168C8.34247 7.7168 7 9.05926 7 10.716C7 12.3716 8.34247 13.714 9.99923 13.714C11.6548 13.714 12.9972 12.3716 12.9972 10.716Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                  <path fill-rule="evenodd" clip-rule="evenodd" d="M9.99947 23.3098C9.99947 23.3098 1.22527 17.5946 1.00419 10.4633C0.84895 5.45605 5.03086 1.0001 9.99947 1.0001C14.9681 1.0001 19.1489 5.45598 18.9959 10.4633C18.7736 17.7408 9.99947 23.3098 9.99947 23.3098Z" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                  <!-- España, {{profile.province}} -->
-                </span>
-                <!-- <p class="text-base text-white font-family-light ml-1 mt-4 tracking-[0.6px] line-clamp-2 overflow-hidden text-ellipsis">{{profile.bio}}</p> -->
-              </article>
-              <!-- --------------------------------------- -->
-              <div>
-                <div class="relative flex justify-between">
-                  <!-- Forma de fondo -->
-                  <div class="ml-3.5 mt-3.5 absolute top-0 left-0 w-[62px] h-[52px] bg-[#A8A8A8] opacity-[0.20] rounded-[94px]"></div>
-                  <button class="h-[98px] flex justify-center items-center w-[145px] bg-black/50 rounded-[503px] backdrop-blur-[20px]">
-                    <svg width="35" height="35" viewBox="0 0 35 35" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L33.999 33.992" stroke="white" stroke-width="2"/><path d="M34 1L1.00105 33.992" stroke="white" stroke-width="2"/></svg>            
-                  </button>
-                  <button class="bg-white h-[98px] w-[124px] rounded-[50px] flex justify-center items-center">
-                    <svg width="38" height="43" viewBox="0 0 38 43" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12.7705 7.58781C14.5371 7.05781 16.5025 6.72656 18.6667 6.72656C28.4275 6.72656 36.3333 14.5662 36.3333 24.2387C36.3333 33.9112 28.4275 41.7507 18.6667 41.7507C8.90583 41.7507 1 33.9112 1 24.2387C1 20.6391 2.10411 17.2824 3.9812 14.4999" stroke="black" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/><path d="M15.9092 2L12.1992 7.71958L17.9629 11.4296" stroke="black" stroke-width="2" stroke-linecap="square" stroke-linejoin="round"/></svg>
-                  </button>
-                  <button class="bg-[#7948FF] h-[98px] w-[145px] rounded-[50px] flex justify-center items-center">
-                    <svg width="44" height="40" viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.25 38C16.3775 36.02 2 27.3125 2 13.25C2 7.04 7.04 2 13.25 2C16.94 2 20.2025 3.7775 22.25 6.5C24.2975 3.755 27.5825 2 31.25 2C37.46 2 42.5 7.0175 42.5 13.25C42.5 27.335 28.1225 36.02 22.25 38Z" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>       
-                  </button>
+
+                @if (imagenes[$index][0].image_3) {
+                  <div class="swiper-slide">
+                    <img
+                      class="absolute top-0 left-0 h-full w-full object-cover"
+                      [src]="imagenes[$index][0].image_3 || ''"
+                      alt="{{ profile.first_name }} {{ profile.last_name }}"
+                    />
+                  </div>
+                }
+                @if (imagenes[$index][0].image_4) {
+                  <div class="swiper-slide">
+                    <img
+                      class="absolute top-0 left-0 h-full w-full object-cover"
+                      [src]="imagenes[$index][0].image_4 || ''"
+                      alt="{{ profile.first_name }} {{ profile.last_name }}"
+                    />
+                  </div>
+                }
+                @if (imagenes[$index][0].image_5) {
+                  <div class="swiper-slide">
+                    <img
+                      class="absolute top-0 left-0 h-full w-full object-cover"
+                      [src]="imagenes[$index][0].image_5 || ''"
+                      alt="{{ profile.first_name }} {{ profile.last_name }}"
+                    />
+                  </div>
+                }
+              } @else {
+                <div class="swiper-slide">
+                  <img
+                    class="absolute top-0 left-0 h-full w-full object-cover"
+                    src="assets/images/default-profile.jpg"
+                    alt="{{ profile.first_name }} {{ profile.last_name }}"
+                  />
                 </div>
-              </div>
+              }
             </div>
           </div>
-        <!-- } -->
+        </div>
+        <div class="mask-custom-shape absolute inset-0 overflow-hidden">
+          <div
+            class="absolute bottom-0 h-64 w-full bg-gradient-to-b from-transparent to-black/80"
+          ></div>
+          <div
+            class="absolute top-0 h-40 w-full bg-gradient-to-t from-transparent to-black/50"
+          ></div>
+        </div>
+        <!-- --------------------------------------- -->
+        <div class="relative z-10 flex p-3.5 select-none">
+          <div
+            id="counter-{{ $index }}"
+            class="font-family-light flex text-4xl tracking-[1.5px]"
+          >
+            <span class="text-white">1</span>
+            <span class="mt-1 text-white/40">
+              /{{ imagenes[$index] ? imagenes[$index].length : 1 }}
+            </span>
+          </div>
+          <button>
+            <!-- info -->
+          </button>
+        </div>
+        <div class="relative z-10 flex flex-col gap-4">
+          <!-- Contenido del artículo -->
+          <article class="p-1.5 select-none">
+            <div
+              class="flex w-fit items-center justify-center gap-1.5 rounded-full bg-black/40 px-4 py-2.5 text-sm backdrop-blur-[10px]"
+            >
+              <span class="h-[8px] w-[8px] rounded-full bg-[#1ECF64]"></span>
+              <span class="font-family-regular tracking-[0.6px]">Activo</span>
+            </div>
+            <h3
+              class="font-family-regular mb-3 flex flex-col text-5xl tracking-[2px]"
+            >
+              <span>{{ profile.first_name }}</span>
+              <span
+                >{{ profile.last_name }}, {{ profile.birthdate | age }}</span
+              >
+            </h3>
+            <div class="flex gap-2.5">
+              <span
+                class="font-family-light flex w-fit items-center gap-2 rounded-full bg-white/19 px-3 py-2 text-sm tracking-[1.1px] backdrop-blur-[20px]"
+              >
+                <svg
+                  width="16"
+                  height="18"
+                  viewBox="0 0 16 18"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.99923 9.6625C9.304 9.6625 10.3617 8.60477 10.3617 7.3C10.3617 5.99523 9.304 4.9375 7.99923 4.9375C6.69446 4.9375 5.63672 5.99523 5.63672 7.3C5.63672 8.60477 6.69446 9.6625 7.99923 9.6625Z"
+                    stroke="white"
+                    stroke-width="1.2"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                  />
+                  <path
+                    d="M15 7.69375C15 12.025 9.645 16.75 8 16.75C6.355 16.75 1 12.4188 1 7.69375C1 4.00125 4.1325 1 8 1C11.8675 1 15 4.00125 15 7.69375Z"
+                    stroke="white"
+                    stroke-width="1.2"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                España, {{ profile.province.name }}
+              </span>
+              @if (profile.gender.name != "Prefiero no decirlo") {
+                <span
+                  class="font-family-light flex w-fit items-center gap-1.5 rounded-full bg-white/19 px-3 py-2 text-sm tracking-[1.1px] backdrop-blur-[20px]"
+                >
+                  @switch (profile.gender.name) {
+                    @case ("Hombre") {
+                      <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.46778 15C9.48555 15 11.9356 12.55 11.9356 9.53221C11.9356 6.51443 9.48555 4.06445 6.46778 4.06445C3.45 4.06445 1 6.51443 1 9.53221C1 12.55 3.45 15 6.46778 15Z"
+                          stroke="white"
+                          stroke-width="1.2"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M14.9987 1L10.3398 5.66667"
+                          stroke="white"
+                          stroke-width="1.2"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M11.5 1H15V4.5"
+                          stroke="white"
+                          stroke-width="1.2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        />
+                      </svg>
+                    }
+                    @case ("Mujer") {
+                      <svg
+                        width="13"
+                        height="19"
+                        viewBox="0 0 13 19"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.5 12.0184C9.54333 12.0184 12 9.55251 12 6.50918C12 3.46584 9.54333 1 6.5 1C3.45667 1 1 3.46584 1 6.50918C1 9.55251 3.45667 12.0184 6.5 12.0184Z"
+                          stroke="white"
+                          stroke-width="1.2"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M6.5 12.0078V17.5078"
+                          stroke="white"
+                          stroke-width="1.2"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                        />
+                        <path
+                          d="M4.56641 15.6758H8.33389"
+                          stroke="white"
+                          stroke-width="1.2"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    }
+                    @case ("No binario") {
+                      <svg
+                        width="13"
+                        height="13"
+                        viewBox="0 0 13 13"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M6.5 12.0184C9.54333 12.0184 12 9.55251 12 6.50918C12 3.46584 9.54333 1 6.5 1C3.45667 1 1 3.46584 1 6.50918C1 9.55251 3.45667 12.0184 6.5 12.0184Z"
+                          stroke="white"
+                          stroke-width="1.2"
+                          stroke-miterlimit="10"
+                          stroke-linecap="round"
+                        />
+                      </svg>
+                    }
+                  }
+                  {{ profile.gender.name }}
+                </span>
+              }
+            </div>
+            <p
+              class="font-family-light mt-5 ml-1 line-clamp-2 overflow-hidden text-base tracking-[1.1px] text-ellipsis text-white"
+            >
+              {{ profile.bio }}
+            </p>
+          </article>
+          <!-- --------------------------------------- -->
+          <div>
+            <div class="relative flex justify-between">
+              <!-- Forma de fondo -->
+              <div
+                class="absolute top-0 left-0 mt-3.5 ml-3.5 h-[52px] w-[62px] rounded-[94px] bg-[#939393c2]"
+              ></div>
+              <button
+                (click)="handleDislike(profile, $event)"
+                class="flex h-[98px] w-[145px] items-center justify-center rounded-[503px] bg-black/50 backdrop-blur-[20px]"
+              >
+                <svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 32 32"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1 1L31.1705 31.1641"
+                    stroke="white"
+                    stroke-width="2"
+                  />
+                  <path
+                    d="M31.1705 1L1 31.1641"
+                    stroke="white"
+                    stroke-width="2"
+                  />
+                </svg>
+              </button>
+              <button
+                class="flex h-[98px] w-[124px] items-center justify-center rounded-[50px] bg-white"
+              >
+                <svg
+                  width="32"
+                  height="37"
+                  viewBox="0 0 32 37"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M10.9938 6.74492C12.4938 6.29492 14.1625 6.01367 16 6.01367C24.2875 6.01367 31 12.67 31 20.8825C31 29.095 24.2875 35.7512 16 35.7512C7.7125 35.7512 1 29.095 1 20.8825C1 17.8262 1.93745 14.9762 3.53121 12.6137"
+                    stroke="black"
+                    stroke-width="2"
+                    stroke-linecap="square"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M13.6578 2L10.5078 6.85625L15.4015 10.0063"
+                    stroke="black"
+                    stroke-width="2"
+                    stroke-linecap="square"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+              <button
+                (click)="handleLike(profile, $event)"
+                class="flex h-[98px] w-[145px] items-center justify-center rounded-[50px] bg-[#7948FF]"
+              >
+                <svg
+                  width="38"
+                  height="34"
+                  viewBox="0 0 38 34"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M19 33C13.78 31.24 1 23.5 1 11C1 5.48 5.48 1 11 1C14.28 1 17.18 2.58 19 5C20.82 2.56 23.74 1 27 1C32.52 1 37 5.46 37 11C37 23.52 24.22 31.24 19 33Z"
+                    stroke="black"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+    <div
+      class="font-family-regular absolute h-full w-full p-5 text-base tracking-[0.5px] text-gray-400 select-none"
+    >
+      <div
+        class="mask-custom-shape absolute inset-0 flex items-center justify-center overflow-hidden bg-gray-200"
+      >
+        <span>No hay más perfiles</span>
+      </div>
     </div>
+  </div>
 </section>

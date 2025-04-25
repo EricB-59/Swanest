@@ -67,7 +67,7 @@ symfony server:start
 1. Navigate to the frontend directory:
 
 ```
-cd ../frontend
+cd ../app
 ```
 
 2. Install dependencies:
@@ -100,10 +100,11 @@ ng serve
 frontend/
 ├── src/
 │   ├── app/
-│   │   ├── components/
+│   │   ├── app/
+│   │   ├── landing-page/
+│   │   |  |── components/
 │   │   ├── services/
 │   │   ├── models/
-│   │   ├── guards/
 │   │   └── ...
 │   ├── assets/
 │   └── environments/
