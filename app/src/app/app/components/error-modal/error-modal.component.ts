@@ -1,24 +1,27 @@
-import { Component, Input } from '@angular/core';
+import { Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-error-modal',
-  imports: [],
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <article
-      class="flex-rox absolute flex h-1/7 w-full justify-between gap-10 rounded-[50px] bg-white p-5 drop-shadow-xl lg:w-1/2"
+      class="flex w-full flex-row rounded-[50px] bg-white p-5 drop-shadow-xl"
     >
       <div class="flex items-center pb-3">
         <img
           src="assets/images/app/icons/warning-icon.svg"
           alt=""
-          class="scale-60"
+          class="mr-3 scale-75"
         />
         <h2 class="font-family-regular pt-2 text-sm lg:text-2xl">
-          Ha ocurrido un incidente con: {{ error }}
+          Ha ocurrido un incidente con: {{ data.error }}
         </h2>
       </div>
-      <div>
-        <button (click)="closeModal()" class="p-2">
+      <div class="flex justify-end">
+        <button (click)="close()" class="p-2">
           <svg
             width="30"
             height="30"
@@ -33,10 +36,22 @@ import { Component, Input } from '@angular/core';
       </div>
     </article>
   `,
-  styles: ``,
+  styles: [
+    `
+      :host {
+        display: block;
+        background: transparent;
+      }
+    `,
+  ],
 })
 export class ErrorModalComponent {
-  @Input() error: string = '';
+  constructor(
+    public _matDialogRef: MatDialogRef<ErrorModalComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { error: string },
+  ) {}
 
-  closeModal() {}
+  close() {
+    this._matDialogRef.close();
+  }
 }
