@@ -11,25 +11,27 @@ import 'swiper/css/effect-fade';
 
 @Component({
   selector: 'app-match-section',
-  imports: [
-    AgePipe,
-  ],
+  imports: [AgePipe],
   templateUrl: './match-section.component.html',
   styleUrl: './match-section.component.css',
 })
 export class MatchSectionComponent implements OnInit {
-  matchService: MatchService = inject(MatchService)
-  profiles!: Profile[]
-  user = sessionStorage.getItem('user')
+  matchService: MatchService = inject(MatchService);
+  profiles: Profile[] = []; // Aquí guardaremos el primer objeto de cada array
+  imagenes: any[] = []; // Aquí guardaremos los objetos restantes
+  user = sessionStorage.getItem('user');
   private cardToUserIdMap = new WeakMap<HTMLElement, number>();
 
   ngOnInit(): void {
     if (this.user) {
       const user_id = JSON.parse(this.user).id;
       this.matchService.getProfiles(user_id).subscribe({
-        next: (data) => { 
-          this.profiles = data;
-          console.info('Perfiles recibidos:', this.profiles.length);
+        next: (data) => {
+          // Procesamos los datos para separar profiles e imagenes
+          this.processProfileData(data);
+          console.info('Profiles:', this.profiles);
+          console.info('Imagenes:', this.imagenes);
+
           setTimeout(() => {
             this.initializeSwipers();
             this.initializeCardMapping();
@@ -37,10 +39,36 @@ export class MatchSectionComponent implements OnInit {
           }, 0);
         },
         error: (error) => {
-          console.error(error)
-        }
-      })
+          console.error(error);
+        },
+      });
     }
+  }
+
+  /**
+   * Procesa los datos recibidos del backend separando el primer objeto como profile
+   * y los demás como imágenes
+   */
+  private processProfileData(data: any[]): void {
+    // Asumimos que data es un array donde cada elemento es otro array
+    // El primer elemento de cada subarray es el profile, el resto son imágenes
+    this.profiles = [];
+    this.imagenes = [];
+
+    data.forEach((item) => {
+      if (Array.isArray(item) && item.length > 0) {
+        // El primer elemento es el profile
+        this.profiles.push(item[0]);
+
+        // Los elementos restantes son imágenes
+        if (item.length > 1) {
+          this.imagenes.push(item.slice(1));
+        }
+      } else {
+        // Si el elemento no es un array, lo tratamos como un profile completo
+        this.profiles.push(item);
+      }
+    });
   }
 
   private initializeSwipers(): void {
@@ -57,50 +85,83 @@ export class MatchSectionComponent implements OnInit {
         },
         on: {
           init: function () {
-            const counter = document.querySelector(`#counter-${index} span.text-white`);
+            const counter = document.querySelector(
+              `#counter-${index} span.text-white`,
+            );
             if (counter) {
               counter.textContent = String((this as any).realIndex + 1);
             }
           },
           slideChange: function () {
-            const counter = document.querySelector(`#counter-${index} span.text-white`);
+            const counter = document.querySelector(
+              `#counter-${index} span.text-white`,
+            );
             if (counter) {
               counter.textContent = String((this as any).realIndex + 1);
             }
-          }
-        }
+          },
+        },
       });
     });
   }
 
   handleDislike(profile: Profile, event: Event) {
     event.stopPropagation();
-    
+
     const card = (event.target as HTMLElement).closest('.card') as HTMLElement;
     if (!card) return;
-    
+
     card.classList.add('go-left');
-    
+
     this.addDislike(profile.user_id);
-    
-    card.addEventListener('transitionend', () => {
-      this.profiles = this.profiles.filter(p => p.user_id !== profile.user_id);
-    }, { once: true });
+
+    card.addEventListener(
+      'transitionend',
+      () => {
+        this.profiles = this.profiles.filter(
+          (p) => p.user_id !== profile.user_id,
+        );
+        // También eliminamos las imágenes correspondientes
+        const profileIndex = this.profiles.findIndex(
+          (p) => p.user_id === profile.user_id,
+        );
+        if (profileIndex !== -1) {
+          this.imagenes.splice(profileIndex, 1);
+        }
+      },
+      { once: true },
+    );
   }
 
   handleLike(profile: Profile, event: Event): void {
     event.stopPropagation();
-    
+
     const card = (event.target as HTMLElement).closest('.card') as HTMLElement;
     if (!card) return;
-    
+
     card.classList.add('go-right');
-    
+
     this.addLike(profile.user_id);
-    
-    card.addEventListener('transitionend', () => {
-      this.profiles = this.profiles.filter(p => p.user_id !== profile.user_id);
-    }, { once: true });
+
+    card.addEventListener(
+      'transitionend',
+      () => {
+        // Obtenemos el índice antes de filtrar
+        const profileIndex = this.profiles.findIndex(
+          (p) => p.user_id === profile.user_id,
+        );
+
+        this.profiles = this.profiles.filter(
+          (p) => p.user_id !== profile.user_id,
+        );
+
+        // También eliminamos las imágenes correspondientes
+        if (profileIndex !== -1) {
+          this.imagenes.splice(profileIndex, 1);
+        }
+      },
+      { once: true },
+    );
   }
 
   addLike(likedUserId: number) {
@@ -108,12 +169,12 @@ export class MatchSectionComponent implements OnInit {
       const user_id = JSON.parse(this.user).id;
       this.matchService.addLike(user_id, likedUserId).subscribe({
         next: (data) => {
-          console.info(data)
+          console.info(data);
         },
         error: (error) => {
-          console.error(error)
-        }
-      })
+          console.error(error);
+        },
+      });
     }
   }
 
@@ -122,29 +183,32 @@ export class MatchSectionComponent implements OnInit {
       const user_id = JSON.parse(this.user).id;
       this.matchService.addDislike(user_id, dislikeUserId).subscribe({
         next: (data) => {
-          console.info(data)
+          console.info(data);
         },
         error: (error) => {
-          console.error(error)
-        }
-      })
+          console.error(error);
+        },
+      });
     }
   }
 
   Rewind() {}
 
-  private initializeCardMapping(): void { 
+  private initializeCardMapping(): void {
     setTimeout(() => {
-      const cards = document.querySelectorAll('.card')
+      const cards = document.querySelectorAll('.card');
       cards.forEach((card, index) => {
         if (this.profiles[index]) {
-          this.cardToUserIdMap.set(card as HTMLElement,this.profiles[index].user_id)
+          this.cardToUserIdMap.set(
+            card as HTMLElement,
+            this.profiles[index].user_id,
+          );
         }
-      })
-    })
+      });
+    });
   }
 
-  private setupDragEvents(): void { 
+  private setupDragEvents(): void {
     // As of this grades we consider the user maked a decision
     const DECISION_THRESHOLD = 75;
 
@@ -227,19 +291,32 @@ export class MatchSectionComponent implements OnInit {
 
           // add class acording to the decision
           actualCard?.classList.add(goRight ? 'go-right' : 'go-left');
-          actualCard?.addEventListener('transitionend', () => {
-            const user_id = component.cardToUserIdMap.get(actualCard)
-            if (user_id !== undefined) {
-              if (goRight) {
-                component.addLike(user_id)
-              } else {
-                component.addDislike(user_id)
+          actualCard?.addEventListener(
+            'transitionend',
+            () => {
+              const user_id = component.cardToUserIdMap.get(actualCard);
+              if (user_id !== undefined) {
+                if (goRight) {
+                  component.addLike(user_id);
+                } else {
+                  component.addDislike(user_id);
+                }
               }
-            }
 
-            actualCard.remove();
-            isAnimating = false;
-          },{once: true});
+              // Encontrar y eliminar el profile y sus imágenes
+              const profileIndex = component.profiles.findIndex(
+                (p) => p.user_id === user_id,
+              );
+              if (profileIndex !== -1) {
+                component.profiles.splice(profileIndex, 1);
+                component.imagenes.splice(profileIndex, 1);
+              }
+
+              actualCard.remove();
+              isAnimating = false;
+            },
+            { once: true },
+          );
         } else {
           actualCard?.classList.add('reset');
           actualCard?.classList.remove('go-right', 'go-left');
