@@ -51,7 +51,7 @@ final class ProfileController extends AbstractController
             return new JsonResponse('Only allow letters in the name', Response::HTTP_BAD_REQUEST);
         }
 
-        if (!preg_match('/^[a-zA-Z]+$/', $lastName)) {
+        if (!preg_match('/^[a-zA-Z ]+$/', $lastName)) {
             return new JsonResponse('Only allow letters in the surname', Response::HTTP_BAD_REQUEST);
         }
 
@@ -99,11 +99,11 @@ final class ProfileController extends AbstractController
 
         $newLabels = new UserLabel;
 
-        $newLabels->setFirstLabel($labelRepository->findOneBy(['name' => $labels['first_label']['name']]));
-        $newLabels->setSecondLabel($labelRepository->findOneBy(['name' => $labels['second_label']['name']]));
-        $newLabels->setThirdLabel($labelRepository->findOneBy(['name' => $labels['third_label']['name']]));
-        $newLabels->setFourthLabel($labelRepository->findOneBy(['name' => $labels['fourth_label']['name']]));
-        $newLabels->setFifthLabel($labelRepository->findOneBy(['name' => $labels['fifth_label']['name']]));
+        $newLabels->setFirstLabel($labelRepository->findOneBy(['name' => $labels['first_label']]));
+        $newLabels->setSecondLabel($labelRepository->findOneBy(['name' => $labels['second_label']]));
+        $newLabels->setThirdLabel($labelRepository->findOneBy(['name' => $labels['third_label']]));
+        $newLabels->setFourthLabel($labelRepository->findOneBy(['name' => $labels['fourth_label']]));
+        $newLabels->setFifthLabel($labelRepository->findOneBy(['name' => $labels['fifth_label']]));
 
         $profile->setLabels($newLabels);
 

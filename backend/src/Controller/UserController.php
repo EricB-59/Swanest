@@ -120,6 +120,7 @@ final class UserController extends AbstractController
         // Return success response with non-sensitive user data
         // Note: Password is deliberately excluded from response
         return new JsonResponse([
+            "id" => $user->getId(),
             "username" => $user->getUsername(),
             "email" => $user->getEmail()
         ], Response::HTTP_OK);
