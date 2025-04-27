@@ -2,7 +2,8 @@ import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProfileService } from '../../../services/profile/profile.service';
 import { Profile, UserLabels, Images } from '../../../models/profile';
-import { User } from '../../../models/user';
+import { UserService } from '../../../services/user/user.service';
+import { Router } from '@angular/router';
 
 export interface label {
   name: string;
@@ -12,6 +13,17 @@ export interface Gender {
 }
 export interface Province {
   name: string;
+}
+
+class ImagesToSend {
+  constructor(
+    id: number,
+    image_1: string,
+    image_2: string,
+    image_3: string,
+    image_4: string,
+    image_5: string,
+  ) {}
 }
 
 @Component({
@@ -286,6 +298,8 @@ export class ImagesUploadComponent implements AfterViewInit {
     private cd: ChangeDetectorRef,
     public matDialogRef: MatDialogRef<ImagesUploadComponent>,
     private profileService: ProfileService,
+    private userService: UserService,
+    private router: Router,
   ) {}
 
   ngAfterViewInit(): void {
@@ -477,12 +491,20 @@ export class ImagesUploadComponent implements AfterViewInit {
               province,
               userLabels,
               userId,
-              images, // Ahora sí tendrá los valores correctos
             );
 
             // Ahora hacemos la llamada al servicio dentro del then
             this.profileService.create(profile).subscribe({
-              next: () => this.closeModal(),
+              next: () => {
+                this.userService.images(userId, images).subscribe({
+                  next: (result) => {
+                    if (result) {
+                      this.router.navigate(['app']);
+                      this.closeModal();
+                    }
+                  },
+                });
+              },
               error: (err) => console.error('Error al crear el perfil:', err),
             });
           }

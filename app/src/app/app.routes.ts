@@ -9,6 +9,7 @@ export const routes: Routes = [
       import('./app/app.routes').then((m) => {
         // ! AUTH: Check if the user had profile
         if (!sessionStorage.getItem('user')) {
+          console.log('routes error');
           return [{ path: '', component: LandingPageComponent }];
         }
 

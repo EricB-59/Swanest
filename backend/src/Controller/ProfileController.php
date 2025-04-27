@@ -36,7 +36,6 @@ final class ProfileController extends AbstractController
         $gender = $data["gender"];
         $birthDate = $data["birthdate"];
         $province = $data["province"];
-        $images = $data['images'];
         $labels = $data['labels'];
 
         $newGender = $entityManager->getRepository(Gender::class)->findOneBy(['id' => $gender]);
@@ -76,16 +75,6 @@ final class ProfileController extends AbstractController
         if ($existingProfile) {
             return new JsonResponse('User already has a profile', Response::HTTP_CONFLICT);
         }
-
-        $newImages = new Images;
-        $newImages->setUser($user);
-        $newImages->setImage1($images['image_1']);
-        $newImages->setImage2($images['image_2']);
-        $newImages->setImage3($images['image_3']);
-        $newImages->setImage4($images['image_4']);
-        $newImages->setImage5($images['image_5']);
-        $newImages->setUploadedAt(now());
-        $user->setImage($newImages);
 
         $profile->setUser($user);
         $profile->setFirstName($firstName);

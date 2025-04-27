@@ -28,7 +28,6 @@ export class Profile {
     public province: Province,
     public labels: UserLabels,
     public user_id: number,
-    public images: Images,
   ) {}
 }
 
