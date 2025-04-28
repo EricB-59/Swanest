@@ -238,18 +238,18 @@ export class ProfileInfoComponent implements OnInit {
       );
     }
     
-    // Actualizar SOLO el contador
+        // Update the counter
     const counterElement = document.getElementById('counter');
     if (counterElement) {
       counterElement.textContent = `${this.selectedInterests.length}/5`;
       
-      // Actualizar color según estado
+      // Update colour according to status
       if (this.selectedInterests.length === 5) {
-        counterElement.style.color = '#34C759'; // verde
+        counterElement.style.color = '#34C759'; // Green
       } else if (this.selectedInterests.length > 0) {
-        counterElement.style.color = '#FF3B30'; // rojo
+        counterElement.style.color = '#FF3B30'; // Red
       } else {
-        counterElement.style.color = 'black'; // negro
+        counterElement.style.color = 'black'; // Black
       }
     }
   }
@@ -270,7 +270,7 @@ export class ProfileInfoComponent implements OnInit {
  
       const provinceElement = document.querySelector('#province') as HTMLInputElement;
       provinceElement.focus();
-      provinceElement.blur(); // Activar validación
+      provinceElement.blur(); // Activate validation
       return;
     }
     if (this.selectedInterests.length !== 5) {
@@ -292,7 +292,7 @@ export class ProfileInfoComponent implements OnInit {
 
     this._matDialog.open(ImagesUploadComponent, {
       disableClose: true,
-      hasBackdrop: false, // o true si quieres que se mantenga el fondo oscuro
+      hasBackdrop: false, // or true if you want the background to remain dark
       panelClass: 'custom-dialog',
     });
   }

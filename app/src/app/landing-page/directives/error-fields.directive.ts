@@ -67,7 +67,7 @@ export class ErrorFieldsDirective implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Detectar cambios en currentSelections
+        // Detect changes in currentSelections
     if (changes['currentSelections'] && this.exactSelections !== null) {
       const selectionCount = this.currentSelections?.length || 0;
       this.isValid = selectionCount === this.exactSelections;
@@ -142,11 +142,11 @@ export class ErrorFieldsDirective implements OnInit, OnChanges {
   
   @HostListener('change')
   onChange(): void {
-    // Si tenemos exactSelections y currentSelections, validamos las selecciones
+        // If we have exactSelections and currentSelections, we validate the selections.
     if (this.exactSelections !== null && this.currentSelections) {
       this.validateSelections();
     } else if (!this.control) {
-      // Validación manual para otros tipos de inputs
+      // Manual validation for other types of inputs
       this.validateManually((this.elRef.nativeElement as HTMLInputElement).value);
     }
     this.updateStyles();
@@ -180,7 +180,7 @@ export class ErrorFieldsDirective implements OnInit, OnChanges {
     } 
     // Validation for provinces or valid list
     else if (this.validList && value && this.validList.length > 0) {
-      // Normaliza el valor del input y los valores de la lista para comparación
+        // Normalise input value and list values for comparison
       const normalizedValue = value.trim().toLowerCase();
       const normalizedList = this.validList.map(item => item.trim().toLowerCase());
       
@@ -228,10 +228,10 @@ export class ErrorFieldsDirective implements OnInit, OnChanges {
   } 
 
   private updateStyles() {
-    // Caso especial para validaciones de intereses
+    // Special case for interest validations
     if (this.exactSelections !== null && this.currentSelections) {
       this.updateInterestStyles();
-      return; // Importante: salir de la función aquí
+      return; // Important: exit the function here
     }
     
     const inputElement = this.elRef.nativeElement;
@@ -308,7 +308,6 @@ export class ErrorFieldsDirective implements OnInit, OnChanges {
     }
   }
 
-  // Método específico para actualizar los estilos de intereses
   private updateInterestStyles(): void {
   
   }
@@ -361,7 +360,6 @@ export class ErrorFieldsDirective implements OnInit, OnChanges {
       this.customErrorMessage = '';
     }
     
-    // Forzar actualización inmediata
     setTimeout(() => this.updateInterestStyles(), 0);
   }
   
