@@ -415,9 +415,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             $userData['profile'] = $this->getProfile()->toArray();
         }
 
-        // if ($this->getImage()) {
-        //     $userData['image'] = $this->getImage()->toArray();
-        // }
+        if ($this->getImage()) {
+            $userData['image'] = $this->getImage()->toArray();
+        }
 
         if ($this->getPreference()) {
             $userData['preference'] = $this->getPreference()->toArray();

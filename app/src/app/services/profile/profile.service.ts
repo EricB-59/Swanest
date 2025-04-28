@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Profile } from '../../models/profile';
 import { API_URL } from '../../../config/const';
-import { differenceInYears } from 'date-fns';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +16,6 @@ export class ProfileService {
 
   create(profile: Profile): Observable<Profile> {
     localStorage.clear();
-    console.log(profile);
     return this.connHttp.post<Profile>(API_URL + this.PREFIX, profile);
   }
 

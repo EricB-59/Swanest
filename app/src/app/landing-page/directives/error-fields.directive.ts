@@ -6,6 +6,8 @@ import {
   OnInit,
   Optional,
   Renderer2,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 import { NgControl } from '@angular/forms';
 
@@ -13,7 +15,7 @@ import { NgControl } from '@angular/forms';
   selector: '[appErrorFields]',
   standalone: true
 })
-export class ErrorFieldsDirective implements OnInit {
+export class ErrorFieldsDirective implements OnInit, OnChanges {
   private errorElement: HTMLElement | null = null;
   private iconElement: HTMLElement | null = null;
   private textElement: Text | null = null;
@@ -26,6 +28,8 @@ export class ErrorFieldsDirective implements OnInit {
   @Input() pattern: string | null = null;
   @Input() customError: string | null = null;
   @Input() validList: string[] | null = null;
+  @Input() exactSelections: number | null = null;
+  @Input() currentSelections: any[] | null = null;
 
   private errorMessages: { [key: string]: string } = {
     required: 'Este campo es obligatorio',
@@ -36,7 +40,8 @@ export class ErrorFieldsDirective implements OnInit {
     pattern: 'Formato No valido',
     min: 'El valor es menor al mínimo permitido',
     max: 'El valor es mayor al máximo permitido',
-    validList: 'Seleccione una opción válida de la lista'
+    validList: 'Seleccione una opción válida de la lista',
+    exactSelections: 'Debe seleccionar exactamente 5 opciones',
   };
 
   constructor(
@@ -46,6 +51,32 @@ export class ErrorFieldsDirective implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.createErrorElement();
+    
+    // If NgControl is being used, subscribe to status changes
+    if (this.control) {
+      this.control.statusChanges?.subscribe(() => {
+        this.updateStyles();
+      });
+    }
+
+    // Initial validation after components are loaded
+    setTimeout(() => {
+      this.updateStyles();
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+        // Detect changes in currentSelections
+    if (changes['currentSelections'] && this.exactSelections !== null) {
+      const selectionCount = this.currentSelections?.length || 0;
+      this.isValid = selectionCount === this.exactSelections;
+      this.validateSelections();
+      this.updateInterestStyles();
+    }
+  }
+
+  private createErrorElement(): void {
     // Create the element to display errors
     this.errorElement = this.renderer.createElement('span');
     this.renderer.addClass(this.errorElement, 'error-message');
@@ -55,7 +86,7 @@ export class ErrorFieldsDirective implements OnInit {
     this.renderer.setStyle(this.errorElement, 'display', 'none');
     this.renderer.setStyle(this.errorElement, 'align-items', 'center');
     this.renderer.setStyle(this.errorElement, 'gap', '6px');
-
+    
     // Create the icon
     this.iconElement = this.renderer.createElement('img');
     this.renderer.setAttribute(
@@ -77,20 +108,17 @@ export class ErrorFieldsDirective implements OnInit {
     // Insert the error message after the input element
     const parentElement = this.elRef.nativeElement.parentElement;
     if (parentElement) {
-      this.renderer.appendChild(parentElement, this.errorElement);
+      if (this.exactSelections !== null) {
+        const checkboxList = parentElement.querySelector('ul');
+        if (checkboxList) {
+          this.renderer.insertBefore(parentElement, this.errorElement, checkboxList);
+        } else {
+          this.renderer.appendChild(parentElement, this.errorElement);
+        }
+      } else {
+        this.renderer.appendChild(parentElement, this.errorElement);
+      }
     }
-
-    // If NgControl is being used, subscribe to status changes
-    if (this.control) {
-      this.control.statusChanges?.subscribe(() => {
-        this.updateStyles();
-      });
-    }
-
-    // Initial validation after components are loaded
-    setTimeout(() => {
-      this.updateStyles();
-    });
   }
 
   // Update styles when an input event occurs
@@ -111,13 +139,29 @@ export class ErrorFieldsDirective implements OnInit {
     }
     this.updateStyles();
   }
-  @HostListener('change', ['$event'])
-  onChange(event: Event): void {
-    if (!this.control) {
-    this.validateManually((event.target as HTMLInputElement).value);
+  
+  @HostListener('change')
+  onChange(): void {
+        // If we have exactSelections and currentSelections, we validate the selections.
+    if (this.exactSelections !== null && this.currentSelections) {
+      this.validateSelections();
+    } else if (!this.control) {
+      // Manual validation for other types of inputs
+      this.validateManually((this.elRef.nativeElement as HTMLInputElement).value);
+    }
+    this.updateStyles();
   }
-  this.updateStyles();
-}
+//   @HostListener('selectionChanged', ['$event'])
+// onSelectionChanged(event: CustomEvent): void {
+//   if (this.exactSelections !== null && event.detail) {
+//     const isValid = event.detail.count === this.exactSelections;
+//     this.isValid = isValid;
+//     this.customErrorMessage = isValid ? '' : 
+//       `Debe seleccionar exactamente ${this.exactSelections} opciones`;
+    
+//     this.updateInterestStyles();
+//   }
+// }
 
   // Manual validation for when NgControl is not present
   private validateManually(value: string): void {
@@ -136,7 +180,7 @@ export class ErrorFieldsDirective implements OnInit {
     } 
     // Validation for provinces or valid list
     else if (this.validList && value && this.validList.length > 0) {
-      // Normaliza el valor del input y los valores de la lista para comparación
+        // Normalise input value and list values for comparison
       const normalizedValue = value.trim().toLowerCase();
       const normalizedList = this.validList.map(item => item.trim().toLowerCase());
       
@@ -146,8 +190,6 @@ export class ErrorFieldsDirective implements OnInit {
         const elementId = this.elRef.nativeElement.id;
         if (elementId === 'province') {
           errorMessage = 'Seleccione una provincia válida';
-          console.log('Valor no válido:', value); 
-          console.log('Lista válida:', this.validList);
         } else {
           errorMessage = this.errorMessages['validList'];
         }
@@ -186,11 +228,17 @@ export class ErrorFieldsDirective implements OnInit {
   } 
 
   private updateStyles() {
+    // Special case for interest validations
+    if (this.exactSelections !== null && this.currentSelections) {
+      this.updateInterestStyles();
+      return; // Important: exit the function here
+    }
+    
     const inputElement = this.elRef.nativeElement;
     
     // Set the default border color to black
     this.renderer.setStyle(inputElement, 'border-color', 'black');
-
+    
     // If using NgControl
     if (this.control && this.control.control) {
       const isInvalid = this.control.invalid && (this.control.dirty || this.control.touched);
@@ -260,6 +308,10 @@ export class ErrorFieldsDirective implements OnInit {
     }
   }
 
+  private updateInterestStyles(): void {
+  
+  }
+
   private updateLabelColor(state: 'valid' | 'invalid' | 'neutral'): void {
     // Find the parent element (label or container)
     const parentElement = this.elRef.nativeElement.parentElement;
@@ -294,7 +346,23 @@ export class ErrorFieldsDirective implements OnInit {
       }
     }
   }
-
+  
+  private validateSelections(): void {
+    if (!this.currentSelections || this.exactSelections === null) return;
+    
+    const hasExactSelections = this.currentSelections.length === this.exactSelections;
+    
+    this.isValid = hasExactSelections;
+    
+    if (!hasExactSelections) {
+      this.customErrorMessage = `Debe seleccionar exactamente ${this.exactSelections} opciones`;
+    } else {
+      this.customErrorMessage = '';
+    }
+    
+    setTimeout(() => this.updateInterestStyles(), 0);
+  }
+  
   private getErrorMessage(): string {
     if (!this.control || !this.control.errors) return '';
     

@@ -1,10 +1,10 @@
 export class UserLabels {
   constructor(
-    public first_label: label,
-    public second_label: label,
-    public third_label: label,
-    public fourth_label: label,
-    public fifth_label: label,
+    public first_label: string,
+    public second_label: string,
+    public third_label: string,
+    public fourth_label: string,
+    public fifth_label: string,
   ) {}
 }
 
@@ -24,21 +24,10 @@ export class Profile {
     public last_name: string,
     public bio: string,
     public birthdate: string,
-    public gender: Gender,
-    public province: Province,
+    public gender: number,
+    public province: string,
     public labels: UserLabels,
     public user_id: number,
+    public images: Images,
   ) {}
-}
-
-export interface Gender {
-  name: string;
-}
-
-export interface Province {
-  name: string;
-}
-
-export interface label {
-  name: string;
 }

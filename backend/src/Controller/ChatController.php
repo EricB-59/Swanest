@@ -148,15 +148,4 @@ final class ChatController extends AbstractController
 
         return new JsonResponse('message_created', Response::HTTP_OK);
     }
-
-    #[Route(path: '/messagesRead/{id}', name: 'app_messages_no_read', methods: ['GET'])]
-    public function messagesNoRead(
-        int $id,
-        EntityManagerInterface $entityManager
-    ): JsonResponse {
-        $messageRepository = $entityManager->getRepository(Message::class);
-        $messagesNoRead = $messageRepository->findBy(['receiver' => $id, 'is_read' => false]);
-
-        return new JsonResponse(['count' => count($messagesNoRead)]);
-    }
 }

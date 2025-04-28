@@ -96,14 +96,17 @@ interface Label {
                 appErrorFields
               />
               <datalist id="provinces">
-                @for (province of this.provinces; track $index) {
+              @for (province of this.provinces; track $index) {
                   <option value="{{ province.name }}"></option>
-                }
-              </datalist>
+                } 
+               </datalist>
             </label>
 
             <!--Labels-->
-            <label for="" class="flex flex-row justify-between">
+            <label for="" class="flex flex-row justify-between"
+            appErrorFields
+            [exactSelections]="5"
+            [currentSelections]="selectedInterests">
               <h2 class="font-basereg pt-6">Intereses</h2>
               <h2 id="counter" class="font-basereg pt-6 pr-6">
                 {{ selectedInterests.length }}/5
@@ -202,40 +205,52 @@ export class ProfileInfoComponent implements OnInit {
   ngOnInit(): void {
     this.profileService.getProvinces().subscribe({
       next: (result) => {
-        console.log('Respuesta de API de provincias:', result);
         if (result && Array.isArray(result)) {
           this.provinces = result;
-          this.provinceNames = this.provinces.map((p) => p.name);
-          console.log('Provincias procesadas:', this.provinceNames);
+          this.provinceNames = this.provinces.map(p => p.name);
         }
       },
     });
-
+  
     this.profileService.getLabels().subscribe({
       next: (result) => {
-        console.log('Respuesta de API de etiquetas:', result);
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
-        console.log('Etiquetas procesadas:', this.labels);
       },
       error: (err) => {
         console.error('Error al cargar etiquetas:', err);
-      },
+      }
     });
   }
 
   toggleInterest(interest: string, event: Event) {
     const checkbox = event.target as HTMLInputElement;
-
+  
     if (checkbox.checked) {
       if (this.selectedInterests.length < 5) {
         this.selectedInterests.push(interest);
       } else {
         checkbox.checked = false;
+        return;
       }
     } else {
       this.selectedInterests = this.selectedInterests.filter(
         (i) => i !== interest,
       );
+    }
+    
+        // Update the counter
+    const counterElement = document.getElementById('counter');
+    if (counterElement) {
+      counterElement.textContent = `${this.selectedInterests.length}/5`;
+      
+      // Update colour according to status
+      if (this.selectedInterests.length === 5) {
+        counterElement.style.color = '#34C759'; // Green
+      } else if (this.selectedInterests.length > 0) {
+        counterElement.style.color = '#FF3B30'; // Red
+      } else {
+        counterElement.style.color = 'black'; // Black
+      }
     }
   }
 
@@ -246,22 +261,27 @@ export class ProfileInfoComponent implements OnInit {
     const provinceInput = (
       document.querySelector('input[list="provinces"]') as HTMLInputElement
     )?.value;
-
+  
     const isValidProvince = this.provinceNames.some(
-      (p) => p.toLowerCase() === provinceInput.toLowerCase(),
+      p => p.toLowerCase() === provinceInput.toLowerCase()
     );
-
+  
     if (!isValidProvince) {
-      console.log('Provincia no válida:', provinceInput);
-      console.log('Provincias válidas:', this.provinceNames);
-      const provinceElement = document.querySelector(
-        '#province',
-      ) as HTMLInputElement;
+ 
+      const provinceElement = document.querySelector('#province') as HTMLInputElement;
       provinceElement.focus();
-      provinceElement.blur(); // Activar validación
+      provinceElement.blur(); // Activate validation
       return;
     }
-
+    if (this.selectedInterests.length !== 5) {
+      // Mostrar error
+      const interestsLabel = document.querySelector('label[appErrorFields][exactSelections]');
+      if (interestsLabel) {
+        const event = new Event('change', { bubbles: true });
+        interestsLabel.dispatchEvent(event);
+      }
+      return;
+    }
     const profileData = {
       bio,
       province: provinceInput,
@@ -272,7 +292,7 @@ export class ProfileInfoComponent implements OnInit {
 
     this._matDialog.open(ImagesUploadComponent, {
       disableClose: true,
-      hasBackdrop: false, // o true si quieres que se mantenga el fondo oscuro
+      hasBackdrop: false, // or true if you want the background to remain dark
       panelClass: 'custom-dialog',
     });
   }

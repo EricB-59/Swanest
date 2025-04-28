@@ -19,7 +19,7 @@
       </div>
       <div class="flex">
         <button
-          class="font-family-regular cursor-pointer rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
+          class="font-family-regular rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
           (click)="toggleSlide()"
         >
           {{ isRightSide ? "Iniciar sesión" : "Registrarse" }}
@@ -43,20 +43,20 @@
     class="relative m-15 flex h-175 w-full items-start justify-between overflow-hidden rounded-[4.625rem] bg-white p-3 pl-10"
   >
     @if (display) {
-      <div class="relative flex h-full w-10/12 flex-col gap-10 py-10">
+      <div class="relative flex h-full w-10/12 flex-col gap-10 p-10">
         <app-register-user></app-register-user>
         <button
-          class="font-family-regular cursor-pointer rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
+          class="font-family-regular rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
           (click)="display = !display"
         >
           {{ display ? "Iniciar sesión" : "Registrarse" }}
         </button>
       </div>
     } @else {
-      <div class="relative flex h-full w-10/12 flex-col gap-10 py-10">
+      <div class="relative flex h-full w-10/12 flex-col gap-10 p-10">
         <app-login-user [closeModal]="close.bind(this)"></app-login-user>
         <button
-          class="font-family-regular cursor-pointer rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
+          class="font-family-regular rounded-full bg-black px-6 py-4.5 tracking-[0.5px] text-white"
           (click)="display = !display"
         >
           {{ isRightSide ? "Iniciar sesión" : "Registrarse" }}

@@ -1,10 +1,5 @@
-<div
-  class="flex h-full w-full flex-col rounded-[50px] border-1 border-[#DFDFDF] bg-white"
->
-  <header class="flex flex-row gap-4 border-b-1 border-[#BFBFBF] p-5 pb-4">
-    <button (click)="closeChat()" class="scale-140 lg:hidden">
-      <img src="assets/images/app/icons/arrows-icon.svg" alt="" />
-    </button>
+<div class="flex h-full w-full flex-col bg-white">
+  <header class="border-b-1 border-[#BFBFBF] p-5 pb-4">
     <div class="flex gap-5">
       <div class="ml-1 h-16 w-16 overflow-hidden rounded-full">
         <img [src]="userImg" alt="Error displaying" />
@@ -12,14 +7,17 @@
       <div
         class="font-family-regular mt-1 mr-4 flex flex-col items-start gap-1 overflow-hidden"
       >
-        <h2 class="text-xl">{{ userName }}</h2>
+        <h2 class="text-lg">{{ userName }}</h2>
       </div>
     </div>
+    <button (click)="closeChat()" class="lg:hidden">
+      <img src="assets/images/app/icons/arrows-icon.svg" alt="" />
+    </button>
   </header>
   <div
     #scrollContainer
     id="scroll-container"
-    class="flex h-300 w-full flex-col overflow-auto bg-white py-2"
+    class="flex h-300 w-full flex-col overflow-auto bg-white"
     (scroll)="onScroll()"
   >
     @for (message of this.messages; track $index) {
@@ -30,9 +28,7 @@
       ></app-message>
     }
   </div>
-  <div
-    class="flex items-center justify-center gap-5 bg-transparent px-10 pb-10"
-  >
+  <div class="z-10 flex items-center justify-center gap-10 bg-white pb-10">
     <div class="h-min w-full lg:w-10/12">
       <input
         id="content_message"

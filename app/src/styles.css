@@ -93,17 +93,3 @@
   /* Transiciones */
   --transition-default: all 0.3s ease-in-out;
 }
-
-.transparent-modal {
-  /* Hace que el contenedor del modal sea transparente */
-  .mat-mdc-dialog-container,
-  .mat-mdc-dialog-surface {
-    background: transparent !important;
-    box-shadow: none !important;
-  }
-}
-
-/* Si quieres que el backdrop (el fondo oscuro) sea menos oscuro o con cierta transparencia */
-.transparent-backdrop {
-  background: rgba(0, 0, 0, 0.5); /* Ajusta la opacidad según necesites */
-}

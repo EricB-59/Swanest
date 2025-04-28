@@ -1,214 +1,32 @@
-import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
-import { MatchService } from '../../services/match/match.service';
-import { Profile } from '../../models/profile';
-import { AgePipe } from '../pipes/age.pipe';
-import Swiper from 'swiper';
-import { Autoplay, EffectFade } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/effect-fade';
-// import {MatBottomSheetModule} from '@angular/material/bottom-sheet'
+import { AfterViewInit, Component, inject, OnDestroy, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-match-section',
-  imports: [AgePipe],
+  imports: [],
   templateUrl: './match-section.component.html',
   styleUrl: './match-section.component.css',
 })
-export class MatchSectionComponent implements OnInit {
-  matchService: MatchService = inject(MatchService);
-  profiles: Profile[] = []; // Aquí guardaremos el primer objeto de cada array
-  imagenes: any[] = []; // Aquí guardaremos los objetos restantes
-  user = sessionStorage.getItem('user');
-  private cardToUserIdMap = new WeakMap<HTMLElement, number>();
+export class MatchSectionComponent implements AfterViewInit {
+  // matchService: MatchService = inject(MatchService);
+  // profiles!: Profile[]
+  // user = sessionStorage.getItem('user')
 
-  ngOnInit(): void {
-    if (this.user) {
-      const user_id = JSON.parse(this.user).id;
-      this.matchService.getProfiles(user_id).subscribe({
-        next: (data) => {
-          // Procesamos los datos para separar profiles e imagenes
-          this.processProfileData(data);
-          console.info('Profiles:', this.profiles);
-          console.info('Imagenes:', this.imagenes);
+  // ngOnInit(): void {
+  //   if (this.user) {
+  //     const user_id = JSON.parse(this.user).id;
+  //     this.matchService.getProfiles(user_id).subscribe({
+  //       next: (data) => { 
+  //         this.profiles = data;
+  //         console.info(this.profiles)
+  //       },
+  //       error: (error) => {
+  //         console.error(error)
+  //       }
+  //     })
+  //   }
+  // }
 
-          setTimeout(() => {
-            this.initializeSwipers();
-            this.initializeCardMapping();
-            this.setupDragEvents();
-          }, 0);
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-    }
-  }
-
-  /**
-   * Procesa los datos recibidos del backend separando el primer objeto como profile
-   * y los demás como imágenes
-   */
-  private processProfileData(data: any[]): void {
-    // Asumimos que data es un array donde cada elemento es otro array
-    // El primer elemento de cada subarray es el profile, el resto son imágenes
-    this.profiles = [];
-    this.imagenes = [];
-
-    data.forEach((item) => {
-      if (Array.isArray(item) && item.length > 0) {
-        // El primer elemento es el profile
-        this.profiles.push(item[0]);
-
-        // Los elementos restantes son imágenes
-        if (item.length > 1) {
-          this.imagenes.push(item.slice(1));
-        }
-      } else {
-        // Si el elemento no es un array, lo tratamos como un profile completo
-        this.profiles.push(item);
-      }
-    });
-  }
-
-  private initializeSwipers(): void {
-    const swipers = document.querySelectorAll('.swiper');
-
-    swipers.forEach((swiperEl, index) => {
-      new Swiper(swiperEl as HTMLElement, {
-        modules: [Autoplay, EffectFade],
-        effect: 'fade',
-        loop: true,
-        autoplay: {
-          delay: 5000,
-          disableOnInteraction: false,
-        },
-        on: {
-          init: function () {
-            const counter = document.querySelector(
-              `#counter-${index} span.text-white`,
-            );
-            if (counter) {
-              counter.textContent = String((this as any).realIndex + 1);
-            }
-          },
-          slideChange: function () {
-            const counter = document.querySelector(
-              `#counter-${index} span.text-white`,
-            );
-            if (counter) {
-              counter.textContent = String((this as any).realIndex + 1);
-            }
-          },
-        },
-      });
-    });
-  }
-
-  handleDislike(profile: Profile, event: Event) {
-    event.stopPropagation();
-
-    const card = (event.target as HTMLElement).closest('.card') as HTMLElement;
-    if (!card) return;
-
-    card.classList.add('go-left');
-
-    this.addDislike(profile.user_id);
-
-    card.addEventListener(
-      'transitionend',
-      () => {
-        this.profiles = this.profiles.filter(
-          (p) => p.user_id !== profile.user_id,
-        );
-        // También eliminamos las imágenes correspondientes
-        const profileIndex = this.profiles.findIndex(
-          (p) => p.user_id === profile.user_id,
-        );
-        if (profileIndex !== -1) {
-          this.imagenes.splice(profileIndex, 1);
-        }
-      },
-      { once: true },
-    );
-  }
-
-  handleLike(profile: Profile, event: Event): void {
-    event.stopPropagation();
-
-    const card = (event.target as HTMLElement).closest('.card') as HTMLElement;
-    if (!card) return;
-
-    card.classList.add('go-right');
-
-    this.addLike(profile.user_id);
-
-    card.addEventListener(
-      'transitionend',
-      () => {
-        // Obtenemos el índice antes de filtrar
-        const profileIndex = this.profiles.findIndex(
-          (p) => p.user_id === profile.user_id,
-        );
-
-        this.profiles = this.profiles.filter(
-          (p) => p.user_id !== profile.user_id,
-        );
-
-        // También eliminamos las imágenes correspondientes
-        if (profileIndex !== -1) {
-          this.imagenes.splice(profileIndex, 1);
-        }
-      },
-      { once: true },
-    );
-  }
-
-  addLike(likedUserId: number) {
-    if (this.user) {
-      const user_id = JSON.parse(this.user).id;
-      this.matchService.addLike(user_id, likedUserId).subscribe({
-        next: (data) => {
-          console.info(data);
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-    }
-  }
-
-  addDislike(dislikeUserId: number) {
-    if (this.user) {
-      const user_id = JSON.parse(this.user).id;
-      this.matchService.addDislike(user_id, dislikeUserId).subscribe({
-        next: (data) => {
-          console.info(data);
-        },
-        error: (error) => {
-          console.error(error);
-        },
-      });
-    }
-  }
-
-  Rewind() {}
-
-  private initializeCardMapping(): void {
-    setTimeout(() => {
-      const cards = document.querySelectorAll('.card');
-      cards.forEach((card, index) => {
-        if (this.profiles[index]) {
-          this.cardToUserIdMap.set(
-            card as HTMLElement,
-            this.profiles[index].user_id,
-          );
-        }
-      });
-    });
-  }
-
-  private setupDragEvents(): void {
+  ngAfterViewInit(): void {
     // As of this grades we consider the user maked a decision
     const DECISION_THRESHOLD = 75;
 
@@ -217,7 +35,6 @@ export class MatchSectionComponent implements OnInit {
 
     // Distance of the card drag
     let pullDistanceX = 0;
-    const component = this;
 
     document.addEventListener('mousedown', startDrag);
     // With passive true we ignore the default behavior
@@ -234,7 +51,6 @@ export class MatchSectionComponent implements OnInit {
       const target = event.target as HTMLElement;
       // Get the first article
       const actualCard = target.closest('.card') as HTMLElement;
-      if (!actualCard) return;
 
       // Get initial position of mouse or finger
       const startX = event.pageX ?? event.touches[0].pageX;
@@ -274,7 +90,7 @@ export class MatchSectionComponent implements OnInit {
         }
       }
 
-      function onEnd() {
+      function onEnd(event: any) {
         // remove the event listeners
         document.removeEventListener('mousemove', onMove);
         document.removeEventListener('mouseup', onEnd);
@@ -288,34 +104,19 @@ export class MatchSectionComponent implements OnInit {
         // In this point the user had make a decision
         if (decisionMade) {
           const goRight = pullDistanceX >= 0;
+          const goLeft = !goRight;
 
           // add class acording to the decision
           actualCard?.classList.add(goRight ? 'go-right' : 'go-left');
           actualCard?.addEventListener(
             'transitionend',
             () => {
-              const user_id = component.cardToUserIdMap.get(actualCard);
-              if (user_id !== undefined) {
-                if (goRight) {
-                  component.addLike(user_id);
-                } else {
-                  component.addDislike(user_id);
-                }
-              }
-
-              // Encontrar y eliminar el profile y sus imágenes
-              const profileIndex = component.profiles.findIndex(
-                (p) => p.user_id === user_id,
-              );
-              if (profileIndex !== -1) {
-                component.profiles.splice(profileIndex, 1);
-                component.imagenes.splice(profileIndex, 1);
-              }
-
               actualCard.remove();
               isAnimating = false;
             },
-            { once: true },
+            {
+              once: true,
+            },
           );
         } else {
           actualCard?.classList.add('reset');
