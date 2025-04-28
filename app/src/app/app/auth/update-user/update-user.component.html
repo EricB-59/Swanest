@@ -1,37 +1,38 @@
-<section class="p-6 md:p-12">
+<section class="p-6 md:p-12 bg-white rounded-4xl">
+  <h2 class="text-primary-main font-family-regular text-3xl mb-6">Editar Perfil</h2>
   <form action="" class="grid w-full grid-cols-1 gap-10 md:grid-cols-2">
     <!-- IMAGES -->
     <article class="space-y-6">
       <!-- Imagen principal -->
-      <picture>
+      <picture class="flex justify-center">
         <img
           [src]=""
           alt="Imagen principal del usuario"
-          class="h-64 w-full rounded-2xl bg-slate-300 object-cover"
+          class="h-64 w-64 rounded-2xl  bg-slate-300 object-cover "
         />
       </picture>
 
       <!-- Cuadrícula de imágenes secundarias -->
-      <div class="grid grid-cols-2 grid-rows-2 gap-4">
+      <div class="grid grid-cols-2 grid-rows-2 gap-4 place-items-center">
         <img
           src=""
           alt="Imagen 1"
-          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
         />
         <img
           src=""
           alt="Imagen 2"
-          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
         />
         <img
           src=""
           alt="Imagen 3"
-          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
         />
         <img
           src=""
           alt="Imagen 4"
-          class="h-32 w-full rounded-2xl bg-slate-300 object-cover"
+          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
         />
       </div>
     </article>
@@ -40,23 +41,27 @@
     <article class="space-y-6">
       <!-- BIO -->
       <div>
-        <label for="bio" class="block text-lg font-light">Preséntate *</label>
+        <h2 for="bio" class="block text-lg font-light">Preséntate *</h2>
         <textarea
           name="bio"
           id="bio"
           rows="3"
           class="mt-2 w-full resize-none border-b-2 border-black font-light focus:outline-none"
           [value]=""
+          [minLength] = "20"
+          appErrorFields
         ></textarea>
       </div>
 
       <!-- PROVINCIA -->
       <div>
-        <label for="province" class="block text-lg font-light">Provincia</label>
+        <h2 for="province" class="block text-lg font-light">Provincia</h2>
         <input
           list="provinces"
           id="province"
           name="province"
+          [validList]="provinceNames"
+          appErrorFields
           class="mt-2 h-8 w-full border-b-2 border-black font-light focus:outline-none"
         />
         <datalist id="provinces">
@@ -70,82 +75,89 @@
       <fieldset>
         <legend class="mb-3 text-lg font-light">Género *</legend>
         <div class="flex flex-wrap gap-2">
-          <!-- Cada opción -->
-          <div
-            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
-          >
-            <input
-              type="radio"
-              id="male"
-              name="genre"
-              value="1"
-              class="h-4 w-4 accent-purple-500"
-            />
-            <label for="male" class="cursor-pointer font-light">Hombre</label>
-          </div>
-          <div
-            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
-          >
-            <input
-              type="radio"
-              id="female"
-              name="genre"
-              value="2"
-              class="h-4 w-4 accent-purple-500"
-            />
-            <label for="female" class="cursor-pointer font-light">Mujer</label>
-          </div>
-          <div
-            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
-          >
-            <input
-              type="radio"
-              id="non-binary"
-              name="genre"
-              value="3"
-              class="h-4 w-4 accent-purple-500"
-            />
-            <label for="non-binary" class="cursor-pointer font-light"
-              >No binario</label
-            >
-          </div>
-          <div
-            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
-          >
-            <input
-              type="radio"
-              id="other"
-              name="genre"
-              value="4"
-              class="h-4 w-4 accent-purple-500"
-            />
-            <label for="other" class="cursor-pointer font-light">Otros</label>
-          </div>
-          <div
-            class="flex w-fit items-center gap-2 rounded-full border px-4 py-2"
-          >
-            <input
-              type="radio"
-              id="prefere-not-to-say"
-              name="genre"
-              value="5"
-              class="h-4 w-4 accent-purple-500"
-            />
-            <label for="prefere-not-to-say" class="cursor-pointer font-light"
-              >Prefiero no contestar</label
-            >
-          </div>
+          <!-- Opción Hombre -->
+          <label for="male" class="group">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+              <input
+                type="radio"
+                id="male"
+                name="genre"
+                value="1"
+                class="h-4 w-4 accent-purple-500"
+              />
+              <span class="cursor-pointer font-light">Hombre</span>
+            </div>
+          </label>
+          
+          <!-- Opción Mujer -->
+          <label for="female" class="group">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+              <input
+                type="radio"
+                id="female"
+                name="genre"
+                value="2"
+                class="h-4 w-4 accent-purple-500"
+              />
+              <span class="cursor-pointer font-light">Mujer</span>
+            </div>
+          </label>
+          
+          <!-- Opción No binario -->
+          <label for="non-binary" class="group">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+              <input
+                type="radio"
+                id="non-binary"
+                name="genre"
+                value="3"
+                class="h-4 w-4 accent-purple-500"
+              />
+              <span class="cursor-pointer font-light">No binario</span>
+            </div>
+          </label>
+          
+          <!-- Opción Otros -->
+          <label for="other" class="group">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+              <input
+                type="radio"
+                id="other"
+                name="genre"
+                value="4"
+                class="h-4 w-4 accent-purple-500"
+              />
+              <span class="cursor-pointer font-light">Otros</span>
+            </div>
+          </label>
+          
+          <!-- Opción Prefiero no contestar -->
+          <label for="prefere-not-to-say" class="group">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+              <input
+                type="radio"
+                id="prefere-not-to-say"
+                name="genre"
+                value="5"
+                class="h-4 w-4 accent-purple-500"
+              />
+              <span class="cursor-pointer font-light">Prefiero no contestar</span>
+            </div>
+          </label>
         </div>
       </fieldset>
 
       <!-- INTERESES -->
       <div>
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-medium">Intereses</h2>
-          <span id="counter" class="text-sm"
-            >{{ selectedInterests.length }}/5</span
-          >
-        </div>
+        <div class="flex flex-row justify-between"
+            [exactSelections]="5"
+            [currentSelections]="selectedInterests"
+            appErrorFields>
+              <h2 class="font-basereg pt-6">Intereses</h2>
+              <h2 id="counter" class="font-basereg pt-6 pr-6">
+                {{ selectedInterests.length }}/5
+              </h2>
+            </div>
 
         <ul
           class="flex w-full flex-wrap items-center justify-start gap-1 pt-2 text-sm"
@@ -174,4 +186,24 @@
       </div>
     </article>
   </form>
+  <article class="font-family-regular flex justify-between w-full mt-6">
+    <button class="flex gap-2 border-gray-400 border-2 rounded-xl items-center px-6 py-2 cursor-pointer  hover:bg-[#ff3b30] hover:border-black "><img class="w-6 h-6" src="assets/images/app/icons/delete-icon.svg" alt="Delete Icon"> Borrar Cuenta</button>
+    <button class="flex bg-black text-white rounded-full cursor-pointer"><span class=" flex items-center pl-6">Siguiente</span> 
+      <div class="flex h-10.5 w-10.5 items-center justify-center">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M2.99878 1C7.56695 2.03828 10.1617 2.20302 14.9988 1C13.7677 5.6902 13.8282 8.30395 14.9988 13"
+          stroke="white"
+        />
+        <path d="M14.9695 1.06836L0.999885 15.3342" stroke="white" />
+      </svg>
+    </div>
+  </button>
+  </article>
 </section>
