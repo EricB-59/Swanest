@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ProfileService } from '../../../services/profile/profile.service';
-import { Profile } from '../../../models/profile';
+import { Images, Profile } from '../../../models/profile';
 import { ErrorFieldsDirective } from '../../../landing-page/directives/error-fields.directive';
+import { UserService } from '../../../services/user/user.service';
+import { Router } from '@angular/router';
 interface Province {
   id: number;
   name: string;
@@ -11,6 +13,14 @@ interface Label {
   id: number;
   name: string;
 }
+type Image = {
+  id: number,
+  image_1: string,
+  image_2: string,
+  image_3: string,
+  image_4: string,
+  image_5: string,
+}
 @Component({
   selector: 'app-update-user',
   imports: [ErrorFieldsDirective],
@@ -18,15 +28,28 @@ interface Label {
   styles: ``,
 })
 export class UpdateUserComponent {
-  constructor(private profileService: ProfileService) {}
+  constructor(private profileService: ProfileService, private userService: UserService, private router: Router) {}
 
   profile: any;
   provinces: Province[] = [];
   provinceNames: string[] = [];
   labels: Label[] = [];
   selectedInterests: string[] = [];
+  images: Image  = <Image>{};
 
   ngOnInit(): void {
+    const user = sessionStorage.getItem('user');
+    if(user) {
+      const userObject = JSON.parse(user);
+      const userId = userObject.id;
+    this.userService.getImages(userId).subscribe({
+      next: (result) => {
+        if(result) {
+          this.images = result;
+        }
+      },
+    });
+  }
     this.profileService.getProvinces().subscribe({
       next: (result) => {
         if (result && Array.isArray(result)) {
@@ -78,6 +101,21 @@ export class UpdateUserComponent {
       } else {
         counterElement.style.color = 'black'; // Black
       }
+    }
+  }
+  handleDelete() {
+    const user = sessionStorage.getItem('user');
+    if(user) {
+      const userObject = JSON.parse(user);
+      const userId = userObject.id;
+      this.userService.delete(userId).subscribe({
+        next: (result) => {
+          if(result) {
+            sessionStorage.clear;
+          this.router.navigate(['/'])
+          }
+        }
+      })
     }
   }
 }
