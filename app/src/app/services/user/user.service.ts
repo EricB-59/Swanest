@@ -3,6 +3,14 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { API_URL } from '../../../config/const';
+type Image = {
+  id: number,
+  image_1: string,
+  image_2: string,
+  image_3: string,
+  image_4: string,
+  image_5: string,
+}
 
 interface ImagesToSend {
   id: number;
@@ -49,10 +57,14 @@ export class UserService {
       }),
     });
   }
-
   login(identifier: string, password: string): Observable<User> {
     const data = { identifier, password };
     return this.connHttp.post<User>(API_URL + this.PREFIX + '/login', data);
+  }
+  getImages(id:number): Observable<Image> {
+    return this.connHttp.get<Image>(API_URL +  'images/' + id, {
+      headers:new HttpHeaders({'Content-Type': 'application/json',}),
+    });
   }
 
   images(id: number, images: any) {
