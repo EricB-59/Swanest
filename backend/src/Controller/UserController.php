@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Images;
 use DateTimeImmutable;
 use DateTimeZone;
 use App\Entity\User;
@@ -120,6 +121,7 @@ final class UserController extends AbstractController
         // Return success response with non-sensitive user data
         // Note: Password is deliberately excluded from response
         return new JsonResponse([
+            "id" => $user->getId(),
             "username" => $user->getUsername(),
             "email" => $user->getEmail()
         ], Response::HTTP_OK);
@@ -180,5 +182,44 @@ final class UserController extends AbstractController
         $entityManager->flush();
 
         return new JsonResponse('user-removed', Response::HTTP_OK);
+    }
+
+    #[Route('/images', 'app_add_images', methods: ['POST'])]
+    public function addImages(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $id = $data['id'];
+        $image_1 = $data['image_1'];
+        $image_2 = $data['image_2'];
+        $image_3 = $data['image_3'];
+        $image_4 = $data['image_4'];
+        $image_5 = $data['image_5'];
+
+        if (empty($id) || empty($image_1) || empty($image_2)) {
+            return new JsonResponse(false, Response::HTTP_BAD_REQUEST);
+        }
+
+        $repositoryUsers = $entityManager->getRepository(User::class);
+        $user = $repositoryUsers->find($id);
+
+        if (!$user) {
+            return new JsonResponse(false, Response::HTTP_NOT_FOUND);
+        }
+
+        $images = new Images;
+        $images->setUser($user);
+        $images->setImage1($image_1);
+        $images->setImage2($image_2);
+        $images->setImage3($image_3);
+        $images->setImage4($image_4);
+        $images->setImage5($image_5);
+
+        $dateTimeZone = new DateTimeZone("Europe/Madrid");
+        $images->setUploadedAt(new DateTimeImmutable(timezone: $dateTimeZone));
+
+        $entityManager->persist($images);
+        $entityManager->flush();
+
+        return new JsonResponse(true, Response::HTTP_OK);
     }
 }
