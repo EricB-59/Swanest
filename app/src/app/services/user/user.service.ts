@@ -71,6 +71,6 @@ export class UserService {
     birthDate: string,
   ) {
     const preferences = { user_id, province, genre, birthDate };
-    return this.connHttp.post<boolean>(API_URL + '/preferences', preferences);
+    return this.connHttp.post<boolean>(API_URL + 'preferences', preferences);
   }
 }
