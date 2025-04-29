@@ -11,9 +11,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route('/match', name: 'app_match')]
-final class MatchController extends AbstractController {
-    #[Route('/profiles/{id}', 'app_match_profiles', methods: ['GET'])] 
-    public function getMatchProfiles(int $id, Request $request, EntityManagerInterface $entityManager){
+final class MatchController extends AbstractController
+{
+    #[Route('/profiles/{id}', 'app_match_profiles', methods: ['GET'])]
+    public function getMatchProfiles(int $id, Request $request, EntityManagerInterface $entityManager)
+    {
         $minAge = $request->get('minAge');
         $maxAge = $request->get('maxAge');
         $gender = $request->query->get('gender');
@@ -22,13 +24,13 @@ final class MatchController extends AbstractController {
         $profileRepository = $entityManager->getRepository(Profile::class);
         $profiles = $profileRepository->findProfiles($id, $minAge, $maxAge, $gender, $province);
 
-        $profilesArray = [];
-        foreach($profiles as $profile){
-            $profilesArray[] = $profile->toArray();
+        if (!$profiles) {
+            return new JsonResponse('Profiles not found', Response::HTTP_NOT_FOUND);
         }
 
-        if (!$profiles) {
-            return new JsonResponse('Profiles not found.', Response::HTTP_NOT_FOUND);
+        $profilesArray = [];
+        foreach ($profiles as $profile) {
+            $profilesArray[] = $profile->toArray();
         }
 
         return new JsonResponse($profilesArray, Response::HTTP_OK);
