@@ -26,7 +26,7 @@ final class PreferencesController extends AbstractController
         $genre = $data['genre'];
         $birtdate = $data['birthdate'];
 
-        if (empty($userID) || empty($province) || empty($genre) || empty($birtdate)) {
+        if (empty($userId) || empty($province) || empty($genre) || empty($birtdate)) {
             return new JsonResponse('empty-fields', Response::HTTP_BAD_REQUEST);
         }
 

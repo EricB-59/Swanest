@@ -1,10 +1,11 @@
 import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MatDialog } from '@angular/material/dialog';
 import { ProfileService } from '../../../services/profile/profile.service';
 import { Profile, UserLabels, Images } from '../../../models/profile';
 import { UserService } from '../../../services/user/user.service';
 import { Router } from '@angular/router';
 import { switchMap, throwError } from 'rxjs';
+import { InfoModalComponent } from '../../../app/components/info-modal/info-modal.component';
 
 export interface label {
   name: string;
@@ -43,6 +44,7 @@ export class ImagesUploadComponent implements AfterViewInit {
     private profileService: ProfileService,
     private userService: UserService,
     private router: Router,
+    private matDialog: MatDialog,
   ) {}
 
   ngAfterViewInit(): void {
@@ -258,8 +260,14 @@ export class ImagesUploadComponent implements AfterViewInit {
               .subscribe({
                 next: (result) => {
                   console.log(result);
-                  this.router.navigate(['app']);
-                  this.closeModal();
+
+                  // Guardamos un flag para mostrar el modal tras el reload
+                  localStorage.setItem('showModal', 'true');
+
+                  // Navegamos y recargamos
+                  this.router.navigate(['/']).then(() => {
+                    window.location.reload();
+                  });
                 },
                 error: (err) => {
                   console.error('Error en el proceso:', err);

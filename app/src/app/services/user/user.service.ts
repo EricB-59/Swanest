@@ -4,13 +4,13 @@ import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { API_URL } from '../../../config/const';
 type Image = {
-  id: number,
-  image_1: string,
-  image_2: string,
-  image_3: string,
-  image_4: string,
-  image_5: string,
-}
+  id: number;
+  image_1: string;
+  image_2: string;
+  image_3: string;
+  image_4: string;
+  image_5: string;
+};
 
 interface ImagesToSend {
   id: number;
@@ -61,9 +61,9 @@ export class UserService {
     const data = { identifier, password };
     return this.connHttp.post<User>(API_URL + this.PREFIX + '/login', data);
   }
-  getImages(id:number): Observable<Image> {
-    return this.connHttp.get<Image>(API_URL +  'images/' + id, {
-      headers:new HttpHeaders({'Content-Type': 'application/json',}),
+  getImages(id: number): Observable<Image> {
+    return this.connHttp.get<Image>(API_URL + 'images/' + id, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
@@ -80,9 +80,9 @@ export class UserService {
     user_id: number,
     province: Province,
     genre: Gender,
-    birthDate: string,
+    birthdate: string,
   ) {
-    const preferences = { user_id, province, genre, birthDate };
+    const preferences = { user_id, province, genre, birthdate };
     return this.connHttp.post<boolean>(API_URL + 'preferences', preferences);
   }
 }
