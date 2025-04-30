@@ -36,6 +36,7 @@ export class UpdateUserComponent {
   labels: Label[] = [];
   selectedInterests: string[] = [];
   images: Image  = <Image>{};
+  imagesToUpload: Map<string, File> = new Map();
 
   ngOnInit(): void {
     const user = sessionStorage.getItem('user');
@@ -102,6 +103,38 @@ export class UpdateUserComponent {
         counterElement.style.color = 'black'; // Black
       }
     }
+  }
+  triggerFileInput(inputId: string) {
+    const fileInput = document.getElementById(inputId) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+  onFileSelected(event: Event, imageKey: string) {
+    const element = event.target as HTMLInputElement;
+    const file = element.files?.[0];
+    
+    if (file) {
+        // We verify that it is an image
+      if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecciona un archivo de imagen válido.');
+        return;
+      }
+      
+        // We save the file to upload it later.
+      this.imagesToUpload.set(imageKey, file);
+      
+      // We show a preview of the image
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        // We update the preview
+        (this.images as any)[imageKey] = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+  handleUpdate() {
+    
   }
   handleDelete() {
     const user = sessionStorage.getItem('user');
