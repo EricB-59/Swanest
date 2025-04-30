@@ -1,4 +1,3 @@
-
 import {
   Component,
   AfterViewInit,
@@ -6,12 +5,13 @@ import {
   QueryList,
   ElementRef,
   ViewChild,
+  OnInit,
 } from '@angular/core';
 import { gsap } from 'gsap';
 import interact from 'interactjs';
 import { AuthComponent } from '../../auth/auth.component';
 import { MatDialog } from '@angular/material/dialog';
-
+import { InfoModalComponent } from '../../../app/components/info-modal/info-modal.component';
 @Component({
   selector: 'app-landing',
   imports: [],
@@ -23,7 +23,7 @@ import { MatDialog } from '@angular/material/dialog';
     }
   `,
 })
-export class LandingComponent implements AfterViewInit {
+export class LandingComponent implements AfterViewInit, OnInit {
   constructor(private _matDialog: MatDialog) {}
 
   openModalAuth(): void {
@@ -46,6 +46,21 @@ export class LandingComponent implements AfterViewInit {
         new Button(buttonRef.nativeElement);
       });
     }, 0);
+  }
+
+  ngOnInit(): void {
+    const shouldShowModal = localStorage.getItem('showModal');
+
+    if (shouldShowModal === 'true') {
+      this._matDialog.open(InfoModalComponent, {
+        data: { type: 'Perfil creado correctamente' },
+        panelClass: 'transparent-modal',
+        backdropClass: 'transparent-backdrop',
+        hasBackdrop: true,
+      });
+
+      localStorage.removeItem('showModal'); // Limpiamos el flag para no repetir
+    }
   }
 
   initializeDraggableImage() {

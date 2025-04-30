@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
           class="mr-3 scale-75"
         />
         <h2 class="font-family-regular pt-2 text-sm lg:text-2xl">
-          ¡Tienes algo nuevo! {{ data.type }}: {{ data.number }}
+          Nueva Notificación: {{ data.type }}: {{ data.number }}
         </h2>
       </div>
     </article>
