@@ -204,4 +204,5 @@ final class ProfileController extends AbstractController
 
         return new JsonResponse($updateUser->toArray(), Response::HTTP_OK);
     }
+    
 }
