@@ -70,7 +70,7 @@ export class UserService {
     const formData = new FormData();
     imagesToUpload.forEach((file, key) => formData.append(key, file));
     return this.connHttp.post(
-      `${API_URL}images/${userId}`,
+      API_URL + 'images/' + userId,
       formData
     );
   }
