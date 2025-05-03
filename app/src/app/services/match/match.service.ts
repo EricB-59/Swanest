@@ -13,23 +13,22 @@ export class MatchService {
   constructor(private connHttp: HttpClient) {}
 
   getProfiles(id: number, filters?: MatchFilter): Observable<Profile[]> {
-    let params = new HttpParams();
+    // Crear objeto para el cuerpo del request
+    const requestBody: any = {};
 
+    // Agregar los filtros al cuerpo si existen
     if (filters) {
-      if (filters.gender) params = params.append('gender', filters.gender);
-      if (filters.maxAge)
-        params = params.append('maxAge', filters.maxAge.toString());
-      if (filters.minAge)
-        params = params.append('minAge', filters.minAge.toString());
-      if (filters.province)
-        params = params.append('province', filters.province);
+      if (filters.gender) requestBody.gender = filters.gender;
+      if (filters.maxAge) requestBody.maxAge = filters.maxAge;
+      if (filters.minAge) requestBody.minAge = filters.minAge;
+      if (filters.province) requestBody.province = filters.province;
     }
 
-    return this.connHttp.get<Profile[]>(
+    return this.connHttp.post<Profile[]>(
       API_URL + this.PREFIX + '/profiles/' + id,
+      requestBody,
       {
-        headers: new HttpHeaders({ 'content-Type': 'application/json' }),
-        params: params,
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       },
     );
   }

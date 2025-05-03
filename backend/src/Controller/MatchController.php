@@ -16,23 +16,35 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/match', name: 'app_match')]
 final class MatchController extends AbstractController
 {
-    #[Route('/profiles/{id}', 'app_match_profiles', methods: ['GET'])]
+    #[Route('/profiles/{id}', 'app_match_profiles', methods: ['POST'])]
     public function getMatchProfiles(int $id, Request $request, EntityManagerInterface $entityManager)
     {
-        $minAge = $request->get('minAge');
-        $maxAge = $request->get('maxAge');
-        $gender = $request->query->get('gender');
-        $province = $request->query->get('province');
+        // Obtener el contenido JSON del cuerpo de la petición
+        $data = json_decode($request->getContent(), true);
+
+        // Obtener los filtros del cuerpo de la petición
+        $minAge = $data['minAge'] ?? null;
+        $maxAge = $data['maxAge'] ?? null;
+        $gender = $data['gender'] ?? null;
+        $province = $data['province'] ?? null;
 
         $profileRepository = $entityManager->getRepository(Profile::class);
-        $profiles = $profileRepository->findProfiles($id, $minAge, $maxAge, $gender, $province);
+        $profiles = $profileRepository->findProfiles(
+            $id,
+            $minAge,
+            $maxAge ? $maxAge + 5 : null,
+            $gender,
+            $province
+        );
 
         $userRepository = $entityManager->getRepository(User::class);
-
-
         $profilesArray = [];
+
         foreach ($profiles as $profile) {
-            $profilesArray[] = [$profile->toArray(), ($userRepository->find($profile->getUser()->getId())->getImage()->toArray())];
+            $profilesArray[] = [
+                $profile->toArray(),
+                ($userRepository->find($profile->getUser()->getId())->getImage()->toArray())
+            ];
         }
 
         if (!$profiles) {
