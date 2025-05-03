@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Matche;
 use App\Entity\Profile;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\Expr\Math;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,15 +27,27 @@ final class MatchController extends AbstractController
         $profileRepository = $entityManager->getRepository(Profile::class);
         $profiles = $profileRepository->findProfiles($id, $minAge, $maxAge, $gender, $province);
 
-        if (!$profiles) {
-            return new JsonResponse('Profiles not found', Response::HTTP_NOT_FOUND);
-        }
+        $userRepository = $entityManager->getRepository(User::class);
+
 
         $profilesArray = [];
         foreach ($profiles as $profile) {
-            $profilesArray[] = $profile->toArray();
+            $profilesArray[] = [$profile->toArray(), ($userRepository->find($profile->getUser()->getId())->getImage()->toArray())];
+        }
+
+        if (!$profiles) {
+            return new JsonResponse('Profiles not found.', Response::HTTP_NOT_FOUND);
         }
 
         return new JsonResponse($profilesArray, Response::HTTP_OK);
+    }
+
+    #[Route('/{id}', 'app_match_profiles', methods: ['GET'])]
+    public function getMatchCount(int $id, EntityManagerInterface $entityManager)
+    {
+        $matchRepository = $entityManager->getRepository(Matche::class);
+        $matchs = $matchRepository->findBy(['user1' => $id]);
+
+        return new JsonResponse(count($matchs), Response::HTTP_OK);
     }
 }
