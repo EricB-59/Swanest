@@ -53,13 +53,19 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
       });
       this.matchService.getMatchCounts(user_id).subscribe({
         next: (data) => {
-          if (data >= 1) {
+          const sessionCount = sessionStorage.getItem('count-notification');
+          const countSession = sessionCount ? +sessionCount : 0;
+
+          if (countSession !== data && data >= 1) {
             this._matDialog.open(InfoModalComponent, {
               data: { type: 'Matchs', number: data },
               panelClass: 'transparent-modal',
               backdropClass: 'transparent-backdrop',
               hasBackdrop: true,
             });
+
+            // Opcional: actualiza el valor en sessionStorage si deseas que no se vuelva a mostrar hasta que cambie
+            sessionStorage.setItem('count-notification', data.toString());
           }
         },
         error: (error) => {
@@ -74,13 +80,19 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
       const user_id = JSON.parse(this.user).id;
       this.matchService.getMatchCounts(user_id).subscribe({
         next: (data) => {
-          if (data >= 1) {
+          const sessionCount = sessionStorage.getItem('count-notification');
+          const countSession = sessionCount ? +sessionCount : 0;
+
+          if (countSession !== data && data >= 1) {
             this._matDialog.open(InfoModalComponent, {
               data: { type: 'Matchs', number: data },
               panelClass: 'transparent-modal',
               backdropClass: 'transparent-backdrop',
               hasBackdrop: true,
             });
+
+            // Opcional: actualiza el valor en sessionStorage si deseas que no se vuelva a mostrar hasta que cambie
+            sessionStorage.setItem('count-notification', data.toString());
           }
         },
         error: (error) => {
