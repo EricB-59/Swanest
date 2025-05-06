@@ -1,0 +1,74 @@
+<div class="bg-white rounded-4xl p-5 max-w-[400px] tracking-[0.8px]">
+    <div class="flex justify-center items-center mb-4">
+      <h3 class="text-2xl font-family-regular text-center tracking-[0.8px]">FILTRAR</h3>
+    </div>
+    <div class="flex flex-col gap-5">
+       <div>
+            <p class="font-family-medium mb-3">Sexo:</p>
+            <div class="flex gap-2 flex-wrap">
+                <div
+                    class="flex h-[40px] w-fit flex-row items-center py-2 border-gray-600 pl-3 pr-2 justify-center rounded-[32px] border-1"
+                >
+                    <label for="male" class="text-sm font-family-regular mr-2 flex cursor-pointer">Hombre</label>
+                    <input
+                        value="1"
+                        id="male"
+                        name="genre"
+                        type="radio"
+                        class="flex h-[20px] w-[20px] cursor-pointer checked:accent-purple-500"
+                    />
+                </div>
+                <div
+                    class="flex h-[40px] w-fit border-gray-600 flex-row items-center py-2 pl-3 pr-2 justify-center rounded-[32px] border-1"
+                >
+                    <label for="female" class="text-sm font-family-regular mr-2 flex cursor-pointer">Mujer</label>
+                    <input
+                        value="1"
+                        id="female"
+                        name="genre"
+                        type="radio"
+                        class="flex h-[20px] w-[20px] cursor-pointer checked:accent-purple-500"
+                    />
+                </div>
+                <div
+                    class="flex h-[40px] w-fit border-gray-600 flex-row items-center py-2 pl-3 pr-2 justify-center rounded-[32px] border-1"
+                >
+                    <label for="non-binary" class="text-sm font-family-regular mr-2 flex cursor-pointer">No binario</label>
+                    <input
+                        value="1"
+                        id="non-binary"
+                        name="genre"
+                        type="radio"
+                        class="flex h-[20px] w-[20px] cursor-pointer checked:accent-purple-500"
+                    />
+                </div>
+                <div
+                    class="flex h-[40px] w-fit border-gray-600 flex-row items-center py-2 pl-3 pr-2 justify-center rounded-[32px] border-1"
+                >
+                    <label for="other" class="text-sm font-family-regular mr-2 flex cursor-pointer">Otro</label>
+                    <input
+                        value="1"
+                        id="other"
+                        name="genre"
+                        type="radio"
+                        class="flex h-[20px] w-[20px] cursor-pointer checked:accent-purple-500"
+                    />
+                </div>
+            </div>
+       </div>
+       <div class="flex flex-col">
+           <p class="font-family-medium mb-2">Edad:</p>
+           <div class="flex gap-4 justify-center">
+                <div class="flex flex-col">
+                    <span class="font-family-regular">min:</span>
+                    <input class="text-center border min-w-20 min-h-11 border-gray-500 rounded-xl font-family-regular" type="number" min="18" max="90" value="18">
+                </div>
+                <div class="flex flex-col">
+                    <span class="font-family-regular">max:</span>
+                    <input class="text-center min-w-20 min-h-11 border border-gray-500 rounded-xl font-family-regular" type="number" min="18" max="90" value="18">
+                </div>
+           </div>
+       </div>
+      <button class="bg-[#7948FF] text-white py-2.5 rounded-xl font-family-regular tracking-[0.8px]">Aplicar</button>
+    </div>
+</div>
