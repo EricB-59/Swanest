@@ -5,6 +5,8 @@ import { ErrorFieldsDirective } from '../../../landing-page/directives/error-fie
 import { UserService } from '../../../services/user/user.service';
 import { Router } from '@angular/router';
 import { Observable, catchError, finalize, of } from 'rxjs';
+import { InfoModalComponent } from '../../components/info-modal/info-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Province {
   id: number;
@@ -35,7 +37,8 @@ export class UpdateUserComponent implements OnInit {
   constructor(
     private profileService: ProfileService, 
     private userService: UserService, 
-    private router: Router
+    private router: Router,
+    private _matDialog: MatDialog
   ) {}
 
   profile: any;
@@ -54,7 +57,7 @@ export class UpdateUserComponent implements OnInit {
       const userObject = JSON.parse(user);
       this.userId = userObject.id;
       
-      // Cargar imágenes del usuario
+      // Upload user images
       this.userService.getImages(this.userId).subscribe({
         next: (result) => {
           if(result) {
@@ -63,7 +66,7 @@ export class UpdateUserComponent implements OnInit {
         },
         error: (error) => {
           console.error('Error al cargar imágenes', error);
-          // Inicializar imágenes vacías para evitar errores
+          // Initialising empty images to avoid errors
           this.images = {
             id: 0,
             image_1: '',
@@ -75,12 +78,12 @@ export class UpdateUserComponent implements OnInit {
         }
       });
       
-      // Cargar el perfil del usuario
+      // Load user profile
       this.profileService.getProfile(this.userId).subscribe({
         next: (result) => {
           this.profile = result;
           
-          // Preseleccionar intereses basados en el perfil cargado
+          // Pre-select interests based on the uploaded profile
           if (this.profile && this.profile.labels) {
             const labelKeys = ['first_label', 'second_label', 'third_label', 'fourth_label', 'fifth_label'];
             labelKeys.forEach(key => {
@@ -89,7 +92,7 @@ export class UpdateUserComponent implements OnInit {
               }
             });
             
-            // Actualizar el contador de intereses
+            // Update the interest counter
             this.updateInterestCounter();
           }
         },
@@ -99,7 +102,7 @@ export class UpdateUserComponent implements OnInit {
       });
     }
     
-    // Cargar provincias
+    //Load provincies
     this.profileService.getProvinces().subscribe({
       next: (result) => {
         if (result && Array.isArray(result)) {
@@ -112,7 +115,7 @@ export class UpdateUserComponent implements OnInit {
       }
     });
 
-    // Cargar etiquetas
+    // Load labels
     this.profileService.getLabels().subscribe({
       next: (result) => {
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
@@ -171,7 +174,7 @@ export class UpdateUserComponent implements OnInit {
     const file = element.files?.[0];
     
     if (file) {
-        // Verify that it is an image
+      // Verify that it is an image
       if (!file.type.startsWith('image/')) {
         alert('Por favor, selecciona un archivo de imagen válido.');
         return;
@@ -183,17 +186,29 @@ export class UpdateUserComponent implements OnInit {
       // Show a preview of the image
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        // Refresh the preview
-        (this.images as any)[imageKey] = e.target.result;      };
+        // Save the base64 URL for the preview
+        (this.images as any)[imageKey] = e.target.result;
+      };
       reader.readAsDataURL(file);
     }
+  }
+  private convertToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        resolve(base64String);
+      };
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
   }
   
   handleUpdate() {
     if (!this.userId) {
       return;
     }   
-        // Get values from the form
+    // Get values from the form
     const bioElement = document.getElementById('bio') as HTMLTextAreaElement;
     const provinceElement = document.getElementById('province') as HTMLInputElement;
     
@@ -220,19 +235,15 @@ export class UpdateUserComponent implements OnInit {
       return;
     }
     
-    
-    
     // Find the IDs of the selected tags
     const selectedLabels = this.selectedInterests.map(interest => {
       const label = this.labels.find(l => l.name === interest);
       return label ? { id: label.id, name: interest } : null;
     });
     
-    
     if (selectedLabels.some(label => label === null)) {
       return;
     }
-    
     
     // Create objects for labels with ID and name
     const userLabels = {
@@ -243,44 +254,52 @@ export class UpdateUserComponent implements OnInit {
       fifth_label: selectedLabels[4]
     };
     
-    // Build object to update
-    const updatedData = {
-      bio: bioElement.value,
-      gender: parseInt(selectedGender.value),  
-      province: selectedProvince.id,           
-      labels: userLabels,
-      images: this.images,                   
-      user_id: this.userId
-    };
-    
-    
     this.isLoading = true;
     
-    // First, if there are new images, upload them.
+    // If there are new images, process them first
     if (this.imagesToUpload.size > 0) {
-      this.uploadImages(this.userId)
-        .pipe(
-          catchError(error => {
-            console.error('Error al subir las imágenes', error);
-            alert('Ha ocurrido un error al subir las imágenes: ' + (error.error?.message || error.message || 'Error desconocido'));
-            this.isLoading = false;
-            return of(null); // Devolver observable con null para detener la cadena
-          }),
-          finalize(() => {
-            if (this.isLoading) {
-              // Solo llamar a updateProfileData si no hubo error (isLoading sigue siendo true)
-              this.updateProfileData(updatedData);
-            }
-          })
-        )
-        .subscribe();
+      // Convert images to Base64
+      this.prepareImagesForUpload().then(base64Images => {
+        // Prepare image object by combining existing and new ones
+        const updatedImages = { ...this.images };
+        
+        // Update only images that have changed
+        for (const [key, base64] of Object.entries(base64Images)) {
+          (updatedImages as any)[key] = base64;
+        }
+        
+        const updatedData = {
+          bio: bioElement.value,
+          gender: parseInt(selectedGender.value),  
+          province: selectedProvince.id,           
+          labels: userLabels,
+          images: updatedImages,
+          user_id: this.userId
+        };
+        
+        // Send profile update
+        this.updateProfileData(updatedData);
+      }).catch(error => {
+        console.error('Error al preparar las imágenes:', error);
+        this.isLoading = false;
+        alert('Error al procesar las imágenes');
+      });
     } else {
-      // Si no hay imágenes nuevas, actualizar directamente el perfil
+      // If there are no new images, update the profile directly.
+      const updatedData = {
+        bio: bioElement.value,
+        gender: parseInt(selectedGender.value),  
+        province: selectedProvince.id,           
+        labels: userLabels,
+        images: this.images,
+        user_id: this.userId
+      };
+      
       this.updateProfileData(updatedData);
     }
   }
   
-  // Método para actualizar los datos del perfil
+  // Method for updating profile data
   private updateProfileData(data: any) {
     this.profileService.update(data)
       .pipe(
@@ -290,22 +309,29 @@ export class UpdateUserComponent implements OnInit {
       )
       .subscribe({
         next: (result) => {
-          // Redirigir al perfil o a donde sea necesario
-          alert('Se ha actualizado perfectamente')
-          this.router.navigate(['/']);
+          this._matDialog.open(InfoModalComponent, {
+            data: { type: 'Perfil actualizado correctamente' },
+            panelClass: 'transparent-modal',
+            backdropClass: 'transparent-backdrop',
+            hasBackdrop: true,
+          });
         },
-        error: (error) => {
-          console.error('Error al actualizar el perfil', error);
-        }
       });
   }
   
-  // Método para subir las imágenes
-  private uploadImages(userId: number): Observable<any> {
-    console.log('Subiendo imágenes para el usuario ID:', userId);
-    console.log('Imágenes a subir:', Array.from(this.imagesToUpload.entries()));
+  // Method for uploading images in base64
+  private async prepareImagesForUpload(): Promise<Record<string, string>> {
+    const imageData: Record<string, string> = {};
     
-    return this.userService.uploadImages(userId, this.imagesToUpload);
+    for (const [key, file] of this.imagesToUpload.entries()) {
+      try {
+        imageData[key] = await this.convertToBase64(file);
+      } catch (error) {
+        console.error(`Error al convertir imagen ${key} a Base64:`, error);
+      }
+    }
+    
+    return imageData;
   }
   
   handleDelete() {
@@ -324,9 +350,6 @@ export class UpdateUserComponent implements OnInit {
               sessionStorage.clear();
               this.router.navigate(['/']);
             }
-          },
-          error: (error) => {
-
           }
         });
     }
