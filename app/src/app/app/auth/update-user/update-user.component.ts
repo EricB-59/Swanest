@@ -50,6 +50,9 @@ export class UpdateUserComponent implements OnInit {
   imagesToUpload: Map<string, File> = new Map();
   isLoading: boolean = false;
   userId: number = 0;
+  bioText: string = '';
+  selectedProvince: string = '';
+  selectedGender: number | null = null;
 
   ngOnInit(): void {
     const user = sessionStorage.getItem('user');
@@ -57,34 +60,81 @@ export class UpdateUserComponent implements OnInit {
       const userObject = JSON.parse(user);
       this.userId = userObject.id;
       
-      // Upload user images
-      this.userService.getImages(this.userId).subscribe({
-        next: (result) => {
-          if(result) {
-            this.images = result;
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar imágenes', error);
-          // Initialising empty images to avoid errors
-          this.images = {
-            id: 0,
-            image_1: '',
-            image_2: '',
-            image_3: '',
-            image_4: '',
-            image_5: ''
-          };
-        }
-      });
+      // Load provinces and labels first
+      this.loadProvinces();
+      this.loadLabels();
+      
+      // Load user images
+      this.loadUserImages();
       
       // Load user profile
-      this.profileService.getProfile(this.userId).subscribe({
-        next: (result) => {
-          this.profile = result;
+      this.loadUserProfile();
+    }
+  }
+  
+  loadUserImages() {
+    this.userService.getImages(this.userId).subscribe({
+      next: (result) => {
+        if(result) {
+          this.images = result;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading images', error);
+        // Initialize empty images to avoid errors
+        this.images = {
+          id: 0,
+          image_1: '',
+          image_2: '',
+          image_3: '',
+          image_4: '',
+          image_5: ''
+        };
+      }
+    });
+  }
+  
+  loadUserProfile() {
+    this.profileService.getProfile(this.userId).subscribe({
+      next: (result) => {
+        this.profile = result;
+        
+        // Set initial form values
+        if (this.profile) {
+          // Set the biography
+          this.bioText = this.profile.bio || '';
+          setTimeout(() => {
+            const bioElement = document.getElementById('bio') as HTMLTextAreaElement;
+            if (bioElement) {
+              bioElement.value = this.bioText;
+            }
+          }, 0);
           
-          // Pre-select interests based on the uploaded profile
-          if (this.profile && this.profile.labels) {
+          // Set the province
+          if (this.profile.province && this.profile.province.name) {
+            this.selectedProvince = this.profile.province.name;
+            setTimeout(() => {
+              const provinceElement = document.getElementById('province') as HTMLInputElement;
+              if (provinceElement) {
+                provinceElement.value = this.selectedProvince;
+              }
+            }, 0);
+          }
+          
+          // Set the gender
+          if (this.profile.gender) {
+            this.selectedGender = this.profile.gender;
+            setTimeout(() => {
+              const genderRadio = document.querySelector(`input[name="genre"][value="${this.selectedGender}"]`) as HTMLInputElement;
+              if (genderRadio) {
+                genderRadio.checked = true;
+              }
+            }, 0);
+          }
+          
+          // Preselect interests based on loaded profile
+          this.selectedInterests = []; // Clear selected interests
+          if (this.profile.labels) {
             const labelKeys = ['first_label', 'second_label', 'third_label', 'fourth_label', 'fifth_label'];
             labelKeys.forEach(key => {
               if (this.profile.labels[key] && this.profile.labels[key].name) {
@@ -92,17 +142,18 @@ export class UpdateUserComponent implements OnInit {
               }
             });
             
-            // Update the interest counter
+            // Update interest counter
             this.updateInterestCounter();
           }
-        },
-        error: (error) => {
-          console.error('Error al cargar el perfil', error);
         }
-      });
-    }
-    
-    //Load provincies
+      },
+      error: (error) => {
+        console.error('Error loading profile', error);
+      }
+    });
+  }
+  
+  loadProvinces() {
     this.profileService.getProvinces().subscribe({
       next: (result) => {
         if (result && Array.isArray(result)) {
@@ -111,17 +162,18 @@ export class UpdateUserComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error al cargar provincias', error);
+        console.error('Error loading provinces', error);
       }
     });
-
-    // Load labels
+  }
+  
+  loadLabels() {
     this.profileService.getLabels().subscribe({
       next: (result) => {
         this.labels = typeof result === 'string' ? JSON.parse(result) : result;
       },
       error: (error) => {
-        console.error('Error al cargar etiquetas', error);
+        console.error('Error loading labels', error);
       }
     });
   }
@@ -131,7 +183,10 @@ export class UpdateUserComponent implements OnInit {
   
     if (checkbox.checked) {
       if (this.selectedInterests.length < 5) {
-        this.selectedInterests.push(interest);
+        // Only add the interest if it's not already in the list
+        if (!this.selectedInterests.includes(interest)) {
+          this.selectedInterests.push(interest);
+        }
       } else {
         checkbox.checked = false;
         return;
@@ -151,7 +206,7 @@ export class UpdateUserComponent implements OnInit {
     if (counterElement) {
       counterElement.textContent = `${this.selectedInterests.length}/5`;
       
-      // Update colour according to status
+      // Update color according to state
       if (this.selectedInterests.length === 5) {
         counterElement.style.color = '#34C759'; // Green
       } else if (this.selectedInterests.length > 0) {
@@ -183,15 +238,16 @@ export class UpdateUserComponent implements OnInit {
       // Save the file for later upload
       this.imagesToUpload.set(imageKey, file);
       
-      // Show a preview of the image
+      // Display an image preview
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        // Save the base64 URL for the preview
+        // Save the base64 URL for preview
         (this.images as any)[imageKey] = e.target.result;
       };
       reader.readAsDataURL(file);
     }
   }
+  
   private convertToBase64(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -208,16 +264,16 @@ export class UpdateUserComponent implements OnInit {
     if (!this.userId) {
       return;
     }   
-    // Get values from the form
+    // Get form values
     const bioElement = document.getElementById('bio') as HTMLTextAreaElement;
     const provinceElement = document.getElementById('province') as HTMLInputElement;
     
-    // Validate that the required fields are complete
+    // Validate that required fields are complete
     if (!bioElement.value || bioElement.value.length < 20) {
       return;
     }
     
-    // Get the selected gender
+    // Get selected gender
     const selectedGender = document.querySelector('input[name="genre"]:checked') as HTMLInputElement;
     if (!selectedGender) {
       alert('Debes seleccionar un género');
@@ -235,13 +291,14 @@ export class UpdateUserComponent implements OnInit {
       return;
     }
     
-    // Find the IDs of the selected tags
+    // Find the IDs of selected labels
     const selectedLabels = this.selectedInterests.map(interest => {
       const label = this.labels.find(l => l.name === interest);
       return label ? { id: label.id, name: interest } : null;
     });
     
     if (selectedLabels.some(label => label === null)) {
+      alert('Error en la selección de intereses');
       return;
     }
     
@@ -260,7 +317,7 @@ export class UpdateUserComponent implements OnInit {
     if (this.imagesToUpload.size > 0) {
       // Convert images to Base64
       this.prepareImagesForUpload().then(base64Images => {
-        // Prepare image object by combining existing and new ones
+        // Prepare image object combining existing and new
         const updatedImages = { ...this.images };
         
         // Update only images that have changed
@@ -280,12 +337,10 @@ export class UpdateUserComponent implements OnInit {
         // Send profile update
         this.updateProfileData(updatedData);
       }).catch(error => {
-        console.error('Error al preparar las imágenes:', error);
         this.isLoading = false;
-        alert('Error al procesar las imágenes');
       });
     } else {
-      // If there are no new images, update the profile directly.
+      // If there are no new images, update profile directly
       const updatedData = {
         bio: bioElement.value,
         gender: parseInt(selectedGender.value),  
@@ -299,7 +354,7 @@ export class UpdateUserComponent implements OnInit {
     }
   }
   
-  // Method for updating profile data
+  // Method to update profile data
   private updateProfileData(data: any) {
     this.profileService.update(data)
       .pipe(
@@ -315,11 +370,11 @@ export class UpdateUserComponent implements OnInit {
             backdropClass: 'transparent-backdrop',
             hasBackdrop: true,
           });
-        },
+        }
       });
   }
   
-  // Method for uploading images in base64
+  // Method to upload images in base64
   private async prepareImagesForUpload(): Promise<Record<string, string>> {
     const imageData: Record<string, string> = {};
     
@@ -327,7 +382,6 @@ export class UpdateUserComponent implements OnInit {
       try {
         imageData[key] = await this.convertToBase64(file);
       } catch (error) {
-        console.error(`Error al convertir imagen ${key} a Base64:`, error);
       }
     }
     
@@ -335,23 +389,23 @@ export class UpdateUserComponent implements OnInit {
   }
   
   handleDelete() {
-    
-    if (this.userId) {
-      this.isLoading = true;
-      this.userService.delete(this.userId)
-        .pipe(
-          finalize(() => {
-            this.isLoading = false;
-          })
-        )
-        .subscribe({
-          next: (result) => {
-            if (result) {
-              sessionStorage.clear();
-              this.router.navigate(['/']);
+      if (this.userId) {
+        this.isLoading = true;
+        this.userService.delete(this.userId)
+          .pipe(
+            finalize(() => {
+              this.isLoading = false;
+            })
+          )
+          .subscribe({
+            next: (result) => {
+              if (result) {
+                sessionStorage.clear();
+                this.router.navigate(['/']);
+              }
             }
-          }
-        });
-    }
+          });
+      }
+    
   }
 }
