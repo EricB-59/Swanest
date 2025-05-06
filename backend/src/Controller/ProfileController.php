@@ -8,6 +8,7 @@ use App\Entity\UserLabel;
 use App\Entity\Profile;
 use App\Entity\User;
 use App\Entity\Province;
+use App\Entity\Images;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -123,48 +124,54 @@ final class ProfileController extends AbstractController
 
     #[Route(path: '/{id}', name: 'app_profile_update', methods: ['PUT'],)]
     public function updateProfile(int $id, EntityManagerInterface $entityManager, Request $request)
-    {
-        $data = json_decode($request->getContent(), true);
+{
+    $data = json_decode($request->getContent(), true);
 
-        $bio = $data["bio"];
-        $province = $data["province"];
-        $gender = $data["gender"];
-        $labels = $data["labels"];
-        $images = $data["images"];
+    $bio = $data["bio"];
+    $province = $data["province"];
+    $gender = $data["gender"];
+    $labels = $data["labels"];
+    $images = $data["images"];
 
-        $newGender = $entityManager->getRepository(Gender::class)->findOneBy(['id' => $gender]);
-        $newProvince = $entityManager->getRepository(Province::class)->findOneBy(['id' => $province]);
+    $newGender = $entityManager->getRepository(Gender::class)->findOneBy(['id' => $gender]);
+    $newProvince = $entityManager->getRepository(Province::class)->findOneBy(['id' => $province]);
 
-        $updateProfile = $entityManager->getRepository(Profile::class)->findOneBy(['user' => $id]);
-        $updateUser = $entityManager->getRepository(User::class)->find($id);
+    $updateProfile = $entityManager->getRepository(Profile::class)->findOneBy(['user' => $id]);
+    $updateUser = $entityManager->getRepository(User::class)->find($id);
 
-        if (!$updateProfile) {
-            return new JsonResponse('profile-not-found', Response::HTTP_BAD_REQUEST);
-        }
+    if (!$updateProfile) {
+        return new JsonResponse('profile-not-found', Response::HTTP_BAD_REQUEST);
+    }
 
-        if (!$updateUser) {
-            return new JsonResponse('user-not-found', Response::HTTP_BAD_REQUEST);
-        }
+    if (!$updateUser) {
+        return new JsonResponse('user-not-found', Response::HTTP_BAD_REQUEST);
+    }
 
-        if (empty($bio) || empty($gender) || empty($labels) || empty($province) || empty($images)) {
-            return new JsonResponse('empty-fields', Response::HTTP_BAD_REQUEST);
-        }
+    if (empty($bio) || empty($gender) || empty($labels) || empty($province) || empty($images)) {
+        return new JsonResponse('empty-fields', Response::HTTP_BAD_REQUEST);
+    }
 
-        if (empty($images['image_1']) || empty($images['image_2'])) {
-            return new JsonResponse('empty-mandatory-fields', Response::HTTP_BAD_REQUEST);
-        }
+    if (empty($images['image_1']) || empty($images['image_2'])) {
+        return new JsonResponse('empty-mandatory-fields', Response::HTTP_BAD_REQUEST);
+    }
 
+    try {
         $newImages = $updateUser->getImage();
-        if ($newImages) {
-            $newImages->setImage1($images['image_1']);
-            $newImages->setImage2($images['image_2']);
-            $newImages->setImage3($images['image_3']);
-            $newImages->setImage4($images['image_4']);
-            $newImages->setImage5($images['image_5']);
-            $newImages->setUploadedAt(now());
-            $updateUser->setImage($newImages);
+        if (!$newImages) {
+            $newImages = new Images();
+            $newImages->setUser($updateUser);
         }
-
+        
+        $newImages->setImage1($images['image_1']);
+        $newImages->setImage2($images['image_2']);
+        $newImages->setImage3($images['image_3'] ?? null);
+        $newImages->setImage4($images['image_4'] ?? null);
+        $newImages->setImage5($images['image_5'] ?? null);
+        $newImages->setUploadedAt(new DateTimeImmutable);
+        
+        $entityManager->persist($newImages);
+        $updateUser->setImage($newImages);
+        
         $newLabels = $updateProfile->getLabels();
         if ($newLabels) {
             $firstLabel = $newLabels->getFirstLabel();
@@ -192,16 +199,22 @@ final class ProfileController extends AbstractController
             $newLabels->setThirdLabel($thirdLabel);
             $newLabels->setFourthLabel($fourthLabel);
             $newLabels->setFifthLabel($fifthLabel);
-            $updateProfile->setLabels($newLabels);
+            $entityManager->persist($newLabels);
         }
 
         $updateProfile->setBio($bio);
         $updateProfile->setGender($newGender);
         $updateProfile->setProvince($newProvince);
-        $updateProfile->setUpdatedAt(now());
+        $updateProfile->setUpdatedAt(new DateTimeImmutable);
+        $entityManager->persist($updateProfile);
 
         $entityManager->flush();
 
         return new JsonResponse($updateUser->toArray(), Response::HTTP_OK);
+    } catch (\Exception $e) {
+        // Log the error
+        error_log($e->getMessage());
+        return new JsonResponse(['error' => 'Error al actualizar el perfil: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
 }

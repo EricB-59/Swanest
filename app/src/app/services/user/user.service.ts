@@ -66,6 +66,14 @@ export class UserService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
+  uploadImages(userId: number, imagesToUpload: Map<string, File>): Observable<any> {
+    const formData = new FormData();
+    imagesToUpload.forEach((file, key) => formData.append(key, file));
+    return this.connHttp.post(
+      API_URL + 'images/' + userId,
+      formData
+    );
+  }
 
   images(id: number, images: any) {
     const imagesWithId = { id: id, ...images };

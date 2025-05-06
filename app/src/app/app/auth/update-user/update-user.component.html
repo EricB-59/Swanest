@@ -4,41 +4,124 @@
     <!-- IMAGES -->
     <article class="space-y-6">
       <!-- Imagen principal -->
-      <picture class="flex justify-center">
+      <picture class="flex justify-center relative">
         <img
           [src]="images.image_1"
           alt="Imagen principal del usuario"
-          class="h-64 w-64 rounded-2xl  bg-slate-300 object-cover "
+          class="h-64 w-64 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+          (click)="triggerFileInput('fileInput1')"
+        />
+        <div class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+        </div>
+        <input 
+          type="file" 
+          id="fileInput1" 
+          (change)="onFileSelected($event, 'image_1')" 
+          accept="image/*" 
+          class="hidden"
         />
       </picture>
 
       <!-- Cuadrícula de imágenes secundarias -->
       <div class="grid grid-cols-2 grid-rows-2 gap-4 place-items-center">
-        <img
-          [src]="images.image_2"
-          alt="Imagen 1"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
-        @if (images.image_3) {
+        <div class="relative">
           <img
-          [src]="images.image_3"
-          alt="Imagen 2"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
+            [src]="images.image_2"
+            alt="Imagen 1"
+            class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+            (click)="triggerFileInput('fileInput2')"
+          />
+          <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <input 
+            type="file" 
+            id="fileInput2" 
+            (change)="onFileSelected($event, 'image_2')" 
+            accept="image/*" 
+            class="hidden"
+          />
+        </div>
+        @if (images.image_3) {
+          <div class="relative">
+            <img
+              [src]="images.image_3"
+              alt="Imagen 2"
+              class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+              (click)="triggerFileInput('fileInput3')"
+            />
+            <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <input 
+              type="file" 
+              id="fileInput3" 
+              (change)="onFileSelected($event, 'image_3')" 
+              accept="image/*" 
+              class="hidden"
+            />
+          </div>
         }
         @if (images.image_4) {
-          <img
-          [src]="images.image_4"
-          alt="Imagen 3"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
+          <div class="relative">
+            <img
+              [src]="images.image_4 "
+              alt="Imagen 3"
+              class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+              (click)="triggerFileInput('fileInput4')"
+            />
+            <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <input 
+              type="file" 
+              id="fileInput4" 
+              (change)="onFileSelected($event, 'image_4')" 
+              accept="image/*" 
+              class="hidden"
+            />
+          </div>
         }
         @if (images.image_5) {
-          <img
-          [src]="images.image_5"
-          alt="Imagen 4"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
+          <div class="relative">
+            <img
+              [src]="images.image_5"
+              alt="Imagen 4"
+              class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+              (click)="triggerFileInput('fileInput5')"
+            />
+            <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <input 
+              type="file" 
+              id="fileInput5" 
+              (change)="onFileSelected($event, 'image_5')" 
+              accept="image/*" 
+              class="hidden"
+            />
+          </div>
         }
       </div>
     </article>
@@ -195,7 +278,7 @@
   <article class="font-family-regular flex justify-between w-full mt-6">
     <button (click)="handleDelete()" class="flex gap-2 border-gray-400 border-2 rounded-xl items-center px-6 py-2 cursor-pointer  hover:bg-[#ff3b30] hover:border-black ">
       <img class="w-6 h-6" src="assets/images/app/icons/delete-icon.svg" alt="Delete Icon"> Borrar Cuenta</button>
-    <button class="flex bg-black text-white rounded-full cursor-pointer"><span class=" flex items-center pl-6">Guardar</span> 
+    <button (click)="handleUpdate()" class="flex bg-black text-white rounded-full cursor-pointer"><span class=" flex items-center pl-6">Guardar</span> 
       <div class="flex h-10.5 w-10.5 items-center justify-center">
       <svg
         width="16"
