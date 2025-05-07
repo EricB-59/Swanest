@@ -130,7 +130,7 @@
     <article class="space-y-6">
       <!-- BIO -->
       <div>
-        <h2 for="bio" class="block text-lg font-light">Introduce yourself *</h2>
+        <h2 for="bio" class="block text-lg font-light">Presentate *</h2>
         <textarea
           name="bio"
           id="bio"
@@ -144,7 +144,7 @@
 
       <!-- PROVINCE -->
       <div>
-        <h2 for="province" class="block text-lg font-light">Province</h2>
+        <h2 for="province" class="block text-lg font-light">Provincia</h2>
         <input
           list="provinces"
           id="province"
@@ -163,7 +163,7 @@
 
       <!-- GENDER -->
       <fieldset>
-        <legend class="mb-3 text-lg font-light">Gender *</legend>
+        <legend class="mb-3 text-lg font-light">Género *</legend>
         <div class="flex flex-wrap gap-2">
           <!-- Male Option -->
           <label for="male" class="group">
@@ -176,7 +176,7 @@
                 [checked]="selectedGender === 1"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">Male</span>
+              <span class="cursor-pointer font-light">Masculino</span>
             </div>
           </label>
           
@@ -191,7 +191,7 @@
                 [checked]="selectedGender === 2"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">Female</span>
+              <span class="cursor-pointer font-light">Femenino</span>
             </div>
           </label>
           
@@ -206,7 +206,7 @@
                 [checked]="selectedGender === 3"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">Non-binary</span>
+              <span class="cursor-pointer font-light">No Binario</span>
             </div>
           </label>
           
@@ -221,7 +221,7 @@
                 [checked]="selectedGender === 4"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">Other</span>
+              <span class="cursor-pointer font-light">Otro</span>
             </div>
           </label>
           
@@ -236,7 +236,7 @@
                 [checked]="selectedGender === 5"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">Prefer not to answer</span>
+              <span class="cursor-pointer font-light">Prefiero no decirlo</span>
             </div>
           </label>
         </div>
@@ -248,7 +248,7 @@
             [exactSelections]="5"
             [currentSelections]="selectedInterests"
             appErrorFields>
-              <h2 class="font-basereg pt-6">Interests</h2>
+              <h2 class="font-basereg pt-6">Intereses</h2>
               <h2 id="counter" class="font-basereg pt-6 pr-6">
                 {{ selectedInterests.length }}/5
               </h2>
