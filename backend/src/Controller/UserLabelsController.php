@@ -13,18 +13,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class UserLabelsController extends AbstractController
 {
-    #[Route(path: '', name: 'get_labels', methods: ['GET'],)]
-    public function getLabels(EntityManagerInterface $entityManager)
+    #[Route(path: '', name: 'get_labels', methods: ['GET'])]
+    public function getLabels(EntityManagerInterface $entityManager): JsonResponse
     {
-
         $labels = $entityManager->getRepository(Label::class)->findAll();
 
-        $out = [];
+        // Transform the entities into a simple array with id and name
+        $data = array_map(fn($label) => [
+            'id' => $label->getId(),
+            'name' => $label->getName(),
+        ], $labels);
 
-        foreach ($labels as $label) {
-            array_push($out, ["id" => $label->getId(), "name" => $label->getName()]);
-        }
-
-        return new JsonResponse(json_encode($out));
+        return new JsonResponse($data, Response::HTTP_OK);
     }
 }
