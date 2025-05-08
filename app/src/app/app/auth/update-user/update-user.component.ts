@@ -122,14 +122,9 @@ export class UpdateUserComponent implements OnInit {
           }
           
           // Set the gender
-          if (this.profile.gender) {
-            this.selectedGender = this.profile.gender;
-            setTimeout(() => {
-              const genderRadio = document.querySelector(`input[name="genre"][value="${this.selectedGender}"]`) as HTMLInputElement;
-              if (genderRadio) {
-                genderRadio.checked = true;
-              }
-            }, 0);
+          if (this.profile && this.profile.gender) {
+            this.selectedGender = this.profile.gender.id;
+
           }
           
           // Preselect interests based on loaded profile
