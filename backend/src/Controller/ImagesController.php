@@ -10,65 +10,119 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+
 #[Route('/images', name: 'app_images')]
 final class ImagesController extends AbstractController
 {
+    /**
+     * Retrieve profile images for a specific user.
+     *
+     * This endpoint fetches the set of profile images associated with a user by:
+     * 1. Looking up the Images entity linked to the given user ID
+     * 2. Returning the image paths as an associative array
+     * 3. Handling the case when no images are found
+     *
+     * @param int $id The ID of the user whose images are being retrieved
+     * @param EntityManagerInterface $entityManager Doctrine entity manager for database operations
+     *
+     * @return JsonResponse JSON array of image paths or error message
+     *
+     * HTTP Status Codes:
+     * - 200 OK: Images successfully retrieved
+     * - 404 Not Found: No images found for the given user
+     */
     #[Route('/{id}', name: 'app_images', methods: ['GET'])]
-    public function getImages (int $id, EntityManagerInterface $entityManager): Response {
+    public function getImages(int $id, EntityManagerInterface $entityManager): Response
+    {
+        // Retrieve the repository for the Images entity
         $imagesRepository = $entityManager->getRepository(Images::class);
+
+        // Find the Images entity associated with the given user ID
         $images = $imagesRepository->findOneBy(['user' => $id]);
-        return new JsonResponse($images->toArray(),Response::HTTP_OK );
+
+        // If no images found, return a 404 response
+        if (!$images) {
+            return new JsonResponse(['message' => 'images-not-found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Convert the Images entity to an array and return it as a JSON response
+        return new JsonResponse($images->toArray(), Response::HTTP_OK);
     }
-    #[Route('/{id}', name: 'app_images_upload', methods: ['POST'])]
+
+
+    /**
+     * Upload and associate images with a user profile.
+     *
+     * This endpoint allows uploading up to 5 images for a specific user by:
+     * 1. Validating that the user exists
+     * 2. Checking for uploaded files in the request
+     * 3. Ensuring the upload directory exists
+     * 4. Processing and storing each uploaded image
+     * 5. Assigning image paths to the corresponding fields in the Images entity
+     * 6. Saving the image information to the database
+     *
+     * Expected file fields in the request:
+     * - image_1, image_2, image_3, image_4, image_5
+     *
+     * @param int $id ID of the user to associate images with
+     * @param Request $request Multipart/form-data request containing image files
+     * @param EntityManagerInterface $entityManager Doctrine entity manager for database operations
+     *
+     * @return JsonResponse Returns a status message indicating success or specific failure
+     *
+     * HTTP Status Codes:
+     * - 200 OK: Images uploaded and saved successfully
+     * - 400 Bad Request: No files provided or invalid file uploaded
+     * - 404 Not Found: User not found
+     * - 500 Internal Server Error: Error saving file to the server
+     */
+    #[Route(path: '/{id}', name: 'app_images_upload', methods: ['POST'])]
     public function uploadImages(int $id, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
+        // Retrieve user by ID
         $user = $entityManager->getRepository(User::class)->find($id);
-        
         if (!$user) {
             return new JsonResponse(['message' => 'user-not-found'], Response::HTTP_NOT_FOUND);
         }
-        
-        // Verificar si hay archivos en la solicitud
+
+        // Retrieve uploaded files from the request
         $files = $request->files;
-        
         if ($files->count() === 0) {
             return new JsonResponse(['message' => 'no-files-uploaded'], Response::HTTP_BAD_REQUEST);
         }
-        
-        // Definir el directorio de subida
+
+        // Define and create the upload directory if it doesn't exist
         $uploadDir = $this->getParameter('images_directory');
-        
-        // Asegurarse de que el directorio existe
         if (!file_exists($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
-        
-        // Obtener o crear la entidad Images para el usuario
+
+        // Retrieve or create the Images entity associated with the user
         $userImages = $user->getImage();
         if (!$userImages) {
             $userImages = new Images();
             $userImages->setUser($user);
         }
-        
-        // Procesar cada imagen
+
+        // List of image field names to check
         $imageFields = ['image_1', 'image_2', 'image_3', 'image_4', 'image_5'];
         foreach ($imageFields as $field) {
             if ($files->has($field)) {
                 $file = $files->get($field);
-                
-                // Validar el archivo
+
+                // Validate uploaded file
                 if (!$file->isValid()) {
                     return new JsonResponse(['message' => 'invalid-file-' . $field], Response::HTTP_BAD_REQUEST);
                 }
-                
-                // Generar un nombre único para el archivo
+
+                // Generate unique file name
                 $fileName = md5(uniqid()) . '.' . $file->getClientOriginalExtension();
-                
-                // Mover el archivo al directorio de carga
+
+                // Move the file to the upload directory and set its path
                 try {
                     $file->move($uploadDir, $fileName);
-                    
-                    // Guardar la ruta del archivo en la entidad Images
+
+                    // Dynamically call the setter method for the image field
                     $setter = 'set' . ucfirst($field);
                     $userImages->$setter($fileName);
                 } catch (\Exception $e) {
@@ -79,13 +133,13 @@ final class ImagesController extends AbstractController
                 }
             }
         }
-        
-        // Guardar la entidad Images y asociarla al usuario
+
+        // Persist the Images entity and associate it with the user
         $user->setImage($userImages);
         $entityManager->persist($userImages);
         $entityManager->persist($user);
         $entityManager->flush();
-        
+
         return new JsonResponse(['message' => 'images-uploaded-successfully'], Response::HTTP_OK);
     }
 }
