@@ -17,18 +17,18 @@
 # ⚙️ Used Technologies
 
 ### 💻 Frontend
--  Typescript
-    - Angular
-    - Material
+- TypeScript
+  - Angular
+  - Material
 - CSS
   - TailwindCSS
-  
-### 🛠️ Backend
--  PHP
-    - Symfony
 
-### 🗂️ BBDD
--  MySQL  &  SQL
+### 🛠️ Backend
+- PHP
+  - Symfony
+
+### 🗂️ Database
+- MySQL & SQL
 
 ---
 <p align="center">
@@ -80,3 +80,59 @@ Optimized for **mobile browsers and desktop**. Enjoy Swanest anywhere, any time.
 Passwords are **encrypted** and never stored in plain text. Swanest is fully **GDPR-compliant** to protect user privacy.
 
 ---
+
+# 🚀 Project Setup
+
+## 🔧 Requirements
+
+- Node.js >= 18  
+- PHP >= 8.1  
+- Composer  
+- MySQL Server  
+- Angular CLI  
+- Symfony CLI (optional, recommended)
+
+---
+
+## 🛠️ Backend (Symfony)
+
+```bash
+# Go to the backend folder
+cd Swanest/backend
+
+# Install dependencies
+composer install
+
+# Configure the database in .env.local
+# Example:
+# DATABASE_URL="mysql://user:password@127.0.0.1:3306/swanest_db"
+
+# Create the database
+php bin/console doctrine:database:create
+
+# Run migrations
+php bin/console doctrine:migrations:migrate
+
+# Start the server
+symfony server:start
+```
+## 💻 Frontend (Angular)
+
+```bash
+# Clone the repository
+git clone https://github.com/EricB-59/Swanest.git
+cd Swanest/app
+
+# Install dependencies
+npm install
+
+# Start the application
+ng serve
+```
+
+
+
+
+
+
+
