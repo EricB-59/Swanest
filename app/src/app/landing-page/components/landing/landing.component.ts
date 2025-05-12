@@ -53,13 +53,26 @@ export class LandingComponent implements AfterViewInit, OnInit {
 
     if (shouldShowModal === 'true') {
       this._matDialog.open(InfoModalComponent, {
-        data: { type: 'Perfil creado correctamente' },
+        data: { type: 'Perfil creado correctamente.' },
         panelClass: 'transparent-modal',
         backdropClass: 'transparent-backdrop',
         hasBackdrop: true,
       });
 
       localStorage.removeItem('showModal'); // Limpiamos el flag para no repetir
+    }
+
+    const shouldShowModalFeedback = localStorage.getItem('showModalFeedback');
+
+    if (shouldShowModalFeedback === 'true') {
+      this._matDialog.open(InfoModalComponent, {
+        data: { type: 'Feedback enviado correctamente' },
+        panelClass: 'transparent-modal',
+        backdropClass: 'transparent-backdrop',
+        hasBackdrop: true,
+      });
+
+      localStorage.removeItem('showModalFeedback'); // Limpiamos el flag para no repetir
     }
   }
 
