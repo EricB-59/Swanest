@@ -29,8 +29,17 @@ export class ContactComponent {
       message: this.form.value.message as string,
     });
 
-    this.feedbackService.create(feedback).subscribe((result) => {
-      console.log(result);
+    this.feedbackService.create(feedback).subscribe({
+      next: (result) => {
+        console.log('Feedback enviado:', result);
+
+        localStorage.setItem('showModalFeedback', 'true');
+
+        window.location.reload();
+      },
+      error: (err) => {
+        console.error('Error al enviar feedback:', err);
+      },
     });
   }
 }
