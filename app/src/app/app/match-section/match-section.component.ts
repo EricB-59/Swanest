@@ -395,4 +395,30 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  calcularEdad(fechaNacimiento: string): number {
+    // Crear objeto Date a partir de la fecha de nacimiento
+    const fechaNac = new Date(fechaNacimiento);
+
+    // Obtener la fecha actual
+    const fechaActual = new Date();
+
+    // Calcular la diferencia de años
+    let edad = fechaActual.getFullYear() - fechaNac.getFullYear();
+
+    // Ajustar la edad si aún no ha cumplido años en el año actual
+    const mesActual = fechaActual.getMonth();
+    const diaActual = fechaActual.getDate();
+    const mesNacimiento = fechaNac.getMonth();
+    const diaNacimiento = fechaNac.getDate();
+
+    if (
+      mesActual < mesNacimiento ||
+      (mesActual === mesNacimiento && diaActual < diaNacimiento)
+    ) {
+      edad--;
+    }
+
+    return edad;
+  }
 }

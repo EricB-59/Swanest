@@ -108,7 +108,10 @@
               class="font-family-regular mb-3 flex flex-col text-5xl tracking-[2px]"
             >
               <span>{{ profile.first_name }}</span>
-              <span>{{ profile.last_name }}, {{ profile.birthdate }}</span>
+              <span
+                >{{ profile.last_name }},
+                {{ calcularEdad(profile.birthdate) }}</span
+              >
             </h3>
             <div class="flex gap-2.5">
               <span
