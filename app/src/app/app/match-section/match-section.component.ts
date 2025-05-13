@@ -38,8 +38,6 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
         next: (data) => {
           // Procesamos los datos para separar profiles e imagenes
           this.processProfileData(data);
-          console.info('Profiles:', this.profiles);
-          console.info('Imagenes:', this.imagenes);
 
           setTimeout(() => {
             this.initializeSwipers();
@@ -248,8 +246,6 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
       });
     }
   }
-
-  Rewind() {}
 
   private initializeCardMapping(): void {
     setTimeout(() => {
