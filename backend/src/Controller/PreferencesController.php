@@ -60,4 +60,66 @@ final class PreferencesController extends AbstractController
 
         return new JsonResponse();
     }
+
+    #[Route('/update/{id}', name: 'app_update_preferences', methods: ['PUT'])]
+    public function updatePreferences(int $id, EntityManagerInterface $entityManager, Request $request) {
+        try{
+            $data = $request->toArray();
+            
+            $provinceName = $data['province'] ?? null;
+            $genderName = $data['gender'];
+            $minAge = $data['minAge'];
+            $maxAge = $data['maxAge'];
+            
+            
+            $preferenceRepository = $entityManager->getRepository(Preference::class);
+            $preference = $preferenceRepository->findOneBy(["user" => $id]);
+            
+            $preference->setAgeMin($minAge);
+            $preference->setAgeMax($maxAge);
+    
+            $genderRepository = $entityManager->getRepository(Gender::class);
+            $gender = $genderRepository->findOneBy(['name' => $genderName]);
+            
+            if (!$gender) {
+                return new JsonResponse(['success' => false, 'message' => 'Preferences not found for user'], Response::HTTP_NOT_FOUND);
+            }
+            
+            $preference->setGender($gender);
+            
+            if (!empty($provinceName)) {
+                $provinceRepository = $entityManager->getRepository(Province::class);
+                $province = $provinceRepository->findOneBy(['name' => $provinceName]);
+                
+                if (!$province) {
+                    return new JsonResponse(['success' => false, 'message' => 'Invalid province selection'], Response::HTTP_BAD_REQUEST);
+                }
+                
+                $preference->setProvince($province);
+            } else {
+                $preference->setProvince(null);
+            }
+            
+            $entityManager->flush();
+            return new JsonResponse(['success' => true, 'message' => 'Preferences updated successfully'], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('/{id}', name: 'app_get_preferences', methods: ['GET'])]
+    public function getPreferences(int $id, EntityManagerInterface $entityManager){
+        try {
+            $preferencesRepository = $entityManager->getRepository(Preference::class);
+            $preferences = $preferencesRepository->findOneBy(['user' => $id]);
+            if (!$preferences) {
+                return new JsonResponse(['error' => 'preferences not found'], Response::HTTP_NOT_FOUND);
+            } else {
+                $preferencesdata = $preferences->toArray();
+            }
+            return new JsonResponse($preferencesdata, Response::HTTP_OK);
+        }catch(\Exception $e){
+            return new JsonResponse(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }

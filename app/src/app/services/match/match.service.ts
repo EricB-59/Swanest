@@ -2,7 +2,6 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Profile } from '../../models/profile';
 import { API_URL } from '../../../config/const';
-import { MatchFilter } from '../../models/match';
 import { Observable } from 'rxjs';
 
 @Injectable({

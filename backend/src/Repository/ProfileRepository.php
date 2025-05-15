@@ -47,19 +47,20 @@ class ProfileRepository extends ServiceEntityRepository
                 ->setParameter("currentDate", $currentDate)
                 ->setParameter("minAge", $minAge)
                 ->setParameter("maxAge", $maxAge);
-        
-        }else if($gender !== null){
+            // dd("bien");
+        }
+        if($gender !== null){
             $qb->innerJoin('p.gender', 'g')
                 ->andWhere('g.name = :gender')
                 ->setParameter('gender', $gender);
-
-        }else if ($province !== null){
+        }
+        if ($province !== null){
             $qb->innerJoin('p.province', 'pr')
                 ->andWhere('pr.name = :province')
                 ->setParameter('province', $province);
         }
         $qb->orderBy('RAND()');
-
+ 
         return $qb->getQuery()->getResult();
     }
     //    /**

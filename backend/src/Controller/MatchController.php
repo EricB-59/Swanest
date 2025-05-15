@@ -50,8 +50,7 @@ final class MatchController extends AbstractController
             $maxAge,
             $gender,
             $province
-        );
-
+        );        
         // Preparamos la respuesta con los perfiles y sus imágenes
         $userRepository = $entityManager->getRepository(User::class);
         $profilesArray = [];

@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   inject,
   OnDestroy,
@@ -17,7 +16,6 @@ import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { MatDialog } from '@angular/material/dialog';
 import { FilterModalComponent } from './filter-modal/filter-modal.component';
-// import {MatBottomSheetModule} from '@angular/material/bottom-sheet'
 
 @Component({
   selector: 'app-match-section',
@@ -40,6 +38,7 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
       const user_id = JSON.parse(this.user).id;
       this.matchService.getProfiles(user_id).subscribe({
         next: (data) => {
+          console.log("PRUEBA - ",data)
           // Procesamos los datos para separar profiles e imagenes
           this.processProfileData(data);
           console.info('Profiles:', this.profiles);
@@ -101,6 +100,8 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error(error);
+          this.profiles = [];
+          this.imagenes = [];
         },
       });
     }
@@ -146,6 +147,35 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
         this.overlayRef = null;
       }
     });
+
+    if (this.user) {
+      const user_id = JSON.parse(this.user).id
+      modalRef.instance.applyFilters.subscribe(() => {
+        this.matchService.getProfiles(user_id).subscribe({
+          next: (data) => {
+            console.log("PRUEBA - ",data)
+            this.processProfileData(data);
+            setTimeout(() => {
+              this.initializeSwipers();
+              this.initializeCardMapping();
+              this.setupDragEvents();
+            }, 0);
+          },
+          error: (err) => {
+            console.error(err)
+            this.profiles = [];
+            this.imagenes = [];
+          },
+          complete: () => {
+            // 4) Cierra el modal
+            this.overlayRef?.dispose();
+            this.overlayRef = null;
+          }
+        })
+        this.overlayRef?.dispose();
+        this.overlayRef = null;
+      });
+    }
   }
 
   /**
