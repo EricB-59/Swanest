@@ -1,65 +1,148 @@
 <section class="p-6 md:p-12 bg-white rounded-4xl">
-  <h2 class="text-primary-main font-family-regular text-3xl mb-6">Editar Perfil</h2>
+  <h2 class="text-primary-main font-family-regular text-3xl mb-6">Edit Profile</h2>
   <form action="" class="grid w-full grid-cols-1 gap-10 md:grid-cols-2">
     <!-- IMAGES -->
     <article class="space-y-6">
-      <!-- Imagen principal -->
-      <picture class="flex justify-center">
+      <!-- Main image -->
+      <picture class="flex justify-center relative">
         <img
           [src]="images.image_1"
-          alt="Imagen principal del usuario"
-          class="h-64 w-64 rounded-2xl  bg-slate-300 object-cover "
+          alt="User main image"
+          class="h-64 w-64 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+          (click)="triggerFileInput('fileInput1')"
+        />
+        <div class="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="17 8 12 3 7 8"></polyline>
+            <line x1="12" y1="3" x2="12" y2="15"></line>
+          </svg>
+        </div>
+        <input 
+          type="file" 
+          id="fileInput1" 
+          (change)="onFileSelected($event, 'image_1')" 
+          accept="image/*" 
+          class="hidden"
         />
       </picture>
 
-      <!-- Cuadrícula de imágenes secundarias -->
+      <!-- Secondary images grid -->
       <div class="grid grid-cols-2 grid-rows-2 gap-4 place-items-center">
-        <img
-          [src]="images.image_2"
-          alt="Imagen 1"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
-        @if (images.image_3) {
+        <div class="relative">
           <img
-          [src]="images.image_3"
-          alt="Imagen 2"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
+            [src]="images.image_2"
+            alt="Image 1"
+            class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+            (click)="triggerFileInput('fileInput2')"
+          />
+          <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+          </div>
+          <input 
+            type="file" 
+            id="fileInput2" 
+            (change)="onFileSelected($event, 'image_2')" 
+            accept="image/*" 
+            class="hidden"
+          />
+        </div>
+        @if (images.image_3) {
+          <div class="relative">
+            <img
+              [src]="images.image_3"
+              alt="Image 2"
+              class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+              (click)="triggerFileInput('fileInput3')"
+            />
+            <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <input 
+              type="file" 
+              id="fileInput3" 
+              (change)="onFileSelected($event, 'image_3')" 
+              accept="image/*" 
+              class="hidden"
+            />
+          </div>
         }
         @if (images.image_4) {
-          <img
-          [src]="images.image_4"
-          alt="Imagen 3"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
+          <div class="relative">
+            <img
+              [src]="images.image_4"
+              alt="Image 3"
+              class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+              (click)="triggerFileInput('fileInput4')"
+            />
+            <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <input 
+              type="file" 
+              id="fileInput4" 
+              (change)="onFileSelected($event, 'image_4')" 
+              accept="image/*" 
+              class="hidden"
+            />
+          </div>
         }
         @if (images.image_5) {
-          <img
-          [src]="images.image_5"
-          alt="Imagen 4"
-          class="h-40 w-40 rounded-2xl bg-slate-300 object-cover"
-        />
+          <div class="relative">
+            <img
+              [src]="images.image_5"
+              alt="Image 4"
+              class="h-40 w-40 rounded-2xl bg-slate-300 object-cover cursor-pointer"
+              (click)="triggerFileInput('fileInput5')"
+            />
+            <div class="absolute bottom-2 right-2 bg-white rounded-full p-1 shadow-md">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+            </div>
+            <input 
+              type="file" 
+              id="fileInput5" 
+              (change)="onFileSelected($event, 'image_5')" 
+              accept="image/*" 
+              class="hidden"
+            />
+          </div>
         }
       </div>
     </article>
 
-    <!-- FORMULARIO -->
+    <!-- FORM -->
     <article class="space-y-6">
       <!-- BIO -->
       <div>
-        <h2 for="bio" class="block text-lg font-light">Preséntate *</h2>
+        <h2 for="bio" class="block text-lg font-light">Presentate *</h2>
         <textarea
           name="bio"
           id="bio"
           rows="3"
           class="mt-2 w-full resize-none border-b-2 border-black font-light focus:outline-none"
-          [value]=""
-          [minLength] = "20"
+          [value]="bioText"
+          [minLength]="20"
           appErrorFields
         ></textarea>
       </div>
 
-      <!-- PROVINCIA -->
+      <!-- PROVINCE -->
       <div>
         <h2 for="province" class="block text-lg font-light">Provincia</h2>
         <input
@@ -67,6 +150,7 @@
           id="province"
           name="province"
           [validList]="provinceNames"
+          [value]="selectedProvince"
           appErrorFields
           class="mt-2 h-8 w-full border-b-2 border-black font-light focus:outline-none"
         />
@@ -77,83 +161,88 @@
         </datalist>
       </div>
 
-      <!-- GÉNERO -->
+      <!-- GENDER -->
       <fieldset>
         <legend class="mb-3 text-lg font-light">Género *</legend>
         <div class="flex flex-wrap gap-2">
-          <!-- Opción Hombre -->
+          <!-- Male Option -->
           <label for="male" class="group">
-            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 ">
               <input
                 type="radio"
                 id="male"
                 name="genre"
                 value="1"
+                [checked]="selectedGender === 1"
                 class="h-4 w-4 accent-purple-500"
               />
               <span class="cursor-pointer font-light">Hombre</span>
             </div>
           </label>
           
-          <!-- Opción Mujer -->
+          <!-- Female Option -->
           <label for="female" class="group">
-            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 ">
               <input
                 type="radio"
                 id="female"
                 name="genre"
                 value="2"
+                [checked]="selectedGender === 2"
                 class="h-4 w-4 accent-purple-500"
               />
               <span class="cursor-pointer font-light">Mujer</span>
             </div>
           </label>
           
-          <!-- Opción No binario -->
+          <!-- Non-binary Option -->
           <label for="non-binary" class="group">
-            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 ">
               <input
                 type="radio"
                 id="non-binary"
                 name="genre"
                 value="3"
+                [checked]="selectedGender === 3"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">No binario</span>
+              <span class="cursor-pointer font-light">No Binario</span>
             </div>
           </label>
           
-          <!-- Opción Otros -->
+          <!-- Other Option -->
           <label for="other" class="group">
-            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 ">
               <input
                 type="radio"
                 id="other"
                 name="genre"
                 value="4"
+                [checked]="selectedGender === 4"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">Otros</span>
+              <span class="cursor-pointer font-light">Otro</span>
             </div>
           </label>
           
-          <!-- Opción Prefiero no contestar -->
+          <!-- Prefer not to answer Option -->
           <label for="prefere-not-to-say" class="group">
-            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 has-[:checked]:bg-green-300">
+            <div class="flex w-fit items-center gap-2 rounded-full border px-4 py-2 ">
               <input
                 type="radio"
                 id="prefere-not-to-say"
                 name="genre"
                 value="5"
+                [checked]="selectedGender === 5"
                 class="h-4 w-4 accent-purple-500"
               />
-              <span class="cursor-pointer font-light">Prefiero no contestar</span>
+              <span class="cursor-pointer font-light">Prefiero no decirlo</span>
             </div>
           </label>
         </div>
       </fieldset>
 
-      <!-- INTERESES -->
+      <!-- INTERESTS -->
       <div>
         <div class="flex flex-row justify-between"
             [exactSelections]="5"
@@ -194,8 +283,8 @@
   </form>
   <article class="font-family-regular flex justify-between w-full mt-6">
     <button (click)="handleDelete()" class="flex gap-2 border-gray-400 border-2 rounded-xl items-center px-6 py-2 cursor-pointer  hover:bg-[#ff3b30] hover:border-black ">
-      <img class="w-6 h-6" src="assets/images/app/icons/delete-icon.svg" alt="Delete Icon"> Borrar Cuenta</button>
-    <button class="flex bg-black text-white rounded-full cursor-pointer"><span class=" flex items-center pl-6">Guardar</span> 
+      <img class="w-6 h-6" src="assets/images/app/icons/delete-icon.svg" alt="Delete Icon"> Delete Account</button>
+    <button (click)="handleUpdate()" class="flex bg-black text-white rounded-full cursor-pointer"><span class=" flex items-center pl-6">Save</span> 
       <div class="flex h-10.5 w-10.5 items-center justify-center">
       <svg
         width="16"

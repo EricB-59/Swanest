@@ -90,9 +90,15 @@
             class="font-family-light flex text-4xl tracking-[1.5px]"
           >
             <span class="text-white">1</span>
-            <span class="mt-1 text-white/40">
-              /{{ imagenes[$index] ? imagenes[$index].length : 1 }}
-            </span>
+            @if (imagenes[$index][0].image_3 == null) {
+              <span class="mt-1 text-white/40">/2</span>
+            } @else if (imagenes[$index][0].image_4 == null) {
+              <span class="mt-1 text-white/40">/3</span>
+            } @else if (imagenes[$index][0].image_5 == null) {
+              <span class="mt-1 text-white/40">/4</span>
+            } @else {
+              <span class="mt-1 text-white/40">/5</span>
+            }
           </div>
           <button>
             <!-- info -->
@@ -111,7 +117,10 @@
               class="font-family-regular mb-3 flex flex-col text-5xl tracking-[2px]"
             >
               <span>{{ profile.first_name }}</span>
-              <span>{{ profile.last_name }}, {{ profile.birthdate }}</span>
+              <span
+                >{{ profile.last_name }},
+                {{ calcularEdad(profile.birthdate) }}</span
+              >
             </h3>
             <div class="flex gap-2.5">
               <span
