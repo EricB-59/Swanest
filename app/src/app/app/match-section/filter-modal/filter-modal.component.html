@@ -1,0 +1,139 @@
+<div class="bg-white rounded-4xl flex flex-col gap-6 p-7 max-w-100 tracking-[0.8px] font-family-regular">
+    <div>
+        <h3 class="text-xl tracking-[1px]">Filtros</h3>
+        <span class="text-sm text-gray-700">Seleccione los filtros según tus preferencias.</span>
+    </div>
+    <div class="flex flex-col gap-7">
+        <div class="relative w-full" #dropdownRef>
+            <p class="text-sm mb-1">Provincia</p>
+            <div>
+                <div
+                    class="font-basereg h-8 w-full border-b-1 border-black cursor-pointer px-2 flex items-center justify-between"
+                    (click)="toggleDropdown()"
+                >
+                    <span class="text-sm text-gray-700">{{ selectedProvince() || 'Seleccione una provincia' }}</span>
+                    <svg 
+                        class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" 
+                        [class.rotate-180]="showDropdown()">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+            </div>
+            <!-- DROPDOWN -->
+            @if (showDropdown()) {
+                <div class="absolute rounded-xl left-0 right-0 mt-1 bg-white border border-gray-300 shadow-lg z-10">
+                    <div class="px-2 pt-2">
+                        <input
+                            type="text"
+                            class="w-full border border-gray-600 rounded-lg px-2 py-1.5 text-sm outline-none placeholder:text-gray-600 focus:border-[#7948FF]"
+                            placeholder="Buscar provincia"
+                            [value]="searchQuery()"
+                            (input)="onSearchInput($event)"
+                        />
+                    </div>
+                    <!-- Lista de opciones -->
+                    <ul class="text-sm text-gray-800 p-2">
+                        @for (province of filteredProvinces(); track province.name) {
+                        <li
+                            class="px-3 py-2 hover:bg-gray-100 cursor-pointer rounded-md"
+                            (click)="selectProvince(province.name)"
+                        >
+                            {{ province.name }}
+                        </li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+        <div>
+            <p class="text-sm mb-3">Sexo</p>
+            <div class="flex gap-2 flex-wrap">
+                <label class="text-sm font-family-regular cursor-pointer flex gap-2 h-10 w-fit items-center py-2 border-gray-600 pl-3 pr-2 justify-center rounded-full border-1">
+                    Hombre
+                    <input
+                        value="1"
+                        name="genre"
+                        type="radio"
+                        [checked]="selectedGenre() === 'Hombre'"
+                        (change)="selectedGenre.set('Hombre')"
+                        class="relative appearance-none w-5 h-5 border-1 border-gray-600 rounded-full cursor-pointer checked:border-gray-600 focus:outline-none focus:ring-0 before:content-[''] before:absolute before:w-2 before:h-2 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:scale-0 checked:before:bg-primary-main checked:before:scale-100 before:transition-transform"
+                    />
+                </label>
+                <label class="text-sm font-family-regular cursor-pointer flex gap-2 h-10 w-fit items-center py-2 border-gray-600 pl-3 pr-2 justify-center rounded-full border-1">
+                    Mujer
+                    <input
+                        value="1"
+                        name="genre"
+                        type="radio"
+                        [checked]="selectedGenre() === 'Mujer'"
+                        (change)="selectedGenre.set('Mujer')"
+                        class="relative appearance-none w-5 h-5 border-1 border-gray-600 rounded-full cursor-pointer checked:border-gray-600 focus:outline-none focus:ring-0 before:content-[''] before:absolute before:w-2 before:h-2 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:scale-0 checked:before:bg-primary-main checked:before:scale-100 before:transition-transform"
+                    />
+                </label>
+                <label class="text-sm font-family-regular cursor-pointer flex gap-2 h-10 w-fit items-center py-2 border-gray-600 pl-3 pr-2 justify-center rounded-full border-1">
+                    No binario
+                    <input
+                        value="1"
+                        name="genre"
+                        type="radio"
+                        [checked]="selectedGenre() === 'No binario'"
+                        (change)="selectedGenre.set('No binario')"
+                        class="relative appearance-none w-5 h-5 border-1 border-gray-600 rounded-full cursor-pointer checked:border-gray-600 focus:outline-none focus:ring-0 before:content-[''] before:absolute before:w-2 before:h-2 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:scale-0 checked:before:bg-primary-main checked:before:scale-100 before:transition-transform"
+                    />
+                </label>
+                <label class="text-sm font-family-regular cursor-pointer flex gap-2 h-10 w-fit items-center py-2 border-gray-600 pl-3 pr-2 justify-center rounded-full border-1">
+                    Otro
+                    <input
+                        value="1"
+                        name="genre"
+                        type="radio"
+                        [checked]="selectedGenre() === 'Otro'"
+                        (change)="selectedGenre.set('Otro')"
+                        class="relative appearance-none w-5 h-5 border-1 border-gray-600 rounded-full cursor-pointer checked:border-gray-600 focus:outline-none focus:ring-0 before:content-[''] before:absolute before:w-2 before:h-2 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:scale-0 checked:before:bg-primary-main checked:before:scale-100 before:transition-transform"
+                    />
+                </label>
+                <label class="text-sm font-family-regular cursor-pointer flex gap-2 h-10 w-fit items-center py-2 border-gray-600 pl-3 pr-2 justify-center rounded-full border-1">
+                    Prefiero no decirle
+                    <input
+                        value="1"
+                        name="genre"
+                        type="radio"
+                        [checked]="selectedGenre() === 'Prefiero no decirlo'"
+                        (change)="selectedGenre.set('Prefiero no decirlo')"
+                        class="relative appearance-none w-5 h-5 border-1 border-gray-600 rounded-full cursor-pointer checked:border-gray-600 focus:outline-none focus:ring-0 before:content-[''] before:absolute before:w-2 before:h-2 before:top-1/2 before:left-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:scale-0 checked:before:bg-primary-main checked:before:scale-100 before:transition-transform"
+                    />
+                </label>
+            </div>
+        </div>
+        <div class="flex flex-col">
+            <p class="text-sm">Edad</p>
+            <ngx-slider
+                [(value)]="minValue"
+                [(highValue)]="maxValue"
+                [options]="options"
+                class="w-full outline-none">
+            </ngx-slider>
+            <div class="flex justify-between w-full">
+                <div class="flex flex-col">
+                    <span class="text-sm text-gray-700">min</span>
+                    <input readonly
+                        class="border border-gray-400 px-3 py-2 w-15 outline-none rounded-xl text-center"
+                        [value]="minValue()"
+                        id="age-min"
+                        type="text"
+                    >
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm text-gray-700">max</span>
+                    <input readonly
+                        class="border border-gray-400 px-3 py-2 w-15 outline-none rounded-xl text-center"
+                        [value]="maxValue()"
+                        id="age-max"
+                        type="text"
+                    >
+                </div>
+            </div>
+        </div>
+        <button class="bg-[#7948FF] text-white py-3 rounded-xl font-family-regular tracking-[0.8px]" (click)="applyPreferences()">Aplicar</button>
+    </div>
+</div>

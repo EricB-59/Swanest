@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user';
 import { API_URL } from '../../../config/const';
+import { Preferences, getPreferences } from '../../models/Preferences';
 type Image = {
   id: number;
   image_1: string;
@@ -87,5 +88,21 @@ export class UserService {
   ) {
     const preferences = { user_id, province, genre, birthdate };
     return this.connHttp.post<boolean>(API_URL + 'preferences', preferences);
+  }
+
+  updatePreferences(id: number ,preferences: Preferences): Observable<{success: boolean, message: string}> {
+    return this.connHttp.put<{success: boolean, message: string}>(
+      API_URL + 'preferences/update/' + id, preferences, {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),  
+      },
+    );
+  }
+
+  getPreferences(id: number): Observable<getPreferences>{
+    return this.connHttp.get<getPreferences>(
+      API_URL + 'preferences/' + id, {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),  
+      },
+    );
   }
 }

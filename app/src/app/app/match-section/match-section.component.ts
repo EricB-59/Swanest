@@ -1,5 +1,4 @@
 import {
-  AfterViewInit,
   Component,
   inject,
   OnDestroy,
@@ -13,8 +12,10 @@ import 'swiper/css';
 import 'swiper/css/autoplay';
 import 'swiper/css/effect-fade';
 import { InfoModalComponent } from '../components/info-modal/info-modal.component';
+import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
 import { MatDialog } from '@angular/material/dialog';
-// import {MatBottomSheetModule} from '@angular/material/bottom-sheet'
+import { FilterModalComponent } from './filter-modal/filter-modal.component';
 
 @Component({
   selector: 'app-match-section',
@@ -28,14 +29,16 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
   imagenes: any[] = []; // Aquí guardaremos los objetos restantes
   user = sessionStorage.getItem('user');
   private cardToUserIdMap = new WeakMap<HTMLElement, number>();
+  private overlayRef: OverlayRef | null = null;
 
-  constructor(private _matDialog: MatDialog) {}
+  constructor(private _matDialog: MatDialog, private overlay: Overlay) {}
 
   ngOnInit(): void {
     if (this.user) {
       const user_id = JSON.parse(this.user).id;
       this.matchService.getProfiles(user_id).subscribe({
         next: (data) => {
+          console.log("PRUEBA - ",data)
           // Procesamos los datos para separar profiles e imagenes
           this.processProfileData(data);
 
@@ -95,7 +98,80 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
         },
         error: (error) => {
           console.error(error);
+          this.profiles = [];
+          this.imagenes = [];
         },
+      });
+    }
+  }
+
+  openFilterDialog(event: MouseEvent) {
+    const target = event.currentTarget as HTMLElement;
+
+    const overlayConfig = {
+      hasBackdrop: true,
+      backdropClass: 'dark-backdrop',
+      positionStrategy: this.overlay
+        .position()
+        .flexibleConnectedTo(target)
+        .withPositions([{
+          originX: 'start',
+          originY: 'bottom',
+          overlayX: 'start',
+          overlayY: 'top',
+          offsetY: 8  // Espacio entre el botón y el modal
+        }])
+    };
+
+    // Crear el overlay
+    this.overlayRef = this.overlay.create(overlayConfig);
+    
+    // Cerrar cuando se hace clic en el backdrop
+    this.overlayRef.backdropClick().subscribe(() => {
+      if (this.overlayRef) {
+        this.overlayRef.dispose();
+        this.overlayRef = null;
+      }
+    });
+    
+    // Crear y adjuntar el componente modal
+    const modalPortal = new ComponentPortal(FilterModalComponent);
+    const modalRef = this.overlayRef.attach(modalPortal);
+    
+    // Suscribirse al evento de cierre del modal
+    modalRef.instance.close.subscribe(() => {
+      if (this.overlayRef) {
+        this.overlayRef.dispose();
+        this.overlayRef = null;
+      }
+    });
+
+    if (this.user) {
+      const user_id = JSON.parse(this.user).id
+      modalRef.instance.applyFilters.subscribe(() => {
+        this.matchService.getProfiles(user_id).subscribe({
+          next: (data) => {
+            console.log("PRUEBA - ",data)
+            this.processProfileData(data);
+            setTimeout(() => {
+              this.initializeSwipers();
+              this.initializeCardMapping();
+              this.setupDragEvents();
+            }, 0);
+          },
+          error: (err) => {
+            console.error(err)
+            this.profiles = [];
+            this.imagenes = [];
+          },
+          complete: () => {
+            // 4) Cierra el modal
+            this.overlayRef?.dispose();
+            this.overlayRef = null;
+          }
+        })
+        this.overlayRef?.dispose();
+        this.overlayRef = null;
       });
     }
   }
