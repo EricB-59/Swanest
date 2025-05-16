@@ -90,19 +90,22 @@ export class UserService {
     return this.connHttp.post<boolean>(API_URL + 'preferences', preferences);
   }
 
-  updatePreferences(id: number ,preferences: Preferences): Observable<{success: boolean, message: string}> {
-    return this.connHttp.put<{success: boolean, message: string}>(
-      API_URL + 'preferences/update/' + id, preferences, {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),  
+  updatePreferences(
+    id: number,
+    preferences: Preferences,
+  ): Observable<{ success: boolean; message: string }> {
+    return this.connHttp.put<{ success: boolean; message: string }>(
+      API_URL + 'preferences/update/' + id,
+      preferences,
+      {
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       },
     );
   }
 
-  getPreferences(id: number): Observable<getPreferences>{
-    return this.connHttp.get<getPreferences>(
-      API_URL + 'preferences/' + id, {
-        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),  
-      },
-    );
+  getPreferences(id: number): Observable<getPreferences> {
+    return this.connHttp.get<getPreferences>(API_URL + 'preferences/' + id, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    });
   }
 }

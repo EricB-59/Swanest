@@ -5,6 +5,7 @@ import { MatchSectionComponent } from './match-section/match-section.component';
 import { UpdateUserComponent } from './auth/update-user/update-user.component';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { UserService } from '../services/user/user.service';
 
 @Component({
   selector: 'app-app',
@@ -18,9 +19,13 @@ import { Router } from '@angular/router';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private userService: UserService,
+  ) {}
 
   user: User | null = null;
+  userImage1: any;
   userLoadError = false;
 
   display_component: string = 'match-section';
@@ -42,7 +47,14 @@ export class AppComponent implements OnInit {
         return;
       }
 
+      let data = JSON.parse(userString);
       this.user = JSON.parse(userString);
+
+      this.userService.getImages(data.id).subscribe({
+        next: (result) => {
+          this.userImage1 = result.image_1;
+        },
+      });
 
       // Basic validation to ensure user object is valid
       if (!this.isValidUser(this.user)) {
