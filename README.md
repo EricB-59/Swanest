@@ -130,7 +130,7 @@ npm install
 ng serve
 ```
 
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/EricB-59/Swanest)
 
 
 
