@@ -44,6 +44,20 @@
       <div
         class="card absolute z-1 flex h-full w-full flex-col justify-between px-2 py-15 text-white lg:p-5"
       >
+        <article
+          id="pop_info_{{ $index }}"
+          class="font-family-medium absolute top-25 left-4 z-30 hidden flex-col gap-5 rounded-4xl bg-white p-5 text-black"
+        >
+          <h2>{{ profile.bio }}</h2>
+          <h2 class="font-family-semibold text-2xl">Intereses:</h2>
+          <ul class="flex gap-5">
+            <li>{{ profile.labels.first_label.name }}</li>
+            <li>{{ profile.labels.second_label.name }}</li>
+            <li>{{ profile.labels.third_label.name }}</li>
+            <li>{{ profile.labels.fourth_label.name }}</li>
+            <li>{{ profile.labels.fifth_label.name }}</li>
+          </ul>
+        </article>
         <!-- Capa con la imagen de fondo enmascarada -->
         <div class="mask-custom-shape absolute inset-0 overflow-hidden">
           <div class="swiper h-full w-full" id="swiper-{{ $index }}">
@@ -131,8 +145,11 @@
               <span class="mt-1 text-white/40">/5</span>
             }
           </div>
-          <button>
-            <!-- info -->
+          <button
+            class="ml-80 cursor-pointer rounded-2xl bg-white"
+            (click)="displayPopInfo($index)"
+          >
+            <img src="assets/icons/menu-icon.svg" alt="" class="w-12" />
           </button>
         </div>
         <div class="relative z-10 flex flex-col gap-4">
