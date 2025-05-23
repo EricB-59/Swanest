@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match/match.service';
 import { Profile } from '../../models/profile';
 import Swiper from 'swiper';
@@ -31,14 +26,17 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
   private cardToUserIdMap = new WeakMap<HTMLElement, number>();
   private overlayRef: OverlayRef | null = null;
 
-  constructor(private _matDialog: MatDialog, private overlay: Overlay) {}
+  constructor(
+    private _matDialog: MatDialog,
+    private overlay: Overlay,
+  ) {}
 
   ngOnInit(): void {
     if (this.user) {
       const user_id = JSON.parse(this.user).id;
       this.matchService.getProfiles(user_id).subscribe({
         next: (data) => {
-          console.log("PRUEBA - ",data)
+          console.log('PRUEBA - ', data);
           // Procesamos los datos para separar profiles e imagenes
           this.processProfileData(data);
 
@@ -114,18 +112,20 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
       positionStrategy: this.overlay
         .position()
         .flexibleConnectedTo(target)
-        .withPositions([{
-          originX: 'start',
-          originY: 'bottom',
-          overlayX: 'start',
-          overlayY: 'top',
-          offsetY: 8  // Espacio entre el botón y el modal
-        }])
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top',
+            offsetY: 8, // Espacio entre el botón y el modal
+          },
+        ]),
     };
 
     // Crear el overlay
     this.overlayRef = this.overlay.create(overlayConfig);
-    
+
     // Cerrar cuando se hace clic en el backdrop
     this.overlayRef.backdropClick().subscribe(() => {
       if (this.overlayRef) {
@@ -133,11 +133,11 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
         this.overlayRef = null;
       }
     });
-    
+
     // Crear y adjuntar el componente modal
     const modalPortal = new ComponentPortal(FilterModalComponent);
     const modalRef = this.overlayRef.attach(modalPortal);
-    
+
     // Suscribirse al evento de cierre del modal
     modalRef.instance.close.subscribe(() => {
       if (this.overlayRef) {
@@ -147,11 +147,11 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
     });
 
     if (this.user) {
-      const user_id = JSON.parse(this.user).id
+      const user_id = JSON.parse(this.user).id;
       modalRef.instance.applyFilters.subscribe(() => {
         this.matchService.getProfiles(user_id).subscribe({
           next: (data) => {
-            console.log("PRUEBA - ",data)
+            console.log('PRUEBA - ', data);
             this.processProfileData(data);
             setTimeout(() => {
               this.initializeSwipers();
@@ -160,7 +160,7 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
             }, 0);
           },
           error: (err) => {
-            console.error(err)
+            console.error(err);
             this.profiles = [];
             this.imagenes = [];
           },
@@ -168,8 +168,8 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
             // 4) Cierra el modal
             this.overlayRef?.dispose();
             this.overlayRef = null;
-          }
-        })
+          },
+        });
         this.overlayRef?.dispose();
         this.overlayRef = null;
       });
@@ -492,5 +492,19 @@ export class MatchSectionComponent implements OnInit, OnDestroy {
     }
 
     return edad;
+  }
+
+  displayPopInfo(index: number) {
+    const POP_INFO = document.getElementById(`pop_info_${index}`);
+
+    if (POP_INFO?.classList.contains('hidden')) {
+      // Mostrar
+      POP_INFO.classList.remove('hidden');
+      POP_INFO.classList.add('flex');
+    } else {
+      // Ocultar
+      POP_INFO?.classList.remove('flex');
+      POP_INFO?.classList.add('hidden');
+    }
   }
 }
